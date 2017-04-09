@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+
+{% block title %}
+ConOccult - Reporting Cycles
+{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class ="col-md-6">
+        <h1>Look Ahead Activities Form</h1>
+        <h3>Week Commencing {{lookahead}}</h3>
+        {% from '_formhelpers.html' import render_field %}
+        {% if action=='new' %}<form method="POST" action ={{ url_for('new_lookahead_details', id= lookahead.id) }} role ="form">
+        
+        {% endif %}
+        {{ form.hidden_tag() }}
+        <table>
+            
+        <tr class="tr_clone">
+            <td>{{ render_field(form.task_code, class="form-control") }}</td>
+            <td>{{ render_field(form.task_name, class="form-control") }}</td>
+            <td>{{ render_field(form.start, class="form-control") }}</td>
+            <td>{{ render_field(form.finish, class="form-control") }}</td>
+            <td>{{ render_field(form.is_active, class="form-control") }}</td>
+            <td><input type="button" name="add" value="Add" class="tr_clone_add"></td>
+        </tr>
+        </table>
+        <button type ="submit" class="btn btn-default">Save</button>
+        </form>
+
+    </div>
+</div>
+<script>
+$(document).ready(function(){
+    $(document).on('click',"input.tr_clone_add", function() {
+    var $tr    = $(this).closest('.tr_clone');
+    var $clone = $tr.clone();
+    $clone.find(':text').val('');
+    $tr.after($clone);
+});
+});
+</script>
+{% endblock %}

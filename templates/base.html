@@ -1,0 +1,68 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content ="IE Edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1" >
+      <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="{{ url_for('static', filename='javascript/jquery-1.11.2.min.js') }}"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="{{ url_for('static', filename='bootstrap/js/bootstrap.min.js') }}"></script>
+    <title>{% block title %}{% endblock %}</title>
+    <!-- Bootstrap -->
+    <link href="{{ url_for('static', filename='bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
+    <style>
+      body {
+          margin: 0;
+      }
+      
+      ul {
+          list-style-type: none;
+          margin: 0;
+          padding: 0;
+          width: 15%;
+          background-color: #abcdef;
+          position: fixed;
+          height: 100%;
+          overflow: auto;
+      }
+      
+      li a {
+          display: block;
+          color: #000;
+          padding: 8px 16px;
+          text-decoration: none;
+      }
+      
+      li .active {
+          background-color: #4CAF50;
+          color: white;
+      }
+      
+      li a:hover:not(.active) {
+          background-color: #555;
+          color: white;
+      }
+      </style>
+    </head>
+  <body>
+    
+    <div class='row'> 
+      <div class="col-md-3">ConOccult Management: <a href="/">Home</a>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-3 menu-list">
+        <ul class="side-menu">
+        <li><a href={{ url_for('login_success') }}> Home</a></li>
+        <li><a href={{ url_for('view_projects') }}> Projects</a></li>
+        <li><a href={{ url_for('view_organisations') }}> Organisation</a></li>
+        </ul>
+      </div>
+      {% block content %}{% endblock %}
+    </div>
+    <hr>
+    
+  </body>
+
+</html>

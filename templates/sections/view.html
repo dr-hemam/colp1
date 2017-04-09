@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block title %}
+ConOccult - Projects
+{% endblock %}
+
+{% block content %}
+
+    <div class ="col-md-5">
+        <h1>Section List</h1>
+        <table>
+        
+        {% for section in sections %}
+        <tr>
+        <th><a href ="/editsection/{{section.id }}">{{ section.name }}</a></th>
+        </tr>
+        <tr><td>{{ section.code }}</td></tr>
+        {% endfor %}
+        </table>
+           
+    </div>
+
+{% endblock %}

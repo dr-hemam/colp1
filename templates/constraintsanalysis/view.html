@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block title %}
+ConOccult - Projects
+{% endblock %}
+
+{% block content %}
+
+    <div class ="col-md-5">
+        <h1>LookAhead List</h1>
+        <table>
+        
+        {% for la in lookaheads %}
+        <tr>
+        <th><a href ="/editlookahead/">{{ la }}</a></th>
+        </tr>
+        <tr><td>Data Date of {{ la }}</td></tr>
+        {% endfor %}
+        </table>
+           
+    </div>
+
+{% endblock %}

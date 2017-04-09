@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block title %}
+ConOccult - Projects
+{% endblock %}
+
+{% block content %}
+
+    <div class ="col-md-5">
+        <h1>Reasons for Delay List</h1>
+        <table>
+        
+        {% for reason in reasons %}
+        <tr>
+        <th><a href ="/editreason/{{reason.id }}">{{ reason.name }}</a></th>
+        </tr>
+        {% endfor %}
+        </table>
+           
+    </div>
+
+{% endblock %}
