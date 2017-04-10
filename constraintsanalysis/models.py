@@ -13,13 +13,18 @@ class ConstraintAnalysis(db.Model):
 	project= db.relationship('Project', backref='constraintsanalysis')
 	reportingdate_id = db.Column(db.Integer, db.ForeignKey('reportingdates.id'))
 	reportingdate= db.relationship('ReportingDate', backref='constraintsanalysis')
+	section_id = db.Column(db.Integer, db.ForeignKey('sections.id'))
+	section= db.relationship('Section', backref='constraintsanalysis')	
 	is_active = db.Column(db.Boolean)
 	status = db.Column(db.Boolean)
 
-	def __init__(self, project, reportingdate, is_active=True):
+	def __init__(self, project, reportingdate, section, is_active=True):
 		self.is_active = is_active
 		self.project_id = project.id
+		self.section = section
 		self.reportingdate = reportingdate
+		self.section_id = section.id
+		self.section = section
 		self.reportingdate_id= reportingdate.id
 		
 	def __repr__(self):
@@ -37,14 +42,18 @@ class ConstraintAnalysisDetail(db.Model):
 	constraint = db.relationship('Constraint', backref='detail')
 	status = db.Column(db.Boolean)
 	is_active = db.Column(db.Boolean)
+	can_do = db.Column(db.Boolean)
 	
-	def __init__(self, constraintanalysis, task, constraint, status, is_active=True):
+	def __init__(self, constraintanalysis, task, constraint, status, can_do, is_active=True):
 		self.constraintanalysis_id = constraintanalysis.id
 		self.task_id= task.id
+		self.task = task
 		self.constraint_id = constraint.id
+		self.constraint = constraint
 		self.status = status
+		self.can_do = can_do
 		self.is_active = is_active
 		
 	def __repr__(self):
-		return self.task_name
+		return str(self.task_id)
 	

@@ -13,7 +13,8 @@ class LookAheadForm(Form):
     def get_cycles():
         return ReportingCycle.query
     reportingdate = QuerySelectField('Data Date')
-    is_active = BooleanField('Active')
+    section = QuerySelectField('Section')
+    is_active = BooleanField('Active', default=True)
 
 
 class LookAheadDetailForm(Form):

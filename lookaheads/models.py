@@ -13,11 +13,14 @@ class LookAhead(db.Model):
 	project= db.relationship('Project', backref='lookahead')
 	reportingdate_id = db.Column(db.Integer, db.ForeignKey('reportingdates.id'))
 	reportingdate= db.relationship('ReportingDate', backref='lookahead')
+	section_id = db.Column(db.Integer, db.ForeignKey('sections.id'))
+	section= db.relationship('Section', backref='lookahead')
 	is_active = db.Column(db.Boolean)
-
-	def __init__(self, project, reportingdate, is_active=True):
+	db.UniqueConstraint('project_id', 'reportingdate_id', name='uix_1')
+	def __init__(self, project, reportingdate, section, is_active=True):
 		self.is_active = is_active
 		self.project_id = project.id
+		self.section_id = section.id
 		self.reportingdate = reportingdate
 		self.reportingdate_id= reportingdate.id
 		

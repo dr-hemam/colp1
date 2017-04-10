@@ -8,6 +8,7 @@ from constraintsanalysis.form import ConstraintAnalysisForm, ConstraintAnalysisD
 from calendars.models import ReportingDate
 from lookaheads.models import LookAhead, LookAheadDetail
 from constraints.models import Constraint
+from sections.models import Section
 
 @app.route('/newconstraintanalysis', methods=['POST', 'GET'])
 @login_required
@@ -15,10 +16,13 @@ from constraints.models import Constraint
 def new_constraintanalysis():
     form = ConstraintAnalysisForm()
     form.reportingdate.query = ReportingDate.query.filter_by(project_id= session.get('project_id'))
+    form.section.query = Section.query.filter_by(project_id= session.get('project_id'))
     if request.method == "POST" and form.validate() and session.get('project_id'):
         project = Project.query.filter_by(id=session.get('project_id')).first()
         constraintanalysis = ConstraintAnalysis (project= project, 
-                                                reportingdate= form.reportingdate.data )
+                                                reportingdate= form.reportingdate.data,
+                                                section= form.section.data,
+                                                is_active = form.is_active.data)
         db.session.add(constraintanalysis)
         db.session.flush()
         db.session.commit()
@@ -31,6 +35,7 @@ def new_constraintanalysis_details(id):
     form = ConstraintAnalysisDetailForm()
     if request.method == "POST":
         constraints = Constraint.query.filter_by(org_id = session.get('organisation_id'), is_active=True).all()
+        constraintanalysis = ConstraintAnalysis.query.filter_by(id= id).first()
         checkboxes=[]
         for c in constraints:
             cn = request.form.getlist(str(c.id))
@@ -46,15 +51,27 @@ def new_constraintanalysis_details(id):
             checkboxes.append(ccd)
         activities = request.form.getlist('task')
         is_actives = request.form.getlist('is_active')
-        statuses = request.form.getlist('status')
-        return (str(activities) + str(is_actives) + str(statuses)+str(checkboxes))
+        #statuses = request.form.getlist('status')
+        can_dos = request.form.getlist('can_do')
+        print(str(can_dos), str(len(activities)))
+        for i in range(len(activities)):
+            for cnst in range(len(checkboxes)):
+                task = LookAheadDetail.query.filter_by(id=activities[i]).first()
+                cnstanalysis= ConstraintAnalysisDetail (constraintanalysis= constraintanalysis,
+                                        task= task, 
+                                        constraint= constraints[cnst],
+                                        can_do = can_dos[i],
+                                        status= checkboxes[cnst][i])
+                db.session.add(cnstanalysis)
+        db.session.commit()
+        return redirect(url_for('view_constraintanalysis_details', id=id))
     constraintanalysis = ConstraintAnalysis.query.filter_by(id= id).first()
     # get lookahead_id through reporting date id
-    lookahead = LookAhead.query.filter_by(reportingdate_id = constraintanalysis.reportingdate_id).first()
+    lookahead = LookAhead.query.filter_by(reportingdate_id = constraintanalysis.reportingdate_id, section_id= constraintanalysis.section_id).first()
     tasks = LookAheadDetail.query.filter_by(lookahead_id= lookahead.id).all()
     constraints = Constraint.query.filter_by(org_id = session.get('organisation_id'), is_active=True).all()
     form.task.query = tasks
-    return render_template('constraintsanalysis/constraintanalysisdetailsform.html', form=form, action='new', constraintanalysis = constraintanalysis, constraints = constraints)
+    return render_template('constraintsanalysis/constraintanalysisdetailsform.html', form=form, action='new', constraintanalysis = constraintanalysis, constraints = constraints, lookahead=lookahead)
         
 # @app.route('/viewlookaheads')
 # @login_required
@@ -64,10 +81,12 @@ def new_constraintanalysis_details(id):
 #     print('lookaheads', lookaheads)
 #     return render_template('lookaheads/view.html', lookaheads=lookaheads)
     
-# @app.route('/viewlookahead/<id>')
-# @login_required
-# @project_required
-# def view_lookahead(id):
-#     lookahead = LookAhead.query.filter_by(id=id).first()
-#     details = LookAheadDetail.query.filter_by(lookahead_id=id).all()
-#     return render_template('lookaheads/viewlookahead.html', lookahead = lookahead, tasks = details)
+@app.route('/viewconstraintanalysisdetails/<id>')
+@login_required
+@project_required
+def view_constraintanalysis_details(id):
+    constraintanalysis = ConstraintAnalysis.query.filter_by(id=id).first()
+    tasks = ConstraintAnalysisDetail.query.filter_by(constraintanalysis_id=id).group_by(ConstraintAnalysisDetail.task_id)
+    constraints = Constraint.query.filter_by(org_id = session.get('organisation_id'), is_active=True).all()
+    details =ConstraintAnalysisDetail.query.filter_by(constraintanalysis_id=id)
+    return render_template('constraintsanalysis/viewconstraintanalysis.html', constraintanalysis = constraintanalysis, tasks = tasks, constraints= constraints, details = details)

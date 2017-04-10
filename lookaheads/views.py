@@ -6,6 +6,7 @@ from users.decorators import *
 from lookaheads.models import LookAhead, LookAheadDetail
 from lookaheads.form import LookAheadForm, LookAheadDetailForm
 from calendars.models import ReportingDate
+from sections.models import Section
 
 @app.route('/newlookahead', methods=['POST', 'GET'])
 @login_required
@@ -13,10 +14,13 @@ from calendars.models import ReportingDate
 def new_lookahead():
     form = LookAheadForm()
     form.reportingdate.query = ReportingDate.query.filter_by(project_id= session.get('project_id'))
+    form.section.query = Section.query.filter_by(project_id= session.get('project_id'))
     if request.method == "POST" and form.validate() and session.get('project_id'):
         project = Project.query.filter_by(id=session.get('project_id')).first()
         lookahead = LookAhead (project= project, 
-                                reportingdate= form.reportingdate.data )
+                                reportingdate= form.reportingdate.data,
+                                section = form.section.data,
+                                is_active = form.section.data)
         db.session.add(lookahead)
         db.session.flush()
         db.session.commit()
@@ -46,7 +50,7 @@ def new_lookahead_details(id):
             db.session.add(task)
             db.session.commit()
         
-        return(str(names))
+        return redirect(url_for('view_lookahead', id=id))
     return render_template('lookaheads/lookaheaddetailsform.html', form=form, action='new', lookahead = lookaheadmain[0])
         
 @app.route('/viewlookaheads')
