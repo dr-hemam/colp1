@@ -6,16 +6,22 @@ from calendars.models import ReportingCycle
 from wtforms.ext.sqlalchemy.fields import QuerySelectField
 
 
-class ConstraintAnalysisForm(Form):
+class WWPForm(Form):
 
     reportingdate = QuerySelectField('Data Date')
     section = QuerySelectField('Section')
     is_active = BooleanField('Active', default= True)
 
-class ConstraintAnalysisDetailForm(Form):
+
+class WWPDetailForm(Form):
     
     task = QuerySelectField('Task', [validators.Required()])
-    constraint = QuerySelectField('Constraint', [validators.Required()])
+    mon = BooleanField('Mon')
+    tue = BooleanField('Tue')
+    wed = BooleanField('Wed')
+    thu = BooleanField('Thu')
+    fri = BooleanField('Fri')
+    sat = BooleanField('Sat')
+    sun = BooleanField('Sun')
     status = BooleanField('Can', default=True)
-    can_do = BooleanField('Can do', default=True)
     is_active = BooleanField('Active', default=True)
