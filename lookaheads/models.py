@@ -16,7 +16,9 @@ class LookAhead(db.Model):
 	section_id = db.Column(db.Integer, db.ForeignKey('sections.id'))
 	section= db.relationship('Section', backref='lookahead')
 	is_active = db.Column(db.Boolean)
-	db.UniqueConstraint('project_id', 'reportingdate_id', name='uix_1')
+	__table_args__ = (
+		db.UniqueConstraint('project_id', 'reportingdate_id', 'section_id', name='uix_1'),
+	)
 	def __init__(self, project, reportingdate, section, is_active=True):
 		self.is_active = is_active
 		self.project_id = project.id
@@ -40,7 +42,9 @@ class LookAheadDetail(db.Model):
 	finish = db.Column(db.DateTime)
 	#responsible person assignment
 	is_active = db.Column(db.Boolean)
-	
+	__table_args__ = (
+		db.UniqueConstraint('lookahead_id', 'task_code', name='uix_1_lookahead_details_lookahead_id_task_code'),
+	)
 	def __init__(self, lookahead, code, name, start, finish, is_active=True):
 		self.lookahead_id = lookahead.id
 		self.task_code= code

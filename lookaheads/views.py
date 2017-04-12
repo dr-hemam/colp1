@@ -7,6 +7,7 @@ from lookaheads.models import LookAhead, LookAheadDetail
 from lookaheads.form import LookAheadForm, LookAheadDetailForm
 from calendars.models import ReportingDate
 from sections.models import Section
+from sqlalchemy import exc
 
 @app.route('/newlookahead', methods=['POST', 'GET'])
 @login_required
@@ -21,9 +22,13 @@ def new_lookahead():
                                 reportingdate= form.reportingdate.data,
                                 section = form.section.data,
                                 is_active = form.section.data)
-        db.session.add(lookahead)
-        db.session.flush()
-        db.session.commit()
+        try:
+            db.session.add(lookahead)
+            db.session.flush()
+            db.session.commit()
+        except exc.IntegrityError as e:
+            db.session.rollback()
+            return "Error Duplicate Entry"
         return redirect(url_for('new_lookahead_details', id= lookahead.id))
     return render_template('lookaheads/lookaheadform.html', form=form, action='new')
     
@@ -47,8 +52,11 @@ def new_lookahead_details(id):
                                     start= starts[i], 
                                     finish= finishs[i], 
                                     is_active= is_actives[i])
-            db.session.add(task)
-            db.session.commit()
+            try:
+                db.session.add(task)
+                db.session.commit()
+            except exc.IntegrityError as e:
+                db.session.rollback()
         
         return redirect(url_for('view_lookahead', id=id))
     return render_template('lookaheads/lookaheaddetailsform.html', form=form, action='new', lookahead = lookaheadmain[0])

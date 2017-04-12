@@ -9,6 +9,8 @@ from calendars.models import ReportingDate
 from lookaheads.models import LookAhead, LookAheadDetail
 from constraints.models import Constraint
 from sections.models import Section
+from sqlalchemy import exc
+
 
 @app.route('/newconstraintanalysis', methods=['POST', 'GET'])
 @login_required
@@ -23,9 +25,13 @@ def new_constraintanalysis():
                                                 reportingdate= form.reportingdate.data,
                                                 section= form.section.data,
                                                 is_active = form.is_active.data)
-        db.session.add(constraintanalysis)
-        db.session.flush()
-        db.session.commit()
+        try:
+            db.session.add(constraintanalysis)
+            db.session.flush()
+            db.session.commit()
+        except exc.IntegrityError as e:
+            db.session.rollback()
+            return "Error Duplicate Entry"
         return redirect(url_for('new_constraintanalysis_details', id= constraintanalysis.id))
     return render_template('constraintsanalysis/constraintanalysisform.html', form=form, action='new')
     

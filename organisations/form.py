@@ -14,4 +14,4 @@ class OrganisationForm(RegisterForm):
     code = StringField('Code', [validators.Required()])
     name= StringField('Organisation Name', [validators.Required()])
     description = TextAreaField ('Description', [validators.Required()])
-    is_active = BooleanField('Active')
+    is_active = BooleanField('Active', default=True)

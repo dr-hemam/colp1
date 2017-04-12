@@ -13,7 +13,9 @@ class UserProject(db.Model):
 	role_id = db.Column(db.Integer)
 	user = db.relationship("User", backref="parent_assocs")
 	project = db.relationship("Project", backref="assoc")
-	
+	__table_args__ = (
+		db.UniqueConstraint('project_id', 'user_id', name='uix_1'),
+	)
 	def __init__(self, project, user, role):
 		self.project_id = project.id
 		self.user_id = user.id
@@ -35,6 +37,7 @@ class Project(db.Model):
 	organisation= db.relationship('Organisation', backref='project')
 	status = db.Column(db.Boolean)
 	users = db.relationship("UserProject")
+
 
 	def __init__(self, code, name, description, owner, start, finish, cycle, organisation, status):
 		self.code = code

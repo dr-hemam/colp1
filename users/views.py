@@ -6,6 +6,7 @@ from users.decorators import login_required, admin_required, organisation_requir
 from organisations.models import Organisation
 from project.models import Project, UserProject
 import bcrypt
+from sqlalchemy import exc
 
 '''
 This section handles user registeration and login
@@ -67,7 +68,7 @@ def register():
         db.session.add(user)
         db.session.commit()
         flash('User Registered')
-        return redirect(url_for('login_success'))
+        return redirect(url_for('newuserprojectassignment'))
     return render_template('users/register.html', form=form)
 
 @app.route('/logout')
@@ -165,19 +166,20 @@ def delete_role(id):
 def newuserprojectassignment():
     form = UserProjectForm()
     if request.method == "POST":
-        print ('in the post')
         prj= Project.query.filter_by(id= session.get('project_id')).first()
         user = form.user.data
         role = form.role.data
         usrassignment = UserProject.query.filter_by(project_id=prj.id, user_id=user.id).first()
         if not usrassignment:
-            print(role.id, user.id, prj)
             assignment = UserProject(project= prj,
                                     user= user,
                                     role= role)
-            db.session.add(assignment)
-            print('added to que', assignment.user_id, assignment.role_id, assignment.project_id)
-            db.session.commit()
+            try:
+                db.session.add(assignment)
+                db.session.commit()
+            except exc.IntegrityError as e:
+                db.session.rollback()
+                return "User already assigned to this project"
         else:
             return 'User already assigned to activity'
     return render_template('/users/projectassignment.html', form=form, action='new')
