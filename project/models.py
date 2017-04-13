@@ -35,7 +35,7 @@ class Project(db.Model):
 	cycle= db.relationship('ReportingCycle', backref='project')
 	org_id = db.Column(db.Integer, db.ForeignKey('organisations.id'))
 	organisation= db.relationship('Organisation', backref='project')
-	status = db.Column(db.Boolean)
+	status = db.Column(db.Boolean, default=True)
 	users = db.relationship("UserProject")
 
 

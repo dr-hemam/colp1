@@ -13,7 +13,7 @@ class User(db.Model):
     organisation_id = db.Column(db.Integer, db.ForeignKey('organisations.id'))
     organisation= db.relationship('Organisation', backref='users')
 	
-    is_admin = db.Column(db.Boolean)
+    is_admin = db.Column(db.Boolean, default=False)
 
     def __init__(self, firstname, lastname, email, username, password, organisation, is_admin=False):
         self.firstname = firstname
@@ -38,7 +38,7 @@ class Role(db.Model):
     organisation = db.relationship('Organisation', backref='roles')
     manager_id = db.Column(db.Integer, db.ForeignKey('roles.id'))
     manager = db.relationship(lambda: Role, remote_side=id,backref='subs')
-    is_active = db.Column(db.Boolean)
+    is_active = db.Column(db.Boolean, default=True)
     def __init__(self, name, organisation, manager, is_active=True):
         self.name = name
         if organisation is not None:

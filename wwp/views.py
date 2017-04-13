@@ -9,6 +9,7 @@ from calendars.models import ReportingDate
 from constraints.models import Constraint
 from sections.models import Section
 from lookaheads.models import LookAheadDetail
+from constraintsanalysis.models import ConstraintAnalysis, ConstraintAnalysisDetail
 
 @app.route('/newwwp', methods=['POST', 'GET'])
 @login_required
@@ -54,11 +55,10 @@ def new_wwp_details(id):
         db.session.commit()
         return redirect(url_for('view_constraintanalysis_details', id=id))
     wwp = WWP.query.filter_by(id= id).first()
-    # get lookahead_id through reporting date id
-    #lookahead = LookAhead.query.filter_by(reportingdate_id = constraintanalysis.reportingdate_id, section_id= constraintanalysis.section_id).first()
-    #tasks = LookAheadDetail.query.filter_by(lookahead_id= lookahead.id).all()
-    #constraints = Constraint.query.filter_by(org_id = session.get('organisation_id'), is_active=True).all()
-    form.task.query = LookAheadDetail.query
+    
+    ca = ConstraintAnalysis.query.filter_by(project_id=wwp.project_id, section_id=wwp.section_id, reportingdate_id=wwp.reportingdate_id).first()
+    
+    form.task.query = LookAheadDetail.query.join(ConstraintAnalysisDetail).filter(ConstraintAnalysisDetail.can_do== True and constraintanalysis_id==ca.id)
     return render_template('wwp/wwpdetails.html', form=form, action='new', wwp = wwp)
         
 """   

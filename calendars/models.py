@@ -20,6 +20,8 @@ class ReportingCycle(db.Model):
 	week_start = db.Column(db.Text)
 	#project_id = db.Column(db.Integer, db.ForeignKey('projects.id'))
 	#project = db.relationship('Project', backref='ReportingCalendar')
+	organisation_id = db.Column(db.Integer, db.ForeignKey('organisations.id'))
+	organisation= db.relationship('Organisation', backref='cycles')
 	is_active = db.Column(db.Boolean)
 	
 	def __init__(self, code, name, cycle_type, cycle_value, week_start, is_active = True):

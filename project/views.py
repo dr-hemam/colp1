@@ -57,7 +57,7 @@ def view_projects():
         for prj in assprojects:
             projects.append(prj.project)
     #projects = Project.query.filter_by(status=True, org_id=session['organisation_id']).all()
-        return render_template('project/view.html', projects=projects)
+        return render_template('project/view.html', projects=projects, organisation = Organisation.query.filter_by(id=session['organisation_id']).first())
     
 @app.route('/viewproject/<id>')
 @login_required

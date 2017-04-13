@@ -25,12 +25,13 @@ ConOccult - Reporting Cycles
         
         
         {% for cycle in cycles %}
-        <div class="floating-box">
+        <div class="well text-center">
         <a href ="{{url_for('edit_cycle', id= cycle.id) }}">{{ cycle.name }}</a>
         </div>
        
         {% endfor %}
-        </table>
+        
+        <a href={{ url_for('add_cycle') }} class='btn btn-success'>Add Cycle</a>
            
     </div>
 

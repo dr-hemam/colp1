@@ -38,7 +38,7 @@ class RoleForm(Form):
     print('hello' +str(get_manager))
     name = StringField('Role Name', [validators.Required()])
     manager = QuerySelectField('Manager', query_factory= get_manager, allow_blank=True)
-    is_active = BooleanField('Active')
+    is_active = BooleanField('Active', default=True)
     
 class UserProjectForm(Form):
     def get_users():

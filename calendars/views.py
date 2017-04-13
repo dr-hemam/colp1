@@ -30,7 +30,7 @@ def add_cycle():
 
 @app.route('/viewcycles')
 def view_cycles():
-    cycles = ReportingCycle.query.all()
+    cycles = ReportingCycle.query.filter_by().all()
     return render_template('calendars/view.html', cycles=cycles)
 
 @app.route('/editcycle/<id>', methods=['GET', 'POST'])

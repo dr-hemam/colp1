@@ -6,16 +6,28 @@ ConOccult - Reporting Cycles
 
 {% block content %}
 <div class="row">
-    <div class ="col-md-6">
-        <h1>Look Ahead Activities Form</h1>
-        <h3>Week Commencing </h3>
+    <div class ="col-md-8">
+        <h1>Weekly Work Plan</h1>
+        <h3>Section: {{wwp.section}}</h3>
+        <h3>Week Commencing {{wwp.reportingdate}}</h3>
         {% from '_formhelpers.html' import render_field_nolabel %}
         {% if action=='new' %}<form method="POST" action ={{ url_for('new_wwp_details', id= wwp.id) }} role ="form">
         
         {% endif %}
         {{ form.hidden_tag() }}
         <table class="table">
-            
+        <tr>
+            <td>Activity</td>
+            <td>Mon</td>
+            <td>Tue</td>
+            <td>Wed</td>
+            <td>Thu</td>
+            <td>Fri</td>
+            <td>Sat</td>
+            <td>Sun</td>
+            <td>Active</td>
+            <td>Actions</td>
+        </tr>
         <tr class="tr_clone">
             <td>{{ render_field_nolabel(form.task, class="form-control") }}</td>
             <td>{{ render_field_nolabel(form.mon, class="form-control") }}</td>
@@ -25,7 +37,6 @@ ConOccult - Reporting Cycles
             <td>{{ render_field_nolabel(form.fri, class="form-control") }}</td>
             <td>{{ render_field_nolabel(form.sat, class="form-control") }}</td>
             <td>{{ render_field_nolabel(form.sun, class="form-control") }}</td>
-
             <td>{{ render_field_nolabel(form.is_active, class="form-control") }}</td>
             <td><input type="button" name="add" value="Add" class="tr_clone_add"></td>
         </tr>

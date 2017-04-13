@@ -132,8 +132,8 @@ def add_role():
     
 @app.route('/viewroles')
 def view_roles():
-    roles = Role.query.filter_by(is_active =True).all()
-    return render_template('users/view_roles.html', roles=roles)
+    roles = Role.query.filter_by(is_active =True, organisation_id= session.get('organisation_id')).all()
+    return render_template('users/view_roles.html', roles=roles, organisation_name= Organisation.query.filter_by(id=session.get('organisation_id')).first())
 
     
 @app.route('/editrole/<id>', methods=('GET', 'POST'))

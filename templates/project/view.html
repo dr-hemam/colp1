@@ -6,18 +6,26 @@ ConOccult - Projects
 
 {% block content %}
 
-    <div class ="col-md-5">
-        <h1>Projects List</h1>
-        <table>
+    <div class ="col-md-8">
+        <h1>{{ organisation }} Projects List</h1>
+        <table class='table table-hover table-responsive'>
         
         {% for project in projects %}
         <tr>
-        <th><a href ="/viewproject/{{project.id }}">{{ project.name }}</a></th>
+        <th padding=5>Name</th>
+        <th>Description</th>
+        <th>Start</th>
+        <th>Finish</th>
         </tr>
-        <tr><td>{{ project.description }}</td></tr>
+        <tr>
+            <td><a href ="/viewproject/{{ project.id }}">{{ project.name }}</a></td>
+            <td>{{ project.description }}</td>
+            <td>{{ project.start }}</td>
+            <td>{{ project.finish }} </td>
+        </tr>
         {% endfor %}
         </table>
-           
+        <a href= {{ url_for('newproject') }} class='btn btn-success'> Add Project </a> 
     </div>
 
 {% endblock %}

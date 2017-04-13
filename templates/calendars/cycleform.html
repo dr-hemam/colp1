@@ -6,7 +6,7 @@ ConOccult - Reporting Cycles
 
 {% block content %}
 <div class="row">
-    <div class ="col-md-4">
+    <div class ="col-md-8">
         <h1>Reporting Cycle Form</h1>
         {% from '_formhelpers.html' import render_field %}
         {% if action=='new' %}<form method="POST" action ={{ url_for('add_cycle') }} role ="form">
