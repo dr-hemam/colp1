@@ -8,6 +8,16 @@ ConOccult - Reporting Cycles
 <div class="row">
     <div class ="col-md-4">
         <h1>Section Form</h1>
+        {% with messages = get_flashed_messages() %}
+          {% if messages %}
+            <ul class='flashes alert alert-success alert-dismissable'>
+            {% for message in messages %}
+              <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+              <li>{{ message }}</li>
+            {% endfor %}
+            </ul>
+          {% endif %}
+        {% endwith %}
         {% from '_formhelpers.html' import render_field %}
         {% if action=='new' %}<form method="POST" action ={{ url_for('new_section') }} role ="form">
         {% else %}<form method="POST" action="{{ url_for('edit_section', id= section.id)  }}" enctype="multipart/form-data" role="form">

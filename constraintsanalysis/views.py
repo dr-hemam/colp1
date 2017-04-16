@@ -1,6 +1,6 @@
 from colp import app, db
 from project.models import Project
-from flask import render_template, redirect, url_for, request, session
+from flask import render_template, redirect, url_for, request, session, flash
 from users.models import User
 from users.decorators import *
 from constraintsanalysis.models import ConstraintAnalysis, ConstraintAnalysisDetail
@@ -29,17 +29,28 @@ def new_constraintanalysis():
             db.session.add(constraintanalysis)
             db.session.flush()
             db.session.commit()
+            return redirect(url_for('new_constraintanalysis_details', id= constraintanalysis.id))
         except exc.IntegrityError as e:
             db.session.rollback()
-            return "Error Duplicate Entry"
-        return redirect(url_for('new_constraintanalysis_details', id= constraintanalysis.id))
+            flash("Error: Duplicate Entry. you can edit or delete existing.")
+            #'return "Error Duplicate Entry"
+            return redirect(url_for('new_constraintanalysis'))
     return render_template('constraintsanalysis/constraintanalysisform.html', form=form, action='new')
     
 
 @app.route('/newconstraintanalysisdetails/<id>', methods=['POST', 'GET'])
 def new_constraintanalysis_details(id):
     form = ConstraintAnalysisDetailForm()
-    if request.method == "POST":
+    constraintanalysis = ConstraintAnalysis.query.filter_by(id= id).first()
+    # get lookahead_id through reporting date id
+    lookahead = LookAhead.query.filter_by(reportingdate_id = constraintanalysis.reportingdate_id, section_id= constraintanalysis.section_id).first()
+    tasks = LookAheadDetail.query.filter_by(lookahead_id= lookahead.id).all()
+    constraints = Constraint.query.filter_by(org_id = session.get('organisation_id'), is_active=True).all()
+    form.task.query = tasks
+    form.constraint.query = constraints
+    print(form, form.validate(), form.errors.items())
+    if form.validate_on_submit():
+        print('validated')
         constraints = Constraint.query.filter_by(org_id = session.get('organisation_id'), is_active=True).all()
         constraintanalysis = ConstraintAnalysis.query.filter_by(id= id).first()
         checkboxes=[]
@@ -71,21 +82,15 @@ def new_constraintanalysis_details(id):
                 db.session.add(cnstanalysis)
         db.session.commit()
         return redirect(url_for('view_constraintanalysis_details', id=id))
-    constraintanalysis = ConstraintAnalysis.query.filter_by(id= id).first()
-    # get lookahead_id through reporting date id
-    lookahead = LookAhead.query.filter_by(reportingdate_id = constraintanalysis.reportingdate_id, section_id= constraintanalysis.section_id).first()
-    tasks = LookAheadDetail.query.filter_by(lookahead_id= lookahead.id).all()
-    constraints = Constraint.query.filter_by(org_id = session.get('organisation_id'), is_active=True).all()
-    form.task.query = tasks
+
     return render_template('constraintsanalysis/constraintanalysisdetailsform.html', form=form, action='new', constraintanalysis = constraintanalysis, constraints = constraints, lookahead=lookahead)
         
-# @app.route('/viewlookaheads')
-# @login_required
-# @project_required
-# def view_lookaheads():
-#     lookaheads = LookAhead.query.filter_by(project_id=session['project_id']).all()
-#     print('lookaheads', lookaheads)
-#     return render_template('lookaheads/view.html', lookaheads=lookaheads)
+@app.route('/viewconstraintanalysis')
+@login_required
+@project_required
+def view_constraintsalysis():
+    constraintanalysis = ConstraintAnalysis.query.filter_by(project_id=session['project_id'],is_active=True).all()
+    return render_template('constraintsanalysis/view.html', constraintanalysis=constraintanalysis)
     
 @app.route('/viewconstraintanalysisdetails/<id>')
 @login_required

@@ -15,7 +15,7 @@ class ConstraintAnalysisForm(Form):
 class ConstraintAnalysisDetailForm(Form):
     
     task = QuerySelectField('Task', [validators.Required()])
-    constraint = QuerySelectField('Constraint', [validators.Required()])
+    constraint = BooleanField('Constraint')
     status = BooleanField('Can', default=True)
     can_do = BooleanField('Can do', default=True)
     is_active = BooleanField('Active', default=True)

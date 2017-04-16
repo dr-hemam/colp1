@@ -6,8 +6,18 @@ ConOccult - Projects
 
 {% block content %}
 
-    <div class ="col-md-5">
+    <div class ="col-md-8">
         <h1>Reasons for Delay List</h1>
+        {% with messages = get_flashed_messages() %}
+          {% if messages %}
+            <ul class='flashes alert alert-success alert-dismissable'>
+            {% for message in messages %}
+              <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+              <li>{{ message }}</li>
+            {% endfor %}
+            </ul>
+          {% endif %}
+        {% endwith %}
         <table>
         
         {% for reason in reasons %}
@@ -16,7 +26,10 @@ ConOccult - Projects
         </tr>
         {% endfor %}
         </table>
-           
+        <br>
+        <div>
+        <a href={{ url_for('new_reason') }} class='btn btn-success'> Add Reason</a>
+         </div>
     </div>
 
 {% endblock %}

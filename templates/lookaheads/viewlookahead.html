@@ -9,6 +9,16 @@ ConOccult - Reporting Cycles
     <div class ="col-md-6">
         <h1>Look Ahead Activities </h1>
         <h3>Week Commencing {{lookahead}}</h3>
+        {% with messages = get_flashed_messages() %}
+          {% if messages %}
+            <ul class='flashes alert alert-success alert-dismissable'>
+            {% for message in messages %}
+              <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+              <li>{{ message }}</li>
+            {% endfor %}
+            </ul>
+          {% endif %}
+        {% endwith %}
         <hr>
         <h4>Activities</h4>
         <table class='table table-hover table-responsive'>
@@ -21,6 +31,10 @@ ConOccult - Reporting Cycles
             <td>{{ task.task_name }}</td>
             <td>{{ task.start.strftime('%d-%b-%Y')}}</td>
             <td>{{ task.finish.strftime('%d-%b-%Y') }}</td>
+            <td>
+                <a href="{{ url_for('edit_lookahead_detail', tid = task.id) }} "><img src="{{ url_for('static', filename='img/delete.png') }}" style="width:20px;height:20px;" alt="Delete"/> </a>
+                <a href="{{ url_for('edit_lookahead_detail', tid = task.id) }} "><img src="{{ url_for('static', filename='img/edit.png') }}" style="width:20px;height:20px;" alt="Edit"/> </a>
+            </td>
             </tr>
             {% endfor %}
         </table>

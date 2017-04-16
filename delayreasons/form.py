@@ -4,4 +4,4 @@ from wtforms import validators, StringField, BooleanField
 class DelayReasonForm(Form):
 
     name= StringField('Reason for Delay', [validators.Required()])
-    is_active = BooleanField('Active')
+    is_active = BooleanField('Active', default=True)

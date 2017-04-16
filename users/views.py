@@ -32,6 +32,7 @@ def login():
                     session['is_admin'] = author.is_admin
                     
                     session['organisation_id'] = org.id
+                    session['organisation'] =org.name
                     print('Session org id is set to ' + str(session['organisation_id']))
                 if 'next' in session:
                     next = session.get('next')
@@ -67,7 +68,7 @@ def register():
         
         db.session.add(user)
         db.session.commit()
-        flash('User Registered')
+        flash('User Registered Successfully ')
         return redirect(url_for('newuserprojectassignment'))
     return render_template('users/register.html', form=form)
 
@@ -75,12 +76,14 @@ def register():
 def logout():
     if session.get('project_id'):
         session.pop('project_id')
+        session.pop('project')
     if session.get('username'):
         session.pop('username')
     if session.get('user_id'):
         session.pop('user_id')
     if session.get('organisation_id'):
         session.pop('organisation_id')
+        session.pop('organisation')
     if session.get('is_admin'):
         session.pop('is_admin')
     return redirect(url_for('login'))
@@ -181,5 +184,6 @@ def newuserprojectassignment():
                 db.session.rollback()
                 return "User already assigned to this project"
         else:
-            return 'User already assigned to activity'
+            flash ('User already assigned to activity')
+            return redirect(url_for('newuserprojectassignment'))
     return render_template('/users/projectassignment.html', form=form, action='new')

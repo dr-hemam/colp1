@@ -1,6 +1,6 @@
 from colp import app, db
 from project.models import Project
-from flask import render_template, redirect, url_for, request, session
+from flask import render_template, redirect, url_for, request, session, flash
 from users.models import User
 from users.decorators import *
 from lookaheads.models import LookAhead, LookAheadDetail
@@ -8,6 +8,8 @@ from lookaheads.form import LookAheadForm, LookAheadDetailForm
 from calendars.models import ReportingDate
 from sections.models import Section
 from sqlalchemy import exc
+from wtforms import validators
+
 
 @app.route('/newlookahead', methods=['POST', 'GET'])
 @login_required
@@ -61,6 +63,47 @@ def new_lookahead_details(id):
         return redirect(url_for('view_lookahead', id=id))
     return render_template('lookaheads/lookaheaddetailsform.html', form=form, action='new', lookahead = lookaheadmain[0])
         
+@app.route('/editlhdetail/<tid>', methods=['GET', 'POST'])
+@login_required
+@project_required
+def edit_lookahead_detail(tid):
+    task = LookAheadDetail.query.filter_by(id= tid).first()
+    form = LookAheadDetailForm(obj= task)
+    lookaheadmain = LookAhead.query.filter_by(id= task.lookahead_id).all()
+    form.lookahead.query = lookaheadmain
+    print ("Before Validate", form)
+    
+    
+    if form.validate_on_submit():
+        task.task_code = form.task_code.data
+        task.start = form.start.data
+        task.finish = form.finish.data
+        task.task_name = form.task_name.data
+        task.is_active= form.is_active.data
+        
+        db.session.add(task)
+        db.session.flush()
+        db.session.commit()
+        flash('Task has been edited successfully')
+        return redirect(url_for('view_lookahead',id= task.lookahead_id))
+    return render_template('lookaheads/lookaheaddetailsform.html', form = form, task=task, action='edit')
+    
+    # lookaheaddetail= LookAheadDetail.query.filter_by(id= id).first()
+    # #lookahead = LookAhead.query.filter_by(id= lookaheaddetail.lookahead_id ).first()
+    # form = LookAheadDetailForm(obj= lookaheaddetail)
+    
+    # if request.method == 'POST' and form.validate():
+    #     lookaheaddetail.task_code = form.task_code.data
+    #     lookaheaddetail.task_name = form.task_name.data
+    #     lookaheaddetail.start = form.start.data
+    #     lookaheaddetail.finish = form.finish.data
+        
+    #     db.session.add(lookaheaddetail)
+    #     db.session.flush()
+    #     db.session.commit()
+    #     return redirect(url_for('view_lookaheads'))
+    # return render_template('lookaheads/lookaheaddetailsform.html', form = form, lookahead_detail=lookaheaddetail, action='edit')
+
 @app.route('/viewlookaheads')
 @login_required
 @project_required

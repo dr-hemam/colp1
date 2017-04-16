@@ -5,6 +5,16 @@
 
     <div class="col-md-4">
         <h3> User Registeration Form</h3>
+        {% with messages = get_flashed_messages() %}
+          {% if messages %}
+            <ul class='flashes alert alert-success alert-dismissable'>
+            {% for message in messages %}
+              <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+              <li>{{ message }}</li>
+            {% endfor %}
+            </ul>
+          {% endif %}
+        {% endwith %}
         {% from "_formhelpers.html" import render_field %}
         <form method="POST" action ={{ url_for('register') }} role ="form">
         {{ form.hidden_tag() }}

@@ -8,20 +8,35 @@ ConOccult - Projects
 
     <div class ="col-md-8">
         <h1>{{ organisation }} Projects List</h1>
+        {% with messages = get_flashed_messages() %}
+          {% if messages %}
+            <ul class='flashes alert alert-success alert-dismissable'>
+            {% for message in messages %}
+              <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+              <li>{{ message }}</li>
+            {% endfor %}
+            </ul>
+          {% endif %}
+        {% endwith %}
         <table class='table table-hover table-responsive'>
-        
-        {% for project in projects %}
-        <tr>
+         <tr>
         <th padding=5>Name</th>
         <th>Description</th>
         <th>Start</th>
         <th>Finish</th>
+        <th>Actions</th>
         </tr>
+        
+        {% for project in projects %}
         <tr>
             <td><a href ="/viewproject/{{ project.id }}">{{ project.name }}</a></td>
             <td>{{ project.description }}</td>
-            <td>{{ project.start }}</td>
-            <td>{{ project.finish }} </td>
+            <td>{{ project.start.strftime('%d-%b-%Y') }}</td>
+            <td>{{ project.finish.strftime('%d-%b-%Y') }} </td>
+            <td>
+            <a href="{{ url_for('edit_project', project_id = project.id) }} "><img src="{{ url_for('static', filename='img/delete.png') }}" style="width:20px;height:20px;" alt="Delete"/> </a>
+            <a href="{{ url_for('edit_project', project_id = project.id) }} "><img src="{{ url_for('static', filename='img/edit.png') }}" style="width:20px;height:20px;" alt="Edit"/> </a>
+            </td>
         </tr>
         {% endfor %}
         </table>

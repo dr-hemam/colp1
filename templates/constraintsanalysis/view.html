@@ -6,17 +6,40 @@ ConOccult - Projects
 
 {% block content %}
 
-    <div class ="col-md-5">
-        <h1>LookAhead List</h1>
-        <table>
+    <div class ="col-md-8">
+        <div>
+            <h1>Constraint Analysis List</h1>
+        </div>
+        {% with messages = get_flashed_messages() %}
+          {% if messages %}
+            <ul class='flashes alert alert-success alert-dismissable'>
+            {% for message in messages %}
+              <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+              <li>{{ message }}</li>
+            {% endfor %}
+            </ul>
+          {% endif %}
+        {% endwith %}
         
-        {% for la in lookaheads %}
+        <table class='table table-hover table-responsive'>
         <tr>
-        <th><a href ="/editlookahead/">{{ la }}</a></th>
+            <th>Section</th>
+            <th>Data Date</th>
+            <th>Actions</th>
         </tr>
-        <tr><td>Data Date of {{ la }}</td></tr>
+        {% for ca in constraintanalysis %}
+        <tr>
+            <td><a href ={{ url_for('view_constraintanalysis_details', id=ca.id) }}>{{ ca.section }}</a></th>
+            <td> {{ ca }}</td>
+            <td>
+                <a href={{ url_for('view_constraintanalysis_details', id = ca.id) }} "><img src="{{ url_for('static', filename='img/delete.png') }}" style="width:20px;height:20px;" alt="Delete"/> </a>
+                <a href={{ url_for('view_constraintanalysis_details', id = ca.id) }} "><img src="{{ url_for('static', filename='img/edit.png') }}" style="width:20px;height:20px;" alt="Edit"/> </a>
+            </td>
+        </tr>
         {% endfor %}
         </table>
+        
+        <a href= {{ url_for('new_constraintanalysis') }} class='btn btn-success'> Add Constraint Analysis </a>
            
     </div>
 

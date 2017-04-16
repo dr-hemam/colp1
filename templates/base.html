@@ -10,22 +10,52 @@
   <link href="{{ url_for('static', filename='css/rotate.css') }}" rel="stylesheet">
   <style>
     /* Remove the navbar's default margin-bottom and rounded borders */ 
+    html{
+    min-height:100%;/* make sure it is at least as tall as the viewport */
+    position:relative;
+    }
+    body{
+    height:100%; /* force the BODY element to match the height of the HTML element */
+    }
+    ul
+    {
+    list-style-type: none;
+    }
+    .sub a{
+      background-color:#444;
+    }
     .navbar {
       margin-bottom: 0;
       border-radius: 0;
     }
     .navbar-brand 
     {
+        background-color:#000;
         padding-top: 0;
     }
+    
     /* Set height of the grid so .sidenav can be 100% (adjust as needed) */
-    .row.content {height: 450px}
+    .row.content {
+      min-height: 540px;
+      height:85vh;
+      overflow:scroll;
+    }
     
     /* Set gray background color and 100% height */
     .sidenav {
       padding-top: 20px;
-      background-color: #f1f1f1;
+      background-color: #555;
       height: 100%;
+      overflow: scroll;
+    }
+    .workarea{
+      height:100%;
+    }
+    .sidenav li a{
+      color:#9d9d9d;
+    }
+    .collapse{
+      background-color:#555;
     }
     
     /* Set black background color, white text and some padding */
@@ -90,9 +120,9 @@
       <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
-        <span class="icon-bar"></span>                        
+        <span class="icon-bar"></span> 
       </button>
-      <a class="navbar-brand" href="/" padding=0px;><img height= 51px; src={{  url_for('static', filename='img/logo.png')  }} </a>
+      <a class="navbar-brand" href="/" style="padding:0px; padding-right:50px"> <img style="height:100%;" src={{  url_for('static', filename='img/logo.png')  }}/> </a>
     </div>
     <div class="collapse navbar-collapse" id="myNavbar">
       <ul class="nav navbar-nav">
@@ -102,8 +132,17 @@
         <li><a href="#">Contact</a></li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
-        <li> {% if session['user_id'] %} <a href={{ url_for('logout') }}><span class="glyphicon glyphicon-log-out"></span> Logout </a>
-        {% else %} <a href={{ url_for('login') }}><span class="glyphicon glyphicon-log-in"></span> Login </a> {% endif %}</li>
+        {% if session['user_id'] %} 
+        <li><a href= {{ url_for('view_projects') }} > {{ session['organisation'] }} </a></li>
+        {% if session['project_id'] %}
+        <li><a href= {{ url_for('login_success') }} style="padding-right:20px;"><span>  {{ session['project'] }} </span></a></li>
+        {% endif %}
+        <li><a href='#'><span class="glyphicon glyphicon-user"></span> {{ session['username'] }} </a></li>
+        <li><a href={{ url_for('logout') }}><span class="glyphicon glyphicon-log-out"></span> Logout </a></li>
+        {% else %} 
+        <li><a href={{ url_for('register') }}> Register </a></li>
+        <li><a href={{ url_for('login') }}> <span class="glyphicon glyphicon-log-in"></span> Login </a> </li>
+        {% endif %}
       </ul>
     </div>
   </div>
@@ -114,29 +153,28 @@
     <div class="col-sm-2 nav sidenav">
       <ul class="nav">
 	      <li><a href="#" id="org_btn" data-toggle="collapse" data-target="#orgsubmeny" aria-expanded="false">Organisation</a></li>
-          <ul class="nav collapse" id="orgsubmeny" role="menu" aria-labelledby="org_btn">
-            <li><a href={{ url_for('view_projects') }}>Projects</a></li>
+          <ul class="nav collapse sub" id="orgsubmeny" role="menu" aria-labelledby="org_btn">
+            <li class='nav'><a href={{ url_for('view_projects') }}> Projects </a></li>
     				<li><a href=   >Users</a></li>
     				<li><a href={{ url_for('view_roles') }}>Roles</a></li>
     				<li><a href={{ url_for('view_cycles') }}>Reporting Cycles</a></li>
     			</ul>	      
 		    <li><a href="#" id="prj_btn" data-toggle="collapse" data-target="#projmenu1" aria-expanded="false">Project</a>
-    			<ul class="nav collapse" id="projmenu1" role="menu" aria-labelledby="prj_btn">
-    				<li><a href="#">Delay Causes</a></li>
-    				<li><a href="#">Constraints</a></li>
-    				<li><a href="#">Sections of Work</a></li>
-    				<li><a href="#">Lookahead</a></li>
-    				<li><a href="#">Constraints Analysis</a></li>
-    				<li><a href="#">Weekly Work Plan</a></li>
-    				<li><a href="#">Sections of Work</a></li>
+    			<ul class="nav collapse sub" id="projmenu1" role="menu" aria-labelledby="prj_btn">
+    				<li><a href={{ url_for('view_reasons') }}> Delay Causes </a></li>
+    				<li><a href={{ url_for('view_constraints') }}> Constraints </a></li>
+    				<li><a href={{ url_for('view_sections') }}> Sections of Work </a></li>
+    				<li><a href={{ url_for('view_lookaheads') }} > Lookahead </a></li>
+    				<li><a href={{ url_for('view_constraintsalysis') }}>Constraints Analysis</a></li>
+    				<li><a href={{ url_for('view_wwps') }}>Weekly Work Plan</a></li>
     			</ul>
 		    </li>
 		    <li><a href="#">Reporting</a></li>
 		    <li><a href="#">Administration</a></li>
 	    </ul>
     </div>
-    <div class="col-sm-10 text-left"> 
-	{% block content %}{% endblock %}
+    <div class="col-sm-10 text-left workarea"> 
+	  {% block content %}{% endblock %}
       
     </div>
     
@@ -148,4 +186,16 @@
 </footer>
 
 </body>
+
+<script type="text/javascript">
+  $(document).ready(function () {
+        $('.navbar li').click(function(e) {
+            $('.navbar li').removeClass('active');
+            var $this = $(this);
+            if (!$this.hasClass('active')) {
+                $this.addClass('active');
+            }
+        });         
+    });
+</script>
 </html>

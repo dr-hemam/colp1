@@ -6,17 +6,34 @@ ConOccult - Projects
 
 {% block content %}
 
-    <div class ="col-md-5">
+    <div class ="col-md-8">
+        <div style="padding:20px;">
         <h1>LookAhead List</h1>
-        <table>
-        
+        {% with messages = get_flashed_messages() %}
+          {% if messages %}
+            <ul class='flashes alert alert-success alert-dismissable'>
+            {% for message in messages %}
+              <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+              <li>{{ message }}</li>
+            {% endfor %}
+            </ul>
+          {% endif %}
+        {% endwith %}
+        <table class='table table-hover table-responsive'>
+        <tr>
+            <th>Data Date</th>
+            <th>Section</th>
+        </tr>
         {% for la in lookaheads %}
         <tr>
-        <th><a href ="/editlookahead/">{{ la }}</a></th>
+        <td><a href ={{ url_for('view_lookahead', id= la.id) }}>{{ la }}</a></th>
+        <td> {{ la.section.name }}</td>
         </tr>
-        <tr><td>Data Date of {{ la }}</td></tr>
+        <tr></tr>
         {% endfor %}
         </table>
+        </div>
+        <a href= {{ url_for('new_lookahead') }} class='btn btn-success'> Add LookAhead</a>
            
     </div>
 

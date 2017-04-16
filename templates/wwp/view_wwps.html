@@ -7,7 +7,7 @@ ConOccult - Projects
 {% block content %}
 
     <div class ="col-md-8">
-        <h1>Section List</h1>
+        <h1>Weekly Work Plans</h1>
         {% with messages = get_flashed_messages() %}
           {% if messages %}
             <ul class='flashes alert alert-success alert-dismissable'>
@@ -21,22 +21,22 @@ ConOccult - Projects
         <table class="table table-hover table-responsive">
         <tr>
             <th>Code</th>
-            <th>Name</th>
+            <th>Data Date</th>
             <th>Actions</th>
         </tr>
-        {% for section in sections %}
+        {% for wp in wwp %}
         
         <tr>
-            <td>{{ section.code }}</td>
-            <td><a href ="/editsection/{{section.id }}">{{ section.name }}</a></td>
-            <td><a href="{{ url_for('edit_section', id = section.id) }} "><img src="{{ url_for('static', filename='img/delete.png') }}" style="width:20px;height:20px;" alt="Delete"/> </a>
-            <a href="{{ url_for('edit_section', id = section.id) }} "><img src="{{ url_for('static', filename='img/edit.png') }}" style="width:20px;height:20px;" alt="Edit"/> </a>
+            <td>{{ wp.section }}</td>
+            <td><a href ={{ url_for('view_wwp_detail', id=wp.id) }}>{{ wp.reportingdate }}</a></td>
+            <td><a href={{ url_for('view_wwp_detail', id=wp.id) }} ><img src="{{ url_for('static', filename='img/delete.png') }}" style="width:20px;height:20px;" alt="Delete"/> </a>
+            <a href={{ url_for('view_wwps', id=wp.id) }}><img src="{{ url_for('static', filename='img/edit.png') }}" style="width:20px;height:20px;" alt="Edit"/> </a>
             </td>
         </tr>
         
         {% endfor %}
         </table>
-        <a href= {{ url_for('new_section') }} class='btn btn-success'> Add Section </a>
+        <a href= {{ url_for('new_wwp') }} class='btn btn-success'> Add Weekly Plan </a>
     </div>
 
 {% endblock %}

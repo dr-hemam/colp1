@@ -18,7 +18,9 @@ class WWP(db.Model):
 	ppc = db.Column(db.Float)
 	is_active = db.Column(db.Boolean)
 	status = db.Column(db.Boolean)
-
+	__table_args__ = (
+        db.UniqueConstraint('project_id', 'reportingdate_id', 'section_id', name='uix_wwp_projid_reportid_section'),
+    )
 	def __init__(self, project, reportingdate, section, ppc=None, status=False, is_active=True):
 		self.is_active = is_active
 		self.project_id = project.id

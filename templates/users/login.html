@@ -8,7 +8,16 @@
   <div class="col-md-4">
 
     <h3>User Login</h3>
-
+      {% with messages = get_flashed_messages() %}
+          {% if messages %}
+            <ul class='flashes alert alert-success alert-dismissable'>
+            {% for message in messages %}
+              <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+              <li>{{ message }}</li>
+            {% endfor %}
+            </ul>
+          {% endif %}
+        {% endwith %}
     {% if error %}
     <div class="error text-danger">{{ error }}</div>
     {% endif %}

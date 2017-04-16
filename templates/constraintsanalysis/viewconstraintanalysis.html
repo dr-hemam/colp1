@@ -11,6 +11,16 @@ ConOccult - Reporting Cycles
         <h3>Area {{constraintanalysis.section}}</h3>
         <h3>Week Commencing {{constraintanalysis}}</h3>
         <hr>
+        {% with messages = get_flashed_messages() %}
+          {% if messages %}
+            <ul class='flashes alert alert-success alert-dismissable'>
+            {% for message in messages %}
+              <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+              <li>{{ message }}</li>
+            {% endfor %}
+            </ul>
+          {% endif %}
+        {% endwith %}
         <h4>Activities</h4>
         <table class='table table-hover table-responsive'>
             <tr>

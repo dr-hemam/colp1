@@ -12,6 +12,16 @@ ConOccult - Reporting Cycles
         <h1>Activities Constraint Analysis </h1>
         <h3>Area: {{constraintanalysis.section}}</h3>
         <h3>Week Commencing {{lookahead}}</h3><br><br>
+        {% with messages = get_flashed_messages() %}
+          {% if messages %}
+            <ul class='flashes alert alert-success alert-dismissable'>
+            {% for message in messages %}
+              <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+              <li>{{ message }}</li>
+            {% endfor %}
+            </ul>
+          {% endif %}
+        {% endwith %}
         {% from '_formhelpers.html' import render_field_nolabel %}
         {% if action=='new' %}<form method="POST" action ={{ url_for('new_constraintanalysis_details', id= constraintanalysis.id) }} role ="form">
         

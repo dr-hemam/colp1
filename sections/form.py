@@ -15,4 +15,4 @@ class SectionForm(Form):
     
     code = StringField('Code', [validators.Required()])
     name= StringField('Section Name', [validators.Required()])
-    active = BooleanField('Active')
+    active = BooleanField('Active', default=True)

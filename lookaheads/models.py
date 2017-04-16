@@ -22,6 +22,7 @@ class LookAhead(db.Model):
 	def __init__(self, project, reportingdate, section, is_active=True):
 		self.is_active = is_active
 		self.project_id = project.id
+		self.section = section
 		self.section_id = section.id
 		self.reportingdate = reportingdate
 		self.reportingdate_id= reportingdate.id
