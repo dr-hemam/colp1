@@ -1,6 +1,6 @@
 -- MySQL dump 10.13  Distrib 5.5.53, for debian-linux-gnu (x86_64)
 --
--- Host: localhost    Database: colp
+-- Host: 0.0.0.0    Database: colp
 -- ------------------------------------------------------
 -- Server version	5.5.53-0ubuntu0.14.04.1
 
@@ -156,7 +156,7 @@ CREATE TABLE `delay_reasons` (
   PRIMARY KEY (`id`),
   KEY `org_id` (`org_id`),
   CONSTRAINT `delay_reasons_ibfk_1` FOREIGN KEY (`org_id`) REFERENCES `organisations` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -165,7 +165,7 @@ CREATE TABLE `delay_reasons` (
 
 LOCK TABLES `delay_reasons` WRITE;
 /*!40000 ALTER TABLE `delay_reasons` DISABLE KEYS */;
-INSERT INTO `delay_reasons` VALUES (1,'Change in priority instructed by Client or PM',1,1);
+INSERT INTO `delay_reasons` VALUES (1,'Change in priority instructed by Client or PM',1,1),(2,'Design not ready',1,1);
 /*!40000 ALTER TABLE `delay_reasons` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -542,6 +542,7 @@ CREATE TABLE `wwp_details` (
 
 LOCK TABLES `wwp_details` WRITE;
 /*!40000 ALTER TABLE `wwp_details` DISABLE KEYS */;
+INSERT INTO `wwp_details` VALUES (1,17,1,1,1,0,0,0,0,0,1),(1,18,0,0,0,1,1,1,0,0,1),(12,18,1,1,0,0,1,0,0,0,1),(14,20,1,1,1,0,0,0,0,0,1);
 /*!40000 ALTER TABLE `wwp_details` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -567,7 +568,7 @@ CREATE TABLE `wwps` (
   CONSTRAINT `wwps_ibfk_1` FOREIGN KEY (`project_id`) REFERENCES `projects` (`id`),
   CONSTRAINT `wwps_ibfk_2` FOREIGN KEY (`reportingdate_id`) REFERENCES `reportingdates` (`id`),
   CONSTRAINT `wwps_ibfk_3` FOREIGN KEY (`section_id`) REFERENCES `sections` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -576,7 +577,7 @@ CREATE TABLE `wwps` (
 
 LOCK TABLES `wwps` WRITE;
 /*!40000 ALTER TABLE `wwps` DISABLE KEYS */;
-INSERT INTO `wwps` VALUES (1,1,1,1,NULL,1,0),(8,1,2,1,NULL,1,0),(9,1,3,1,NULL,1,0),(11,1,4,1,NULL,1,0);
+INSERT INTO `wwps` VALUES (1,1,1,1,NULL,1,0),(8,1,2,1,NULL,1,0),(9,1,3,1,NULL,1,0),(11,1,4,1,NULL,1,0),(12,1,1,2,NULL,1,0),(13,1,2,2,NULL,1,0),(14,1,1,3,NULL,1,0);
 /*!40000 ALTER TABLE `wwps` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -589,4 +590,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2017-04-17 18:42:31
+-- Dump completed on 2017-04-18 14:11:07
