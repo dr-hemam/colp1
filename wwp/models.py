@@ -31,6 +31,7 @@ class WWP(db.Model):
 		self.ppc = ppc
 		self.reportingdate_id= reportingdate.id
 		self.status =status
+	
 	def __repr__(self):
 		dd = datetime.strptime(str(self.reportingdate.rdate), '%Y-%m-%d %H:%M:%S').strftime("%d-%b-%Y")
 		return str(dd)
@@ -53,7 +54,7 @@ class WWPDetail(db.Model):
 	is_active = db.Column(db.Boolean)
 	
 	
-	def __init__(self, wwp, task, mon, tue, wed, thu, fri, sat, sun, status, is_active=True):
+	def __init__(self, wwp, task, mon, tue, wed, thu, fri, sat, sun, status= False, is_active=True):
 		self.wwp_id = wwp.id
 		self.task_id= task.id
 		self.task = task

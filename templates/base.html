@@ -21,8 +21,13 @@
     {
     list-style-type: none;
     }
-    .sub a{
+    
+    .sub li{
       background-color:#444;
+    }
+    li.active {
+    color:#FFFFFF;
+    background-color:#000000;
     }
     .navbar {
       margin-bottom: 0;
@@ -53,6 +58,9 @@
     }
     .sidenav li a{
       color:#9d9d9d;
+    }
+    .sidenav li.active a{
+      color:#FFF;
     }
     .collapse{
       background-color:#555;
@@ -127,9 +135,9 @@
     <div class="collapse navbar-collapse" id="myNavbar">
       <ul class="nav navbar-nav">
         <li class="active "><a href="/">Home</a></li>
-        <li><a href="#">About</a></li>
+        <li><a href="about.html">About</a></li>
         <li><a href={{ url_for('login_success') }}>Projects</a></li>
-        <li><a href="#">Contact</a></li>
+        <li><a href="contact.html">Contact</a></li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
         {% if session['user_id'] %} 
@@ -152,13 +160,14 @@
   <div class="row content">
     <div class="col-sm-2 nav sidenav">
       <ul class="nav">
-	      <li><a href="#" id="org_btn" data-toggle="collapse" data-target="#orgsubmeny" aria-expanded="false">Organisation</a></li>
+	      <li><a href="#" id="org_btn" data-toggle="collapse" data-target="#orgsubmeny" aria-expanded="false">Organisation</a>
           <ul class="nav collapse sub" id="orgsubmeny" role="menu" aria-labelledby="org_btn">
-            <li class='nav'><a href={{ url_for('view_projects') }}> Projects </a></li>
-    				<li><a href=   >Users</a></li>
+            <li><a href={{ url_for('view_projects') }}> Projects </a></li>
+    				<li><a href= {{ url_for('view_projects') }}  >Users</a></li>
     				<li><a href={{ url_for('view_roles') }}>Roles</a></li>
     				<li><a href={{ url_for('view_cycles') }}>Reporting Cycles</a></li>
-    			</ul>	      
+    			</ul>	    
+    		</li>
 		    <li><a href="#" id="prj_btn" data-toggle="collapse" data-target="#projmenu1" aria-expanded="false">Project</a>
     			<ul class="nav collapse sub" id="projmenu1" role="menu" aria-labelledby="prj_btn">
     				<li><a href={{ url_for('view_reasons') }}> Delay Causes </a></li>
@@ -186,16 +195,27 @@
 </footer>
 
 </body>
-
-<script type="text/javascript">
-  $(document).ready(function () {
-        $('.navbar li').click(function(e) {
-            $('.navbar li').removeClass('active');
-            var $this = $(this);
-            if (!$this.hasClass('active')) {
-                $this.addClass('active');
-            }
-        });         
-    });
+<script>
+  window.onload = function (){
+    for (var i = 0; i < document.links.length; i++) {
+    	var cleanurl = document.location.href.replace("#" , "" );
+        if (document.links[i].href == cleanurl) {
+            var item = document.links[i].parentNode;
+    		item.classList.add("active");
+    		console.log(item);
+    		if (item.parentElement.classList.contains("collapse")){
+    			item.parentElement.classList.add("in");
+    		}
+    	}
+    	else{
+    		var item = document.links[i].parentNode;
+    		if(item.classList.contains("active")){
+    			item.classList.remove("active");
+    		}
+    	}	
+    }
+  };
 </script>
+
+
 </html>

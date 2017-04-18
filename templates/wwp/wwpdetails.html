@@ -40,13 +40,34 @@ ConOccult - Reporting Cycles
         </tr>
         <tr class="tr_clone">
             <td>{{ render_field_nolabel(form.task, class="form-control") }}</td>
-            <td>{{ render_field_nolabel(form.mon, class="form-control") }}</td>
-            <td>{{ render_field_nolabel(form.tue, class="form-control") }}</td>
-            <td>{{ render_field_nolabel(form.wed, class="form-control") }}</td>
-            <td>{{ render_field_nolabel(form.thu, class="form-control") }}</td>
-            <td>{{ render_field_nolabel(form.fri, class="form-control") }}</td>
-            <td>{{ render_field_nolabel(form.sat, class="form-control") }}</td>
-            <td>{{ render_field_nolabel(form.sun, class="form-control") }}</td>
+            <td>
+                <input class="form-control" id="mon" name="mon" type="checkbox" value='1'>
+                <input type="hidden" name="mon" value="No"></div>
+            </td>
+            <td>
+                <input class="form-control" id="tue" name="tue" type="checkbox" value='1'>
+                <input type="hidden" name="tue" value="No"></div>
+            </td>
+            <td>
+                <input class="form-control" id="wed" name="wed" type="checkbox" value='1'>
+                <input type="hidden" name="wed" value="No"></div>
+            </td>
+            <td>
+                <input class="form-control" id="thu" name="thu" type="checkbox" value='1'>
+                <input type="hidden" name="thu" value="No"></div>
+            </td>
+            <td>
+                <input class="form-control" id="fri" name="fri" type="checkbox" value='1'>
+                <input type="hidden" name="fri" value="No"></div>
+            </td>
+            <td>
+                <input class="form-control" id="sat" name="sat" type="checkbox" value='1'>
+                <input type="hidden" name="sat" value="No"></div>
+            </td>
+            <td>
+                <input class="form-control" id="sun" name="sun" type="checkbox" value='1'>
+                <input type="hidden" name="sun" value="No"></div>
+            </td>
             <td>{{ render_field_nolabel(form.is_active, class="form-control") }}</td>
             <td><input type="button" name="add" value="Add" class="tr_clone_add"></td>
         </tr>

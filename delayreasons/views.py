@@ -1,7 +1,7 @@
 from colp import app, db
 from delayreasons.form import DelayReasonForm
 from delayreasons.models import DelayReason
-from flask import render_template, redirect, url_for, request, session
+from flask import render_template, redirect, url_for, request, session, flash
 from users.models import User
 from users.decorators import *
 from organisations.models import Organisation
@@ -43,3 +43,18 @@ def edit_reason(id):
 def view_reasons():
     reasons = DelayReason.query.filter_by(is_active=True, org_id=session['organisation_id']).all()
     return render_template('delayreasons/view.html', reasons=reasons)
+    
+@app.route('/deletereason/<id>')
+def delete_reason(id):
+    reason = DelayReason.query.filter_by(id=id).first()
+    reason.is_active= False
+    try:
+        db.session.add(reason)
+        db.session.flush()
+        db.session.commit()
+    except Exception as e:
+        print(e)
+        flash('An error occurred during deleting the delay cause category')
+        return redirect(url_for('view_reasons'))
+    flash('The delay cause category has been deleted successfully!')
+    return redirect(url_for('view_reasons'))
