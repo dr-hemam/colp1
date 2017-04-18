@@ -18,11 +18,18 @@ ConOccult - Projects
             </ul>
           {% endif %}
         {% endwith %}
-        <table>
-        
+        <table class='table table-hover table-responsive'>
+        <tr>
+          <th>Description</th>
+          <th>Actions</th>
+        </tr>
         {% for reason in reasons %}
         <tr>
-        <th><a href ="/editreason/{{reason.id }}">{{ reason.name }}</a></th>
+        <td><a href ="/editreason/{{reason.id }}">{{ reason.name }}</a></td>
+        <td>
+          <a href="{{ url_for('delete_reason', id = reason.id) }} "><img src="{{ url_for('static', filename='img/delete.png') }}" style="width:20px;height:20px;" alt="Delete"/> </a>
+          <a href="{{ url_for('edit_reason', id = reason.id) }} "><img src="{{ url_for('static', filename='img/edit.png') }}" style="width:20px;height:20px;" alt="Edit"/> </a>
+        </td>
         </tr>
         {% endfor %}
         </table>

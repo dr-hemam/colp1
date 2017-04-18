@@ -1,0 +1,103 @@
+{% extends 'base.html' %}
+
+{% block title %}
+ConOccult - Reporting Cycles
+{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class ="col-md-8">
+        <h1>Weekly Work Plan Activities  </h1>
+        <h3>Area {{wwp.section}}</h3>
+        <h3>Week Commencing {{wwp}}</h3>
+        <hr>
+        {% with messages = get_flashed_messages() %}
+          {% if messages %}
+            <ul class='flashes alert alert-success alert-dismissable'>
+            {% for message in messages %}
+              <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+              <li>{{ message }}</li>
+            {% endfor %}
+            </ul>
+          {% endif %}
+        {% endwith %}
+        <h4>Activities</h4>
+        <div class="imageTable">
+        <table class='table table-hover table-responsive'>
+            <tr>
+                <th>Task</th>
+                
+                <th>Mon</th>
+                <th>Tue</th>
+                <th>Wed</th>
+                <th>Thu</th>
+                <th>Fri</th>
+                <th>Sat</th>
+                <th>Sun</th>
+                
+                <th>Status</th>
+                <th>Active</th>
+            </tr>
+            {% for task in wwpdetails %}
+            <tr>
+            <td>{{ task.task }}</td>
+            <td>
+                {% if task.mon %}
+                <img class="img-responsive" src={{ url_for('static',  filename='img/True.png') }} />
+                {% else %}
+                <img class="img-responsive" src={{ url_for('static',  filename='img/False.png') }} />
+                {% endif %}
+            </td>
+            <td>
+                {% if task.tue %}
+                <img class="img-responsive" src={{ url_for('static',  filename='img/True.png') }} >
+                {% else %}
+                <img class="img-responsive" src={{ url_for('static',  filename='img/False.png') }} >
+                {% endif %}
+            </td>
+            <td>
+                {% if task.wed %}
+                <img class="img-responsive" src={{ url_for('static',  filename='img/True.png') }} >
+                {% else %}
+                <img class="img-responsive" src={{ url_for('static',  filename='img/False.png') }} >
+                {% endif %}
+            </td>
+            <td>
+                {% if task.thu %}
+                <img class="img-responsive" src={{ url_for('static',  filename='img/True.png') }} >
+                {% else %}
+                <img class="img-responsive" src={{ url_for('static',  filename='img/False.png') }} >
+                {% endif %}
+            </td>
+            <td>
+                {% if task.fri %}
+                <img class="img-responsive" src={{ url_for('static',  filename='img/True.png') }} >
+                {% else %}
+                <img class="img-responsive" src={{ url_for('static',  filename='img/False.png') }} >
+                {% endif %}
+            </td>
+            <td>
+                {% if task.sat %}
+                <img class="img-responsive" src={{ url_for('static',  filename='img/True.png') }} >
+                {% else %}
+                <img class="img-responsive" src={{ url_for('static',  filename='img/False.png') }} >
+                {% endif %}
+            </td>
+            <td>
+                {% if task.sun %}
+                <img class="img-responsive" src={{ url_for('static',  filename='img/True.png') }} >
+                {% else %}
+                <img class="img-responsive" src={{ url_for('static',  filename='img/False.png') }} >
+                {% endif %}
+            </td>
+            
+            <td>{{ task.status}}</td>
+            <td>{{ task.is_active }}</td>
+            </tr>
+
+            {% endfor %}
+        </table></div>
+    </div>
+</div>
+
+{% endblock %}

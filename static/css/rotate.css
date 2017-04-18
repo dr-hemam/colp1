@@ -21,3 +21,9 @@ th.rotate {
 	/*width: 20px !important;*/
 	font-weight: normal;
 }
+
+.autoResizeImage {
+    max-width: 100%;
+    height: auto;
+    width: auto;
+}
