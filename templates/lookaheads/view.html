@@ -23,13 +23,18 @@ ConOccult - Projects
         <tr>
             <th>Data Date</th>
             <th>Section</th>
+            <th>Actions</th>
         </tr>
         {% for la in lookaheads %}
         <tr>
         <td><a href ={{ url_for('view_lookahead', id= la.id) }}>{{ la }}</a></th>
         <td> {{ la.section.name }}</td>
+        <td>
+                <a href="{{ url_for('view_lookahead', id =la.id) }} "><img src="{{ url_for('static', filename='img/delete.png') }}" style="width:20px;height:20px;" alt="Delete"/> </a>
+                <a href="{{ url_for('view_lookahead', id =la.id) }} "><img src="{{ url_for('static', filename='img/edit.png') }}" style="width:20px;height:20px;" alt="Edit"/> </a>
+        </td>
         </tr>
-        <tr></tr>
+        
         {% endfor %}
         </table>
         </div>

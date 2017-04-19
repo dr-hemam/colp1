@@ -187,3 +187,29 @@ def newuserprojectassignment():
             flash ('User already assigned to activity')
             return redirect(url_for('newuserprojectassignment'))
     return render_template('/users/projectassignment.html', form=form, action='new')
+    
+    
+def sub(roles, id):
+    ul ="<ul>"
+    for role in roles:
+        if role.manager_id == id:
+            ul +="<li id='" + str(role.id) + "'>"
+            ul += role.name
+            ul += sub(roles, role.id)
+            ul += "</li>"
+    ul += "</ul>"
+    return ul
+            
+@app.route('/rolesorder')
+def roles_ordered():
+    roles = Role.query.filter_by(organisation_id= session.get('organisation_id')).all()
+    print(str(roles))
+    ul="<ul>"
+    for role in roles:
+        if role.manager == None:
+            ul +="<li id='"+ str(role.id) +"'>" + role.name 
+            id= role.id
+            ul += sub(roles, id)
+            ul += "</li>"
+    ul +="</ul>"
+    return render_template('users/view_roles.1.html', roles= ul)
