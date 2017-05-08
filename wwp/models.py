@@ -51,10 +51,12 @@ class WWPDetail(db.Model):
 	sat = db.Column(db.Boolean)
 	sun = db.Column(db.Boolean)
 	status = db.Column(db.Boolean)
+	updated = db.Column(db.Boolean)
 	is_active = db.Column(db.Boolean)
+	delayreason = db.relationship('DelayReason', backref='wwptask')
+	delayreason_id = db.Column(db.Integer, db.ForeignKey('delay_reasons.id'))
 	
-	
-	def __init__(self, wwp, task, mon, tue, wed, thu, fri, sat, sun, status= False, is_active=True):
+	def __init__(self, wwp, task, mon, tue, wed, thu, fri, sat, sun, updated= False, status= False, is_active=True):
 		self.wwp_id = wwp.id
 		self.task_id= task.id
 		self.task = task
@@ -66,6 +68,7 @@ class WWPDetail(db.Model):
 		self.sat = sat
 		self.sun = sun
 		self.status = status
+		self.updated = updated
 		self.is_active = is_active
 		
 	def __repr__(self):

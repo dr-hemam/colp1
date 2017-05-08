@@ -10,9 +10,7 @@ from wtforms.ext.sqlalchemy.fields import QuerySelectField
 
 class SectionForm(Form):
     
-    def get_cycles():
-        return ReportingCycle.query
-    
     code = StringField('Code', [validators.Required()])
     name= StringField('Section Name', [validators.Required()])
+    parent = QuerySelectField('Parent', allow_blank=True)
     active = BooleanField('Active', default=True)

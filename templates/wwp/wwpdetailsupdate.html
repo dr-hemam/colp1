@@ -6,7 +6,7 @@ ConOccult - Reporting Cycles
 
 {% block content %}
 <div class="row">
-    <div class ="col-md-8">
+    <div class ="col-md-10">
         <h1>Weekly Work Plan Activities  </h1>
         <h3>Area {{wwp.section}}</h3>
         <h3>Week Commencing {{wwp}}</h3>
@@ -21,12 +21,14 @@ ConOccult - Reporting Cycles
             </ul>
           {% endif %}
         {% endwith %}
+        {% from '_formhelpers.html' import render_field_nolabel %}
+        {% if action=='update' %}<form method="POST" action ={{ url_for('update_wwp_details', id= wwp.id) }} role ="form">
+        {% endif %}
         <h4>Activities</h4>
         <div class="imageTable">
         <table class='table table-hover table-responsive'>
             <tr>
                 <th>Task</th>
-                
                 <th>Mon</th>
                 <th>Tue</th>
                 <th>Wed</th>
@@ -35,12 +37,12 @@ ConOccult - Reporting Cycles
                 <th>Sat</th>
                 <th>Sun</th>
                 
-                <th>Status</th>
-                <th>Active</th>
+                <th>Completed</th>
+                <th>Delay Reason</th>
             </tr>
             {% for task in wwpdetails %}
             <tr>
-            <td style="width:50%">{{ task.task }}</td>
+            <td style="width:25%">{{ task.task }}</td>
             <td>
                 {% if task.mon %}
                 <img class="img-responsive" src={{ url_for('static',  filename='img/True.png') }} />
@@ -91,12 +93,17 @@ ConOccult - Reporting Cycles
                 {% endif %}
             </td>
             
-            <td>{{ task.status}}</td>
-            <td>{{ task.is_active }}</td>
+            <td>
+                <input class="form-control" id="status" name="status" type="checkbox" value='1'>
+                <input type="hidden" name="status" value="No">
+                </td>
+            <td>{{ render_field_nolabel(form.delayreason, class="form-control") }}</td>
             </tr>
-
+            </div>
             {% endfor %}
         </table></div>
+        <input class="btn btn-success" type="submit" name="Save Updates"/>
+        </form>
     </div>
 </div>
 

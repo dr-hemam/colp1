@@ -53,49 +53,53 @@ def new_wwp():
 
 @app.route('/newwwpdetails/<id>', methods=['POST', 'GET'])
 def new_wwp_details(id):
-    try:
-        form = WWPDetailForm()
-        wwp = WWP.query.filter_by(id= id).first()
-        ca = ConstraintAnalysis.query.filter_by(project_id=wwp.project_id, section_id=wwp.section_id, reportingdate_id=wwp.reportingdate_id).first()
-        lookahead = LookAhead.query.filter_by(reportingdate_id = wwp.reportingdate_id, section_id= wwp.section_id).first()
+
+    form = WWPDetailForm()
+    wwp = WWP.query.filter_by(id= id).first()
+    ca = ConstraintAnalysis.query.filter_by(project_id=wwp.project_id, section_id=wwp.section_id, reportingdate_id=wwp.reportingdate_id).first()
+    lookahead = LookAhead.query.filter_by(reportingdate_id = wwp.reportingdate_id, section_id= wwp.section_id).first()
+    if lookahead:
         form.task.query = LookAheadDetail.query.filter_by(lookahead_id= lookahead.id)
-        #= LookAheadDetail.query.join(ConstraintAnalysisDetail).join(LookAhead, aliased=True).filter_by(section_id==wwp.section_id, constraintanalysis_id==ca.id, ConstraintAnalysisDetail.can_do== True )
-    
-        if request.method == "POST" and form.validate():
-            constraints = Constraint.query.filter_by(org_id = session.get('organisation_id'), is_active=True).all()
-            constraintanalysis = ConstraintAnalysis.query.filter_by(id= id).first()
-            
-            activities = request.form.getlist('task')
-            is_actives = request.form.getlist('is_active')
-            mon = getCheckbox(request.form.getlist('mon'))
-            tue = getCheckbox(request.form.getlist('tue'))
-            wed = getCheckbox(request.form.getlist('wed'))
-            thu = getCheckbox(request.form.getlist('thu'))
-            fri = getCheckbox(request.form.getlist('fri'))
-            sat = getCheckbox(request.form.getlist('sat'))
-            sun = getCheckbox(request.form.getlist('sun'))
-            print(mon, tue, wed,thu, fri, sat, sun)
-            #statuses = request.form.getlist('status')
-            can_dos = request.form.getlist('can_do')
-            for i in range(len(activities)):
-                task = LookAheadDetail.query.filter_by(id=activities[i]).first()
-                wwpdetail= WWPDetail (wwp= wwp,
-                                        task= task, 
-                                        mon= mon[i],
-                                        tue= tue[i],
-                                        wed=wed[i],
-                                        thu= thu[i],
-                                        fri= fri[i],
-                                        sat= sat[i],
-                                        sun= sun[i]
-                                        )
-                db.session.add(wwpdetail)
-            db.session.commit()
-            flash("Weekly Work Plan saved successfully!")
-            return redirect(url_for('view_wwp_detail', id=id))
-    except:
-        flash('An error has occurred while creating the Weekly Work Plan')
+    else:
+        flash('No lookahead tasks found. Please prepare the lookahead first!')
         return redirect(url_for('view_wwps'))
+    #= LookAheadDetail.query.join(ConstraintAnalysisDetail).join(LookAhead, aliased=True).filter_by(section_id==wwp.section_id, constraintanalysis_id==ca.id, ConstraintAnalysisDetail.can_do== True )
+
+    if request.method == "POST" and form.validate():
+        constraints = Constraint.query.filter_by(org_id = session.get('organisation_id'), is_active=True).all()
+        constraintanalysis = ConstraintAnalysis.query.filter_by(id= id).first()
+        
+        activities = request.form.getlist('task')
+        is_actives = request.form.getlist('is_active')
+        mon = getCheckbox(request.form.getlist('mon'))
+        tue = getCheckbox(request.form.getlist('tue'))
+        wed = getCheckbox(request.form.getlist('wed'))
+        thu = getCheckbox(request.form.getlist('thu'))
+        fri = getCheckbox(request.form.getlist('fri'))
+        sat = getCheckbox(request.form.getlist('sat'))
+        sun = getCheckbox(request.form.getlist('sun'))
+        print(mon, tue, wed,thu, fri, sat, sun)
+        #statuses = request.form.getlist('status')
+        #can_dos = request.form.getlist('can_do')
+        for i in range(len(activities)):
+            task = LookAheadDetail.query.filter_by(id=activities[i]).first()
+            wwpdetail= WWPDetail (wwp= wwp,
+                                    task= task, 
+                                    mon= mon[i],
+                                    tue= tue[i],
+                                    wed=wed[i],
+                                    thu= thu[i],
+                                    fri= fri[i],
+                                    sat= sat[i],
+                                    sun= sun[i]
+                                    )
+            db.session.add(wwpdetail)
+        db.session.commit()
+        flash("Weekly Work Plan saved successfully!")
+        return redirect(url_for('view_wwp_detail', id=id))
+# except:
+#     flash('An error has occurred while creating the Weekly Work Plan')
+#     return redirect(url_for('view_wwps'))
     return render_template('wwp/wwpdetails.html', form=form, action='new', wwp = wwp)
    
 @app.route('/viewwwp')
@@ -112,11 +116,57 @@ def view_wwps():
 @login_required
 @project_required
 def view_wwp_detail(id):
-    try:
-        wwp= WWP.query.filter_by(id=id).first()
-        wwpdetails = WWPDetail.query.filter_by(wwp_id=wwp.id).all()
-        
-    except:
-        return ("exception")
+    wwp= WWP.query.filter_by(id=id).first()
+    wwpdetails = WWPDetail.query.filter_by(wwp_id=wwp.id).all()
     return render_template('wwp/viewwwpdetails.html', wwp=wwp, wwpdetails= wwpdetails)
+
+    
     #return render_template('wwp/view_wwps.html', wwp=wwp)
+    
+    
+@app.route('/updatewwpdetails/<id>', methods=['POST', 'GET'])
+def update_wwp_details(id):
+
+    wwp = WWP.query.filter_by(id= id).first()
+    form = WWPDetailForm()
+    ca = ConstraintAnalysis.query.filter_by(project_id=wwp.project_id, section_id=wwp.section_id, reportingdate_id=wwp.reportingdate_id).first()
+    lookahead = LookAhead.query.filter_by(reportingdate_id = wwp.reportingdate_id, section_id= wwp.section_id).first()
+    
+    #= LookAheadDetail.query.join(ConstraintAnalysisDetail).join(LookAhead, aliased=True).filter_by(section_id==wwp.section_id, constraintanalysis_id==ca.id, ConstraintAnalysisDetail.can_do== True )
+    wwp_details = WWPDetail.query.filter_by(wwp_id = wwp.id).all()
+    
+    
+    #print (task_forms)
+    if request.method == "POST" :
+        activities = wwp_details
+        status = getCheckbox(request.form.getlist('status'))
+        ppc=0.0
+        for s in status:
+            if s==True:
+                ppc = ppc+1
+        ppc = ppc / len(status)
+        print (ppc)
+        print (status)
+        delayreason = request.form.getlist('delayreason')
+        print (delayreason)
+        for i in range(len(activities)):
+            task = WWPDetail.query.filter_by(wwp_id= wwp.id, task_id=activities[i].task_id).first()
+            task.status = status[i]
+            #print(delayreason[i])
+            if delayreason[i] != '__None':
+                task.delayreason_id = delayreason[i]
+            else:
+                task.delayreason_id = None
+            task.updated = True
+            db.session.add(task)
+            db.session.flush()
+        wwp.ppc= ppc
+        wwp.status = True
+        db.session.add(wwp)
+        db.session.commit()
+        flash("Weekly Work Plan saved successfully!")
+        return redirect(url_for('view_wwp_detail', id=id))
+    # except:
+    #     flash('An error has occurred while creating the Weekly Work Plan')
+    #     return redirect(url_for('view_wwps'))
+    return render_template('wwp/wwpdetailsupdate.html', form=form, action='update', wwp = wwp, wwpdetails= wwp_details)

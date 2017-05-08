@@ -6,7 +6,7 @@ ConOccult - Reporting Cycles
 
 {% block content %}
 <div class="row">
-    <div class ="col-md-8">
+    <div class ="col-md-10">
         <h1>Constraint Analysis Activities  </h1>
         <h3>Area {{constraintanalysis.section}}</h3>
         <h3>Week Commencing {{constraintanalysis}}</h3>
@@ -33,9 +33,15 @@ ConOccult - Reporting Cycles
             </tr>
             {% for task in tasks %}
             <tr>
-            <td>{{ task.task }}</td>
+            <td style="width:50%">{{ task.task }}</td>
                 {% for d in details.filter_by(task_id= task.task_id).all() %}
-                <td>{{ d.status }}</td>
+                <td>
+                {% if d.status %}
+                <img class="img-responsive" src={{ url_for('static',  filename='img/True.png') }} >
+                {% else %}
+                <img class="img-responsive" src={{ url_for('static',  filename='img/False.png') }} >
+                {% endif %}
+                </td>
                 {% endfor %}
             <td>{{ task.status}}</td>
             <td>{{ task.is_active }}</td>

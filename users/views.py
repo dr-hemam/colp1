@@ -190,26 +190,52 @@ def newuserprojectassignment():
     
     
 def sub(roles, id):
-    ul ="<ul>"
+    ul =',"childs":['
     for role in roles:
         if role.manager_id == id:
-            ul +="<li id='" + str(role.id) + "'>"
-            ul += role.name
+            ul +='{ "name":"' + role.name +'", "id":"' + str(role.id) +'","manager_id":"' + str(role.manager_id) + '"'
+            
             ul += sub(roles, role.id)
-            ul += "</li>"
-    ul += "</ul>"
+            ul += "}"
+    ul += "]"
     return ul
             
 @app.route('/rolesorder')
 def roles_ordered():
     roles = Role.query.filter_by(organisation_id= session.get('organisation_id')).all()
-    print(str(roles))
-    ul="<ul>"
+    ul="["
     for role in roles:
         if role.manager == None:
-            ul +="<li id='"+ str(role.id) +"'>" + role.name 
+            ul += '{ "name":"' + role.name +'", "id":"' + str(role.id) +'","manager_id":"' + str(role.manager_id) + '"'
             id= role.id
             ul += sub(roles, id)
-            ul += "</li>"
-    ul +="</ul>"
-    return render_template('users/view_roles.1.html', roles= ul)
+            ul += "},"
+    ul =ul[:-1]
+    ul +="]"
+    return ul
+    
+    
+# def sub(roles, id):
+#     ul ="<ul>"
+#     for role in roles:
+#         if role.manager_id == id:
+#             ul +="<li id='" + str(role.id) + "'>"
+#             ul += role.name
+#             ul += sub(roles, role.id)
+#             ul += "</li>"
+#     ul += "</ul>"
+#     return ul
+            
+# @app.route('/rolesorder')
+# def roles_ordered():
+#     roles = Role.query.filter_by(organisation_id= session.get('organisation_id')).all()
+#     print(str(roles))
+#     ul="<ul>"
+#     for role in roles:
+#         if role.manager == None:
+#             ul +="<li id='"+ str(role.id) +"'>" + role.name 
+#             id= role.id
+#             ul += sub(roles, id)
+#             ul += "</li>"
+#     ul +="</ul>"
+#     return render_template('users/view_roles.1.html', roles= ul)

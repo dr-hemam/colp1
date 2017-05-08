@@ -34,7 +34,7 @@ class LoginForm(Form):
 
 class RoleForm(Form):
     def get_manager():
-        return Role.query
+        return Role.query.filter_by(organisation_id = session.get('organisation_id'))
     print('hello' +str(get_manager))
     name = StringField('Role Name', [validators.Required()])
     manager = QuerySelectField('Manager', query_factory= get_manager, allow_blank=True)

@@ -9,7 +9,7 @@ from calendars.models import ReportingDate
 from lookaheads.models import LookAhead, LookAheadDetail
 from constraints.models import Constraint
 from sections.models import Section
-from sqlalchemy import exc
+from sqlalchemy import exc, desc
 
 
 @app.route('/newconstraintanalysis', methods=['POST', 'GET'])
@@ -89,7 +89,8 @@ def new_constraintanalysis_details(id):
 @login_required
 @project_required
 def view_constraintsalysis():
-    constraintanalysis = ConstraintAnalysis.query.filter_by(project_id=session['project_id'],is_active=True).all()
+    constraintanalysis = ConstraintAnalysis.query.join(ReportingDate).filter_by(project_id=session['project_id'], is_active=True)
+    constraintanalysis = constraintanalysis.order_by(desc('rdate')).all()
     return render_template('constraintsanalysis/view.html', constraintanalysis=constraintanalysis)
     
 @app.route('/viewconstraintanalysisdetails/<id>')
