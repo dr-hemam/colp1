@@ -107,7 +107,7 @@ def new_wwp_details(id):
 @project_required
 def view_wwps():
     #wwp= WWP.query.filter_by(project_id=session.get('project_id'), is_active=True)
-    wwp= WWP.query.join(ReportingDate).filter_by(project_id=session.get('project_id'), is_active=True)
+    wwp= WWP.query.join(ReportingDate).filter_by(project_id=session['project_id'], is_active=True)
     wwp = wwp.order_by(desc('rdate')).all()
     return render_template('wwp/view_wwps.html', wwp=wwp)
     
