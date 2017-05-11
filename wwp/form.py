@@ -6,6 +6,7 @@ from calendars.models import ReportingCycle
 from wtforms.ext.sqlalchemy.fields import QuerySelectField
 from delayreasons.models import DelayReason
 from flask import session
+from users.models import User
 
 class WWPForm(Form):
 
@@ -16,10 +17,14 @@ class WWPForm(Form):
 
 class WWPDetailForm(Form):
     
+    def get_users():
+        return User.query.filter_by(organisation_id=session.get('organisation_id'))
+        
     def delay_reasons():
         return DelayReason.query.filter_by(org_id= session.get('organisation_id'))
     
     task = QuerySelectField('Task', [validators.Required()])
+    user = QuerySelectField('User', query_factory= get_users, allow_blank=True)
     mon = BooleanField('Mon')
     tue = BooleanField('Tue')
     wed = BooleanField('Wed')

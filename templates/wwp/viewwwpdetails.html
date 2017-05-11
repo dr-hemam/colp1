@@ -26,7 +26,7 @@ ConOccult - Reporting Cycles
         <table class='table table-hover table-responsive'>
             <tr>
                 <th>Task</th>
-                
+                <th>Responsible</th>
                 <th>Mon</th>
                 <th>Tue</th>
                 <th>Wed</th>
@@ -35,12 +35,13 @@ ConOccult - Reporting Cycles
                 <th>Sat</th>
                 <th>Sun</th>
                 
-                <th>Status</th>
-                <th>Active</th>
+                <th>Completed</th>
+                
             </tr>
             {% for task in wwpdetails %}
             <tr>
             <td style="width:50%">{{ task.task }}</td>
+            <td> {{ task.user }} </td>
             <td>
                 {% if task.mon %}
                 <img class="img-responsive" src={{ url_for('static',  filename='img/True.png') }} />
@@ -92,7 +93,7 @@ ConOccult - Reporting Cycles
             </td>
             
             <td>{{ task.status}}</td>
-            <td>{{ task.is_active }}</td>
+            
             </tr>
 
             {% endfor %}

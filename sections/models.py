@@ -22,7 +22,8 @@ class Section(db.Model):
 		self.active = active
 		self.project_id = project.id
 		self.parent = parent
-		self.parent_id= parent.id
+		if parent:
+			self.parent_id= parent.id
 		
 	def json(self):
 		return ({"name": self.name , "id": str(self.id) ,

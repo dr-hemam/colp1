@@ -28,6 +28,7 @@ ConOccult - Reporting Cycles
         <table class="table">
         <tr>
             <td>Activity</td>
+            <td>Responsible</td>
             <td>Mon</td>
             <td>Tue</td>
             <td>Wed</td>
@@ -44,6 +45,7 @@ ConOccult - Reporting Cycles
         </tr>
         <tr class="tr_clone">
             <td>{{ render_field_nolabel(form.task, class="form-control") }}</td>
+            <td>{{ render_field_nolabel(form.user, class="form-control") }}</td>
             <td>
                 <input class="form-control" id="mon" name="mon" type="checkbox" value='1'>
                 <input type="hidden" name="mon" value="No"></div>

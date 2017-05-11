@@ -43,6 +43,8 @@ class WWPDetail(db.Model):
 	wwp = db.relationship('WWP', backref='detail')
 	task_id = db.Column(db.Integer, db.ForeignKey('lookaheads_details.id'), primary_key=True)
 	task = db.relationship('LookAheadDetail', backref='wwptask')
+	user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=True)
+	user = db.relationship("User", backref="wwp_details")
 	mon= db.Column(db.Boolean)
 	tue = db.Column(db.Boolean)
 	wed = db.Column(db.Boolean)
@@ -56,10 +58,12 @@ class WWPDetail(db.Model):
 	delayreason = db.relationship('DelayReason', backref='wwptask')
 	delayreason_id = db.Column(db.Integer, db.ForeignKey('delay_reasons.id'))
 	
-	def __init__(self, wwp, task, mon, tue, wed, thu, fri, sat, sun, updated= False, status= False, is_active=True):
+	def __init__(self, wwp, task, user, mon, tue, wed, thu, fri, sat, sun, updated= False, status= False, is_active=True):
 		self.wwp_id = wwp.id
 		self.task_id= task.id
 		self.task = task
+		self.user_id = user.id
+		#self.user = user
 		self.mon = mon
 		self.tue = tue
 		self.wed = wed

@@ -70,6 +70,7 @@ def new_wwp_details(id):
         constraintanalysis = ConstraintAnalysis.query.filter_by(id= id).first()
         
         activities = request.form.getlist('task')
+        users = request.form.getlist('user')
         is_actives = request.form.getlist('is_active')
         mon = getCheckbox(request.form.getlist('mon'))
         tue = getCheckbox(request.form.getlist('tue'))
@@ -83,8 +84,10 @@ def new_wwp_details(id):
         #can_dos = request.form.getlist('can_do')
         for i in range(len(activities)):
             task = LookAheadDetail.query.filter_by(id=activities[i]).first()
+            user = User.query.filter_by(id= users[i]).first()
             wwpdetail= WWPDetail (wwp= wwp,
-                                    task= task, 
+                                    task= task,
+                                    user = user,
                                     mon= mon[i],
                                     tue= tue[i],
                                     wed=wed[i],

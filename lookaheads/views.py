@@ -7,7 +7,7 @@ from lookaheads.models import LookAhead, LookAheadDetail
 from lookaheads.form import LookAheadForm, LookAheadDetailForm
 from calendars.models import ReportingDate
 from sections.models import Section
-from sqlalchemy import exc
+from sqlalchemy import exc, desc
 from wtforms import validators
 
 
@@ -108,7 +108,8 @@ def edit_lookahead_detail(tid):
 @login_required
 @project_required
 def view_lookaheads():
-    lookaheads = LookAhead.query.filter_by(project_id=session['project_id']).all()
+    lookaheads = LookAhead.query.join(ReportingDate).filter_by(project_id=session['project_id'])
+    lookaheads = lookaheads.order_by(desc('rdate')).all()
     print('lookaheads', lookaheads)
     return render_template('lookaheads/view.html', lookaheads=lookaheads)
     
