@@ -8,6 +8,7 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
   <link href="{{ url_for('static', filename='css/rotate.css') }}" rel="stylesheet">
+  {% block ref %} {% endblock %}
   <style>
     /* Remove the navbar's default margin-bottom and rounded borders */ 
     html{
@@ -178,7 +179,7 @@
     				<li><a href={{ url_for('view_wwps') }}>Weekly Work Plan</a></li>
     			</ul>
 		    </li>
-		    <li><a href="#">Reporting</a></li>
+		    <li><a href={{ url_for('report') }}>Reporting</a></li>
 		    <li><a href="#">Administration</a></li>
 	    </ul>
     </div>

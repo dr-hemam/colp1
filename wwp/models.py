@@ -60,9 +60,11 @@ class WWPDetail(db.Model):
 	
 	def __init__(self, wwp, task, user, mon, tue, wed, thu, fri, sat, sun, updated= False, status= False, is_active=True):
 		self.wwp_id = wwp.id
-		self.task_id= task.id
+		if task:
+			self.task_id= task.id
 		self.task = task
-		self.user_id = user.id
+		if user:
+			self.user_id = user.id
 		#self.user = user
 		self.mon = mon
 		self.tue = tue

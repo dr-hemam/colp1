@@ -23,3 +23,4 @@ from calendars import views
 from lookaheads import views
 from constraintsanalysis import views
 from wwp import views
+from reporting import views
