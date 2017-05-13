@@ -98,14 +98,14 @@ ConOccult - Assign User to Project
 	@media screen and (max-width:600px){
 	div.row{
 		display:flex;
-		flex-direction:column
-		
+		flex-direction:column;
+		margin-left:0px;
 	}
 	div.column{
 		width:97%;
 		display:block;
 		text-align:center;
-		
+		margin-left:0px;
 	}
 	#tasks{
 		display:none;
@@ -320,13 +320,16 @@ var piChart = dc.pieChart("#chart")
 	//.height(200)
 	//.radius(100)
 	//.innerRadius(80)
+	.label(function(d){ return d.key +" : "+ d.value;})
+	.renderLabel(true)
 	.legend(dc.legend().x(450).y(5).itemHeight(12).gap(5))
-	.title(function(d) {return d.key +" : "+ d.value;}) 
+	.title(function(d) {console.log(d.value); return d.key +" : "+ d.value;}) 
 	.colors(d3.scale.category10())
 	.transitionDuration(1500)
 	.valueAccessor(function (p) {
 	    return p.value.average;
 	})
+	
 	.title(function(d){ return d.value.average; })
 	//.label(function(d){return d.key+":"+ Math.round((d.value/sumofTotal)*100,0) +"%"; })
 	.renderLabel(false)

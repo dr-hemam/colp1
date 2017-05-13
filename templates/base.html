@@ -203,7 +203,6 @@
         if (document.links[i].href == cleanurl) {
             var item = document.links[i].parentNode;
     		item.classList.add("active");
-    		console.log(item);
     		if (item.parentElement.classList.contains("collapse")){
     			item.parentElement.classList.add("in");
     		}
