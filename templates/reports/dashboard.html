@@ -12,6 +12,7 @@ ConOccult - Assign User to Project
 	margin: 0;
 	padding:0;
 	}
+	
 	div{
 	-webkit-box-sizing: border-box;
 	-moz-box-sizing: border-box;
@@ -28,29 +29,44 @@ ConOccult - Assign User to Project
 	}
 	
 	div.row{
-		display:block;
+		display:flex;
 		position:relative;
-		margin-left:20px;
+		margin-left:0px;
 		margin-bottom:0;
-		clear;
-	}
-	
-	div.column{
-		width:50%;
-		display:block;
-		float:left;
-		text-align:center;
 		
 	}
 	
+	div.column{
+		width:48%;
+		display:block;
+		float:left;
+		margin-left:5px;
+		margin-right:0px;
+		margin-top:5px;
+		border-radius:5px;
+		text-align:center;
+		border:1px solid gray;
+	}
+	
+	.fullWidth{
+		width:96.4%;
+		display:block;
+		float:left;
+		margin-left:5px;
+		margin-right:0px;
+		margin-top:5px;
+		border-radius:5px;
+		text-align:center;
+		border:1px solid gray;
+	}
 	#tasks{
 		display:block;
 		
 	}
 	
 	h2{
-		margin-top:20px;
-		
+		margin-top:0px;
+		background-color:LightBlue ;
 		text-align:center;
 		
 	}
@@ -79,7 +95,25 @@ ConOccult - Assign User to Project
 		text-align:center;
 	}
 	
-	
+	@media screen and (max-width:600px){
+	div.row{
+		display:flex;
+		flex-direction:column
+		
+	}
+	div.column{
+		width:97%;
+		display:block;
+		text-align:center;
+		
+	}
+	#tasks{
+		display:none;
+	}
+	table{
+		display:none;
+	}
+	}
 </style>
 
 {% endblock %}
@@ -95,12 +129,18 @@ ConOccult - Assign User to Project
 </div>
 <div class="row">
 	<div class="column" id="reasons-chart">
+		
 		<h2>Delay Causes Analysis</h2>
 	</div>
-	<div class="column" id="tasks" >
+	<div class="column" id="managers-chart"><h2>Responsible Managers</h2></div>
+	
+</div>
+<div class="row">
+	<div class="fullWidth" id="tasks" >
 		<h2>Tasks Table</h2>
 		<table id="tasks-table"></table>
 	</div>
+	
 </div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.0/d3.min.js"></script>
 
@@ -240,10 +280,13 @@ var ndx = crossfilter(all_tasks);
 var dateDim = ndx.dimension(function(d) { return d.date; });
 var sectionDim = ndx.dimension(function(d) { return d.section});
 var reasonDim = ndx.dimension(function(d) { return d.Reason});
+var managerDim = ndx.dimension(function(d) { return d.responsible});
+
 
 var hits = dateDim.group().reduce(reduceAdd, reduceRemove, reduceInitial);
 var sectionGroup = sectionDim.group().reduce(reduceAdd, reduceRemove, reduceInitial);
 var reasonGroup = reasonDim.group();
+var managerGroup = managerDim.group().reduce(reduceAdd, reduceRemove, reduceInitial);
 var minDate = dateDim.bottom(1)[0].date;
 var maxDate = dateDim.top(1)[0].date;
 
@@ -289,8 +332,8 @@ var piChart = dc.pieChart("#chart")
 	.renderLabel(false)
 	.dimension(sectionDim)
 	.group(sectionGroup);
-var reasonsChart = dc.rowChart("#reasons-chart");
 
+var reasonsChart = dc.rowChart("#reasons-chart");
 reasonsChart
 	.dimension(reasonDim)
 	.group(reasonGroup)
@@ -298,7 +341,19 @@ reasonsChart
 	//.colors(['#6baed6'])
 	.elasticX(true)
 	.xAxis().ticks(4);
-	
+
+var managerChart = dc.rowChart("#managers-chart");
+managerChart
+	.dimension(managerDim)
+	.group(managerGroup)
+	.ordering(function(d) { return -d.value })
+	//.colors(['#6baed6'])
+	.elasticX(true)
+	.valueAccessor(function (p) {
+	    return p.value.average;
+	})
+	.xAxis().ticks(4);
+
 var dataTable = dc.dataTable("#tasks-table")
 	//.width(600)
 	//.height(300)
@@ -306,7 +361,7 @@ var dataTable = dc.dataTable("#tasks-table")
 	.showGroups(false)
 	.group(function(d){return d;})
 	.columns([{label:'Date', format:function(d){return d.date.getDate()+'-'+ months[d.date.getMonth()]+ '-' + d.date.getFullYear()}},
-		'task_name',
+			{ label:'Description', format:function(d) { return d.task_name } },
 		'section',
 		'responsible',
 		'updated',
