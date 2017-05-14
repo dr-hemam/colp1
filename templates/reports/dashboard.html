@@ -135,22 +135,31 @@ ConOccult - Assign User to Project
 <div class="row">
 	<div class="column" id="chart-line-hitsperday">
 	<h2>PPC Chart</h2>
+	<span class="reset" style="display:none;background-color:lightgray;">Selection: <span class="filter"></span></span>
+		<a class="reset btn btn-success" style="display:none;" href="javascript: hitslineChart.filterAll(); dc.redrawAll();">reset</a>
 	</div>
 	<div class="column" id="chart">
-	<h2>Sections</h2><a class="reset" style="display:none; text-decoration:none;" href="javascript:piChart.filterAll(); dc.redrawAll();">reset</a>
+	<h2>Sections</h2><span class="reset" style="display:none; background-color:lightgray;">Selection: <span class="filter"></span></span>
+	<a class="reset btn btn-success" style="display:none; text-decoration:none;" href="javascript:piChart.filterAll(); dc.redrawAll();">reset</a>
 	</div>
 </div>
 <div class="row">
 	<div class="column" id="reasons-chart">
-		
 		<h2>Delay Causes Analysis</h2>
+		<span class="reset" style="display:none; background-color:lightgray;">Selection: <span class="filter"></span></span>
+		<a class="reset btn btn-success" style="display:none;" href="javascript:reasonsChart.filterAll(); dc.redrawAll();">reset</a>
 	</div>
-	<div class="column" id="managers-chart"><h2>Responsible Managers</h2></div>
+	<div class="column" id="managers-chart"><h2>Responsible Managers</h2>
+	<span class="reset" style="display:none; background-color:lightgray;">Selection: <span class="filter"></span></span>
+		<a class="reset btn btn-success" style="display:none;" href="javascript:managerChart.filterAll(); dc.redrawAll();">reset</a>
+	</div>
 	
 </div>
 <div class="row">
 	<div class="fullWidth" id="tasks" >
 		<h2>Tasks Table</h2>
+		<span class="filter-count"></span>
+		
 		<table id="tasks-table"></table>
 	</div>
 	
@@ -294,6 +303,18 @@ var dateDim = ndx.dimension(function(d) { return d.date; });
 var sectionDim = ndx.dimension(function(d) { return d.section});
 var reasonDim = ndx.dimension(function(d) { return d.Reason});
 var managerDim = ndx.dimension(function(d) { return d.responsible});
+
+var all = ndx.groupAll();
+
+
+var counter = dc.dataCount('.filter-count')
+    .dimension(ndx)
+    .group(all);
+    
+counter.html({
+     some: '%filter-count out of %total-count records selected <a class="reset btn btn-success" href="javascript:dc.filterAll(); dc.redrawAll();">Reset All</a>',
+     all: 'All records selected. Click on charts to apply filters'
+})
 
 
 var hits = dateDim.group().reduce(reduceAdd, reduceRemove, reduceInitial);
