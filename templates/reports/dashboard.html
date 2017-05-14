@@ -37,15 +37,20 @@ ConOccult - Assign User to Project
 	}
 	
 	div.column{
-		width:48%;
+		width:45%;
 		display:block;
 		float:left;
-		margin-left:5px;
-		margin-right:0px;
-		margin-top:5px;
-		border-radius:5px;
+		margin-left:1em;
+		margin-right:4em;
+		margin-top:2em;
+		margin-bottom:1em;
+		border-radius:2em;
 		text-align:center;
-		border:1px solid gray;
+		box-shadow: 12px 15px 10px 0px rgba(46,61,73,0.2);
+		border:none;
+	}
+	div.column:hover{
+		box-shadow:2px 4px 8px 0px rgba(46,61,73,0.3);
 	}
 	
 	.fullWidth{
@@ -55,9 +60,13 @@ ConOccult - Assign User to Project
 		margin-left:5px;
 		margin-right:0px;
 		margin-top:5px;
-		border-radius:5px;
+		box-shadow: 12px 15px 20px 0px rgba(46,61,73,0.15);
+		border-radius:2em;
 		text-align:center;
-		border:1px solid gray;
+		border:none;
+	}
+	.fullWidth:hover{
+		box-shadow:2px 4px 8px 0px rgba(46,61,73,0.2);
 	}
 	#tasks{
 		display:block;
@@ -68,12 +77,14 @@ ConOccult - Assign User to Project
 		margin-top:0px;
 		background-color:LightBlue ;
 		text-align:center;
-		
+		border-top-left-radius: 1em;
+		border-top-right-radius: 1em;
 	}
 	
 	table{
 		border-collapse: collapse;
 		margin:0 auto;
+		border-radius:2em;
 		
 	}
 	
@@ -83,19 +94,21 @@ ConOccult - Assign User to Project
 	}
 	
 	table thead tr {
-	border-top: 1px solid gainsboro;
+	
 	background-color: steelblue;
 	line-height: 2;
 	color:white;
 	}
-	
+	th{
+		text-align:center;
+	}
 	table tbody tr td,
 	table thead tr td{
 		width:20%;
 		text-align:center;
 	}
 	
-	@media screen and (max-width:600px){
+	@media screen and (max-width:800px){
 	div.row{
 		display:flex;
 		flex-direction:column;
