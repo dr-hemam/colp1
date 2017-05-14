@@ -179,92 +179,7 @@ function print_filter(filter) {
 }
 
 
-var data = [
-{"date": "17/11/2016", "project": "Enabling Works Contract", "responsible": "John", "section": "Section C1", "PPC": "70",
-"tasks":[{"name": "task 10", "updated": "True", "completed": "True", "Reason": "No Delay"},
-{"name": "task 20", "updated": "True", "completed": "False", "Reason": "Defects requiring rework"}]
-},
-{"date": "17/11/2016", "project": "Enabling Works Contract", "responsible": "Enrique", "section": "Section C2", "PPC": "65",
-"tasks":[{"name": "task 10", "updated": "True", "completed": "True", "Reason": "No Delay"},
-{"name": "task 20", "updated": "True", "completed": "False", "Reason": "Design Change"}]
-},
-{"date": "17/11/2016", "project": "Enabling Works Contract", "responsible": "Richard", "section": "Section C3", "PPC": "72",
-"tasks":[{"name": "task 10", "updated": "True", "completed": "True", "Reason": "No Delay"},
-{"name": "task 20", "updated": "True", "completed": "False", "Reason": "Defects requiring rework"}]
-},
-{"date": "24/11/2016", "project": "Enabling Works Contract", "responsible": "John", "section": "Section C1", "PPC": "69",
-"tasks":[{"name": "task 10", "updated": "True", "completed": "True", "Reason": "No Delay"},
-{"name": "task 20", "updated": "True", "completed": "False", "Reason": "Design Change"}]
-},
-{"date": "24/11/2016", "project": "Enabling Works Contract", "responsible": "Enrique", "section": "Section C2", "PPC": "72",
-"tasks":[{"name": "task 10", "updated": "True", "completed": "True", "Reason": "No Delay"},
-{"name": "task 20", "updated": "True", "completed": "False", "Reason": "Interface with other packages"}]
-},
-{"date": "24/11/2016", "project": "Enabling Works Contract", "responsible": "Richard", "section": "Section C3", "PPC": "85",
-"tasks":[{"name": "task 10", "updated": "True", "completed": "True", "Reason": "No Delay"},
-{"name": "task 20", "updated": "True", "completed": "False", "Reason": "Interface with other packages"}]
-},
-{"date": "01/12/2016", "project": "Enabling Works Contract", "responsible": "John", "section": "Section C1", "PPC": "98",
-"tasks":[{"name": "task 10", "updated": "True", "completed": "True", "Reason": "No Delay"},
-{"name": "task 20", "updated": "True", "completed": "False", "Reason": "Design Change"}]
-},
-{"date": "01/12/2016", "project": "Enabling Works Contract", "responsible": "Enrique", "section": "Section C2", "PPC": "74",
-"tasks":[{"name": "task 10", "updated": "True", "completed": "True", "Reason": "No Delay"},
-{"name": "task 20", "updated": "True", "completed": "False", "Reason": "Interface with other packages"}]
-},
-{"date": "01/12/2016", "project": "Enabling Works Contract", "responsible": "Richard", "section": "Section C3", "PPC": "64",
-"tasks":[{"name": "task 10", "updated": "True", "completed": "True", "Reason": "No Delay"},
-{"name": "task 20", "updated": "True", "completed": "False", "Reason": "Design Change"}]
-},
-{"date": "08/12/2016", "project": "Enabling Works Contract", "responsible": "John", "section": "Section C1", "PPC": "23",
-"tasks":[{"name": "task 10", "updated": "True", "completed": "True", "Reason": "No Delay"},
-{"name": "task 20", "updated": "True", "completed": "False", "Reason": "Lack of human resource"}]
-},
-{"date": "08/12/2016", "project": "Enabling Works Contract", "responsible": "Enrique", "section": "Section C2", "PPC": "58",
-"tasks":[{"name": "task 10", "updated": "True", "completed": "True", "Reason": "No Delay"},
-{"name": "task 20", "updated": "True", "completed": "False", "Reason": "Interface with other packages"}]
-},
-{"date": "08/12/2016", "project": "Enabling Works Contract", "responsible": "Richard", "section": "Section C3", "PPC": "65",
-"tasks":[{"name": "task 10", "updated": "True", "completed": "True", "Reason": "No Delay"},
-{"name": "task 20", "updated": "True", "completed": "False", "Reason": "Lack of human resource"}]
-},
-{"date": "15/12/2016", "project": "Enabling Works Contract", "responsible": "John", "section": "Section C1", "PPC": "89",
-"tasks":[{"name": "task 10", "updated": "True", "completed": "True", "Reason": "No Delay"},
-{"name": "task 20", "updated": "True", "completed": "False", "Reason": "Lack of human resource"}]
-},
-{"date": "15/12/2016", "project": "Enabling Works Contract", "responsible": "Enrique", "section": "Section C2", "PPC": "70",
-"tasks":[{"name": "task 10", "updated": "True", "completed": "True", "Reason": "No Delay"},
-{"name": "task 20", "updated": "True", "completed": "False", "Reason": "Lack of human resource"}]
-},
-{"date": "15/12/2016", "project": "Enabling Works Contract", "responsible": "Richard", "section": "Section C3", "PPC": "84",
-"tasks":[{"name": "task 10", "updated": "True", "completed": "True", "Reason": "No Delay"},
-{"name": "task 20", "updated": "True", "completed": "False", "Reason": "Defective Material"}]
-},
-{"date": "22/12/2016", "project": "Enabling Works Contract", "responsible": "John", "section": "Section C1", "PPC": "53",
-"tasks":[{"name": "task 10", "updated": "True", "completed": "True", "Reason": "No Delay"},
-{"name": "task 20", "updated": "True", "completed": "False", "Reason": "Design Change"}]
-},
-{"date": "22/12/2016", "project": "Enabling Works Contract", "responsible": "Enrique", "section": "Section C2", "PPC": "95",
-"tasks":[{"name": "task 10", "updated": "True", "completed": "True", "Reason": "No Delay"},
-{"name": "task 20", "updated": "True", "completed": "False", "Reason": "Design Change"}]
-},
-{"date": "22/12/2016", "project": "Enabling Works Contract", "responsible": "Richard", "section": "Section C3", "PPC": "15",
-"tasks":[{"name": "task 10", "updated": "True", "completed": "True", "Reason": "No Delay"},
-{"name": "task 20", "updated": "True", "completed": "False", "Reason": "Design Change"}]
-},
-{"date": "29/12/2016", "project": "Enabling Works Contract", "responsible": "John", "section": "Section C1", "PPC": "67",
-"tasks":[{"name": "task 10", "updated": "True", "completed": "True", "Reason": "No Delay"},
-{"name": "task 20", "updated": "True", "completed": "False", "Reason": "Defective Material"}]
-},
-{"date": "29/12/2016", "project": "Enabling Works Contract", "responsible": "Enrique", "section": "Section C2", "PPC": "79",
-"tasks":[{"name": "task 10", "updated": "True", "completed": "True", "Reason": "No Delay"},
-{"name": "task 20", "updated": "True", "completed": "False", "Reason": "Design Change"}]
-},
-{"date": "29/12/2016", "project": "Enabling Works Contract", "responsible": "Richard", "section": "Section C3", "PPC": "76",
-"tasks":[{"name": "task 10", "updated": "True", "completed": "True", "Reason": "No Delay"},
-{"name": "task 20", "updated": "True", "completed": "False", "Reason": "Defective Material"}]
-}
-];
+var data = {{ data|safe }};
 
 
 
@@ -284,20 +199,22 @@ months[11] = "Dec";
 
 
 
-var parseDate = d3.time.format("%d/%m/%Y").parse;
-data.forEach(function(d) {
-//this function is used to parse dates
-	d.date = parseDate(d.date);
-});
+// var parseDate = d3.time.format("%d/%m/%Y").parse;
+// data.forEach(function(d) {
+// //this function is used to parse dates
+// 	d.date = parseDate(d.date);
+// });
 
 var all_tasks = [];
 //this function can be used to flattern the data
 	data.forEach(function(d) {
+		tmpdate= new Date(d.date);
+		d.date = tmpdate;
     d.tasks.forEach(function(task) {
-        all_tasks.push({project: d.project, date:d.date, PPC: d.PPC, section:d.section, responsible: d.responsible, task_name: task.name, updated: task.updated, completed: task.completed, Reason: task.Reason});
+        all_tasks.push({project: d.project, date:d.date, PPC: d.PPC, section:d.section, responsible: task.responsible, task_name: task.task_name, updated: task.updated, completed: task.completed, Reason: task.Reason});
     });
 }); 
-
+//console.log(all_tasks);
 var ndx = crossfilter(all_tasks);
 var dateDim = ndx.dimension(function(d) { return d.date; });
 var sectionDim = ndx.dimension(function(d) { return d.section});
@@ -323,7 +240,11 @@ var reasonGroup = reasonDim.group();
 var managerGroup = managerDim.group().reduce(reduceAdd, reduceRemove, reduceInitial);
 var minDate = dateDim.bottom(1)[0].date;
 var maxDate = dateDim.top(1)[0].date;
+console.log(minDate);
+console.log(maxDate);
 
+print_filter('dateDim');
+print_filter('hits');
 var hitslineChart = dc.barChart("#chart-line-hitsperday");
 
 //set histogram properties
@@ -335,18 +256,18 @@ hitslineChart
 	.valueAccessor(function (p) {
 	    return p.value.average;
 	})
-	.elasticY(true)
-	.elasticX(true)
-	.xAxisPadding(7)
-	.xAxisPaddingUnit('day')
+	.xAxisPadding(2)
+	
 	.centerBar(true)
 	.barPadding(0.2)
 	.outerPadding(0.2)
-	.title(function(d) {console.log(d); return d.key +": $"+ d.value;}) 
+	.elasticX(true)
+	//.title(function(d) {return d.key +": $"+ d.value.average;}) 
 	.renderTitle(true)
 	.yAxisLabel("PPC")
 	.x(d3.time.scale().domain([minDate,maxDate]))
-	.xUnits(d3.time.weeks);
+	.xUnits(d3.time.weeks)
+	.xAxisPaddingUnit('week');
 
 	
 var piChart = dc.pieChart("#chart")
@@ -354,19 +275,18 @@ var piChart = dc.pieChart("#chart")
 	//.height(200)
 	//.radius(100)
 	//.innerRadius(80)
-	.label(function(d){ return d.key +" : "+ d.value;})
-	.renderLabel(true)
+	
 	.legend(dc.legend().x(450).y(5).itemHeight(12).gap(5))
-	.title(function(d) {console.log(d.value); return d.key +" : "+ d.value;}) 
+	.title(function(d) {return d.key +" : "+ d.value.average;}) 
 	.colors(d3.scale.category10())
 	.transitionDuration(1500)
 	.valueAccessor(function (p) {
 	    return p.value.average;
 	})
 	
-	.title(function(d){ return d.value.average; })
 	//.label(function(d){return d.key+":"+ Math.round((d.value/sumofTotal)*100,0) +"%"; })
-	.renderLabel(false)
+	.label(function(d){return d.key+":"+ d.value.average; })
+	.renderLabel(true)
 	.dimension(sectionDim)
 	.group(sectionGroup);
 
@@ -405,6 +325,7 @@ var dataTable = dc.dataTable("#tasks-table")
 		'completed'])
 	.sortBy(function(d){ return d.date;})
 	.order(d3.descending);
+
 
 dc.renderAll();
 

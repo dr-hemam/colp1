@@ -4,6 +4,8 @@
 '''
 from colp import db
 from datetime import datetime
+import json
+
 
 
 class WWP(db.Model):
@@ -24,7 +26,7 @@ class WWP(db.Model):
 	def __init__(self, project, reportingdate, section, ppc=None, status=False, is_active=True):
 		self.is_active = is_active
 		self.project_id = project.id
-		self.section = section
+		self.project = project
 		self.reportingdate = reportingdate
 		self.section_id = section.id
 		self.section = section
@@ -36,7 +38,14 @@ class WWP(db.Model):
 		dd = datetime.strptime(str(self.reportingdate.rdate), '%Y-%m-%d %H:%M:%S').strftime("%d-%b-%Y")
 		return str(dd)
 		
-	
+	def to_json(self):
+		return ({'id': str(self.id),
+						'date': str(self.reportingdate.rdate),
+						'project': str(self.project),
+						'section': str(self.section),
+						'PPC': str(self.ppc)
+		})
+		
 class WWPDetail(db.Model):
 	__tablename__ ="wwp_details"
 	wwp_id = db.Column(db.Integer, db.ForeignKey('wwps.id'), primary_key=True)
@@ -79,4 +88,12 @@ class WWPDetail(db.Model):
 		
 	def __repr__(self):
 		return str(self.task_id)
+		
+	def to_json(self):
+		return ({'task_name':str(self.task),
+			'responsible':str(self.user),
+			'updated': str(self.updated),
+			'completed': str(self.status),
+			'Reason':str(self.delayreason)
+		})
 	
