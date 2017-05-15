@@ -19,6 +19,8 @@ def report2():
     return render_template('reports/dashboard2.html')
 
 @app.route('/report3', methods=['POST', 'GET'])
+@login_required
+@project_required
 def report3():
     if session.get('project_id'):
         wwps = WWP.query.filter_by(project_id= session['project_id']).all()

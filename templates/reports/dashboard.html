@@ -337,14 +337,15 @@ hitslineChart
 	})
 	.elasticY(true)
 	.elasticX(true)
-	.xAxisPadding(7)
-	.xAxisPaddingUnit('day')
+	.xAxisPadding(1)
+	.xAxisPaddingUnit('week')
 	.centerBar(true)
 	.barPadding(0.2)
 	.outerPadding(0.2)
 	.title(function(d) {console.log(d); return d.key +": $"+ d.value;}) 
 	.renderTitle(true)
 	.yAxisLabel("PPC")
+	.round(d3.time.month.round)
 	.x(d3.time.scale().domain([minDate,maxDate]))
 	.xUnits(d3.time.weeks);
 
@@ -354,19 +355,17 @@ var piChart = dc.pieChart("#chart")
 	//.height(200)
 	//.radius(100)
 	//.innerRadius(80)
-	.label(function(d){ return d.key +" : "+ d.value;})
-	.renderLabel(true)
-	.legend(dc.legend().x(450).y(5).itemHeight(12).gap(5))
-	.title(function(d) {console.log(d.value); return d.key +" : "+ d.value;}) 
+	.legend(dc.legend().x(350).y(5).itemHeight(12).gap(5))
+	.title(function(d) {return d.key +" : "+ d.value.average;}) 
 	.colors(d3.scale.category10())
 	.transitionDuration(1500)
 	.valueAccessor(function (p) {
 	    return p.value.average;
 	})
 	
-	.title(function(d){ return d.value.average; })
 	//.label(function(d){return d.key+":"+ Math.round((d.value/sumofTotal)*100,0) +"%"; })
-	.renderLabel(false)
+	.label(function(d){return d.key+":"+ d.value.average; })
+	.renderLabel(true)
 	.dimension(sectionDim)
 	.group(sectionGroup);
 
