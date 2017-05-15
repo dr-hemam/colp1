@@ -66,7 +66,7 @@ CREATE TABLE `constraintanalysis` (
   CONSTRAINT `constraintanalysis_ibfk_1` FOREIGN KEY (`project_id`) REFERENCES `projects` (`id`),
   CONSTRAINT `constraintanalysis_ibfk_2` FOREIGN KEY (`reportingdate_id`) REFERENCES `reportingdates` (`id`),
   CONSTRAINT `constraintanalysis_ibfk_3` FOREIGN KEY (`section_id`) REFERENCES `sections` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -75,7 +75,7 @@ CREATE TABLE `constraintanalysis` (
 
 LOCK TABLES `constraintanalysis` WRITE;
 /*!40000 ALTER TABLE `constraintanalysis` DISABLE KEYS */;
-INSERT INTO `constraintanalysis` VALUES (1,1,1,1,1,NULL);
+INSERT INTO `constraintanalysis` VALUES (1,1,1,1,1,NULL),(2,1,1,2,1,NULL),(3,1,2,1,1,NULL),(4,1,3,1,1,NULL);
 /*!40000 ALTER TABLE `constraintanalysis` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -108,7 +108,7 @@ CREATE TABLE `constraintanalysis_details` (
 
 LOCK TABLES `constraintanalysis_details` WRITE;
 /*!40000 ALTER TABLE `constraintanalysis_details` DISABLE KEYS */;
-INSERT INTO `constraintanalysis_details` VALUES (1,1,1,1,1,1),(1,1,2,1,1,1),(1,1,3,1,1,1),(1,1,4,1,1,1),(1,1,5,1,1,1),(1,1,6,1,1,1),(1,1,7,1,1,1),(1,1,8,1,1,1),(1,1,9,1,1,1),(1,1,10,1,1,1),(1,1,11,1,1,1),(1,2,1,1,1,1),(1,2,2,1,1,1),(1,2,3,1,1,1),(1,2,4,1,1,1),(1,2,5,1,1,1),(1,2,6,1,1,1),(1,2,7,1,1,1),(1,2,8,1,1,1),(1,2,9,1,1,1),(1,2,10,1,1,1),(1,2,11,1,1,1);
+INSERT INTO `constraintanalysis_details` VALUES (1,1,1,1,1,1),(1,1,2,1,1,1),(1,1,3,1,1,1),(1,1,4,1,1,1),(1,1,5,1,1,1),(1,1,6,1,1,1),(1,1,7,1,1,1),(1,1,8,1,1,1),(1,1,9,1,1,1),(1,1,10,1,1,1),(1,1,11,1,1,1),(1,2,1,1,1,1),(1,2,2,1,1,1),(1,2,3,1,1,1),(1,2,4,1,1,1),(1,2,5,1,1,1),(1,2,6,1,1,1),(1,2,7,1,1,1),(1,2,8,1,1,1),(1,2,9,1,1,1),(1,2,10,1,1,1),(1,2,11,1,1,1),(2,3,1,1,1,1),(2,3,2,1,1,1),(2,3,3,1,1,1),(2,3,4,1,1,1),(2,3,5,0,1,1),(2,3,6,0,1,1),(2,3,7,0,1,1),(2,3,8,0,1,1),(2,3,9,0,1,1),(2,3,10,0,1,1),(2,3,11,0,1,1),(2,4,1,1,1,1),(2,4,2,1,1,1),(2,4,3,1,1,1),(2,4,4,1,1,1),(2,4,5,0,1,1),(2,4,6,0,1,1),(2,4,7,1,1,1),(2,4,8,0,1,1),(2,4,9,1,1,1),(2,4,10,0,1,1),(2,4,11,0,1,1),(3,5,1,1,1,1),(3,5,2,1,1,1),(3,5,3,1,1,1),(3,5,4,1,1,1),(3,5,5,1,1,1),(3,5,6,1,1,1),(3,5,7,1,1,1),(3,5,8,1,1,1),(3,5,9,1,1,1),(3,5,10,1,1,1),(3,5,11,1,1,1),(3,6,1,1,1,1),(3,6,2,1,1,1),(3,6,3,1,1,1),(3,6,4,1,1,1),(3,6,5,1,1,1),(3,6,6,1,1,1),(3,6,7,1,1,1),(3,6,8,1,1,1),(3,6,9,1,1,1),(3,6,10,1,1,1),(3,6,11,1,1,1),(4,7,1,1,1,1),(4,7,2,0,1,1),(4,7,3,1,1,1),(4,7,4,0,1,1),(4,7,5,1,1,1),(4,7,6,0,1,1),(4,7,7,0,1,1),(4,7,8,0,1,1),(4,7,9,0,1,1),(4,7,10,0,1,1),(4,7,11,0,1,1),(4,8,1,1,1,1),(4,8,2,0,1,1),(4,8,3,1,1,1),(4,8,4,0,1,1),(4,8,5,1,1,1),(4,8,6,0,1,1),(4,8,7,0,1,1),(4,8,8,0,1,1),(4,8,9,0,1,1),(4,8,10,0,1,1),(4,8,11,0,1,1),(4,9,1,1,1,1),(4,9,2,0,1,1),(4,9,3,1,1,1),(4,9,4,0,1,1),(4,9,5,1,1,1),(4,9,6,0,1,1),(4,9,7,0,1,1),(4,9,8,0,1,1),(4,9,9,0,1,1),(4,9,10,0,1,1),(4,9,11,0,1,1);
 /*!40000 ALTER TABLE `constraintanalysis_details` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -188,7 +188,7 @@ CREATE TABLE `lookaheads` (
   CONSTRAINT `lookaheads_ibfk_1` FOREIGN KEY (`project_id`) REFERENCES `projects` (`id`),
   CONSTRAINT `lookaheads_ibfk_2` FOREIGN KEY (`reportingdate_id`) REFERENCES `reportingdates` (`id`),
   CONSTRAINT `lookaheads_ibfk_3` FOREIGN KEY (`section_id`) REFERENCES `sections` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -197,7 +197,7 @@ CREATE TABLE `lookaheads` (
 
 LOCK TABLES `lookaheads` WRITE;
 /*!40000 ALTER TABLE `lookaheads` DISABLE KEYS */;
-INSERT INTO `lookaheads` VALUES (1,1,1,1,1);
+INSERT INTO `lookaheads` VALUES (1,1,1,1,1),(2,1,1,2,1),(3,1,2,1,1),(4,1,3,1,1);
 /*!40000 ALTER TABLE `lookaheads` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -219,7 +219,7 @@ CREATE TABLE `lookaheads_details` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `uix_1_lookahead_details_lookahead_id_task_code` (`lookahead_id`,`task_code`),
   CONSTRAINT `lookaheads_details_ibfk_1` FOREIGN KEY (`lookahead_id`) REFERENCES `lookaheads` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -228,7 +228,7 @@ CREATE TABLE `lookaheads_details` (
 
 LOCK TABLES `lookaheads_details` WRITE;
 /*!40000 ALTER TABLE `lookaheads_details` DISABLE KEYS */;
-INSERT INTO `lookaheads_details` VALUES (1,1,'Task C1-10','Task C1-10','2016-11-17 00:00:00','2016-11-20 00:00:00',1),(2,1,'Task C1-20','Task C1-20','2016-11-18 00:00:00','2016-11-21 00:00:00',1);
+INSERT INTO `lookaheads_details` VALUES (1,1,'Task C1-10','Task C1-10','2016-11-17 00:00:00','2016-11-20 00:00:00',1),(2,1,'Task C1-20','Task C1-20','2016-11-18 00:00:00','2016-11-21 00:00:00',1),(3,2,'Task C2-10','Task C2-10','2016-11-17 00:00:00','2016-11-18 00:00:00',1),(4,2,'Task C2-20','Task C2-20','2016-11-18 00:00:00','2016-11-20 00:00:00',1),(5,3,'Task 24-1','Task 24-1','2016-11-25 00:00:00','2016-11-26 00:00:00',1),(6,3,'Task 24-2','Task 24-2','2016-11-26 00:00:00','2016-11-28 00:00:00',1),(7,4,'Task 1-12-1','Task 1-12-1','2017-12-01 00:00:00','2017-12-03 00:00:00',1),(8,4,'Task 1-12-2','Task 1-12-2','2017-12-01 00:00:00','2017-12-03 00:00:00',1),(9,4,'Task 1-12-3','Task 1-12-3','2017-12-02 00:00:00','2017-12-03 00:00:00',1);
 /*!40000 ALTER TABLE `lookaheads_details` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -474,7 +474,7 @@ CREATE TABLE `user_project` (
 
 LOCK TABLES `user_project` WRITE;
 /*!40000 ALTER TABLE `user_project` DISABLE KEYS */;
-INSERT INTO `user_project` VALUES (1,1,1);
+INSERT INTO `user_project` VALUES (1,1,1),(1,2,1);
 /*!40000 ALTER TABLE `user_project` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -499,7 +499,7 @@ CREATE TABLE `users` (
   UNIQUE KEY `username` (`username`),
   KEY `organisation_id` (`organisation_id`),
   CONSTRAINT `users_ibfk_1` FOREIGN KEY (`organisation_id`) REFERENCES `organisations` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -508,7 +508,7 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES (1,'Hassan','Emam','hassan.emam@hotmail.com','hassan','$2a$12$UfqXLs0gHouGmyq/rMDAPOGfJQN5QECR.QmbhHi1FIFpcTkV5CgrK',1,1);
+INSERT INTO `users` VALUES (1,'Hassan','Emam','hassan.emam@hotmail.com','hassan','$2a$12$UfqXLs0gHouGmyq/rMDAPOGfJQN5QECR.QmbhHi1FIFpcTkV5CgrK',1,1),(2,'Emam','Emam','emam@hotmail.com','Emam','$2a$12$ja2Upqbyioxp/Vx/GI6jK.datHdrmXdEDAYnN9T5kXjiiRV00ngRa',1,0);
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -551,7 +551,7 @@ CREATE TABLE `wwp_details` (
 
 LOCK TABLES `wwp_details` WRITE;
 /*!40000 ALTER TABLE `wwp_details` DISABLE KEYS */;
-INSERT INTO `wwp_details` VALUES (1,1,1,1,1,1,0,0,0,0,1,1,1,NULL),(1,2,1,0,0,1,1,1,0,0,1,1,1,NULL);
+INSERT INTO `wwp_details` VALUES (1,1,1,1,1,1,0,0,0,0,1,1,1,NULL),(1,2,1,0,0,1,1,1,0,0,1,1,1,NULL),(2,3,1,1,1,1,0,0,0,0,1,1,1,NULL),(2,4,1,0,1,1,1,0,0,0,0,1,1,2),(3,5,1,1,1,1,0,0,0,0,1,1,1,NULL),(3,6,1,0,1,1,1,0,0,0,0,1,1,8),(4,7,1,0,0,0,0,0,0,0,1,1,1,NULL),(4,8,2,0,0,0,0,0,0,0,0,1,1,13),(4,9,2,0,0,0,0,0,0,0,1,1,1,NULL);
 /*!40000 ALTER TABLE `wwp_details` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -577,7 +577,7 @@ CREATE TABLE `wwps` (
   CONSTRAINT `wwps_ibfk_1` FOREIGN KEY (`project_id`) REFERENCES `projects` (`id`),
   CONSTRAINT `wwps_ibfk_2` FOREIGN KEY (`reportingdate_id`) REFERENCES `reportingdates` (`id`),
   CONSTRAINT `wwps_ibfk_3` FOREIGN KEY (`section_id`) REFERENCES `sections` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -586,7 +586,7 @@ CREATE TABLE `wwps` (
 
 LOCK TABLES `wwps` WRITE;
 /*!40000 ALTER TABLE `wwps` DISABLE KEYS */;
-INSERT INTO `wwps` VALUES (1,1,1,1,1,1,1);
+INSERT INTO `wwps` VALUES (1,1,1,1,1,1,1),(2,1,1,2,0.5,1,1),(3,1,2,1,0.5,1,1),(4,1,3,1,0.666667,1,1);
 /*!40000 ALTER TABLE `wwps` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -599,4 +599,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2017-05-11  7:44:23
+-- Dump completed on 2017-05-15 10:50:52
