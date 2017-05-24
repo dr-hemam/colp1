@@ -79,7 +79,10 @@ def project_detail():
     session['project_id']= project_id
     project = Project.query.filter_by(id= project_id).first()
     session['project'] = project.name
-
+    if session.get('next'):
+        next = session.get('next')
+        session.pop('next')
+        return redirect (next)
     return render_template('project/details.html', project=project)
 
 @app.route('/editproject/<project_id>', methods=['GET', 'POST'])
