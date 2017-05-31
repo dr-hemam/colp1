@@ -40,6 +40,8 @@ def edit_reason(id):
     return render_template('delayreasons/setup.html', form = form, reason=reason, action='edit')
 
 @app.route('/viewreasons')
+@login_required
+@organisation_required
 def view_reasons():
     reasons = DelayReason.query.filter_by(is_active=True, org_id=session['organisation_id']).all()
     return render_template('delayreasons/view.html', reasons=reasons)
