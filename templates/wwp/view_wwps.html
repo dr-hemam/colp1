@@ -8,14 +8,16 @@ ConOccult - Projects
 
     <div class ="col-md-8">
         <h1>Weekly Work Plans</h1>
-        {% with messages = get_flashed_messages() %}
+        {% with messages = get_flashed_messages(with_categories=true) %}
           {% if messages %}
-            <ul class='flashes alert alert-success alert-dismissable'>
-            {% for message in messages %}
+            
+            {% for category, message in messages %}
+            <ul class='flashes alert {{ category }} alert-dismissable'>
               <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
               <li>{{ message }}</li>
+             </ul>
             {% endfor %}
-            </ul>
+            
           {% endif %}
         {% endwith %}
         <table class="table table-hover table-responsive">

@@ -56,7 +56,7 @@ def delete_reason(id):
         db.session.commit()
     except Exception as e:
         print(e)
-        flash('An error occurred during deleting the delay cause category')
+        flash('An error occurred during deleting the delay cause category', 'alert-danger')
         return redirect(url_for('view_reasons'))
-    flash('The delay cause category has been deleted successfully!')
+    flash('The delay cause category has been deleted successfully!', 'alert-success')
     return redirect(url_for('view_reasons'))

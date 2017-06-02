@@ -12,6 +12,7 @@ from wtforms import validators
 
 @app.route('/newproject', methods=['POST', 'GET'])
 @login_required
+@admin_required
 def newproject():
     form = ProjectSetupForm()
     try:
@@ -37,10 +38,10 @@ def newproject():
                     rd = ReportingDate(project, d)
                     db.session.add(rd)
                 db.session.commit()
-                flash('Project has been created successully')
+                flash('Project has been created successully','alert-success')
                 return redirect(url_for('view_projects'))
     except validators.ValidationError as e:
-        flash(e)
+        flash(e, 'alert-danger')
     return render_template('project/setup.html', form=form, action='new')
     
 
@@ -103,6 +104,6 @@ def edit_project(project_id):
         db.session.add(project)
         db.session.flush()
         db.session.commit()
-        flash('Project updated successfully')
+        flash('Project updated successfully','alert-success')
         return redirect(url_for('view_projects'))
     return render_template('project/setup.html', form = form, project=project, action='edit')

@@ -1,12 +1,13 @@
 {% extends 'base.html' %}
 
 {% block title %}
-ConOccult - Projects
+ConOccult - Roles
 {% endblock %}
 
 {% block content %}
-    <div class ="col-md-4">
-        <h1>Projects Information</h1>
+
+    <div class ="col-md-8">
+        <h1> {{ organisation_name }} Users List</h1>
         {% with messages = get_flashed_messages(with_categories=true) %}
           {% if messages %}
             
@@ -21,30 +22,22 @@ ConOccult - Projects
         {% endwith %}
         <table class='table table-hover table-responsive'>
         <tr>
-            <th>Project Ref</th>
-            <td>{{ project.code }}</td>
+            <th>User Name</th>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Email</th>
         </tr>
+        {% for user in users %}
         <tr>
-            <th>Project Name</th>
-            <td>{{ project.name }}</td>
-        </tr>
-        <tr>
-            <th>Project Description</th>
-            <td>{{ project.description }}</td>
-        </tr>
-        <tr>
-            <th>Start Date</th>
-            <td>{{ project.start }}</td>
-        </tr>
-        <tr>
-            <th>End Date</th>
-            <td>{{ project.finish }}</td>
-        </tr>
-        <tr>
-            <th>Status</th>
-            <td>{{ project.status }}</td>
-        </tr>
+        <td><a href ="{{ url_for('edit_user' , id= user.id) }}">{{ user.username }}</a></th>
+        </td>
+        <td>{{ user.firstname }}</td>
+        <td>{{ user.lastname }}</td>
+        <td>{{ user.email }}</td>
+        
+        {% endfor %}
         </table>
-           
+        <a href= {{ url_for('add_role') }} class='btn btn-success'> Add Roles </a> 
     </div>
+
 {% endblock %}

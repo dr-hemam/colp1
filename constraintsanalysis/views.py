@@ -32,7 +32,7 @@ def new_constraintanalysis():
             return redirect(url_for('new_constraintanalysis_details', id= constraintanalysis.id))
         except exc.IntegrityError as e:
             db.session.rollback()
-            flash("Error: Duplicate Entry. you can edit or delete existing.")
+            flash("Error: Duplicate Entry. you can edit or delete existing.", 'alert-danger')
             #'return "Error Duplicate Entry"
             return redirect(url_for('new_constraintanalysis'))
     return render_template('constraintsanalysis/constraintanalysisform.html', form=form, action='new')

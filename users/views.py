@@ -68,9 +68,47 @@ def register():
         
         db.session.add(user)
         db.session.commit()
-        flash('User Registered Successfully ')
+        flash('User Registered Successfully ', 'alert-success')
         return redirect(url_for('newuserprojectassignment'))
-    return render_template('users/register.html', form=form)
+    return render_template('users/register.html', form=form, action='new')
+
+@app.route('/edituser/<id>', methods=('GET', 'POST'))
+@organisation_required
+@login_required
+def edit_user(id):
+    print (type(id) ,type(session['user_id']))
+    if session.get('is_admin') or id==str(session['user_id']):
+        user = User.query.filter_by(id=id).first()
+        form = RegisterForm(obj= user)
+        org = Organisation.query.filter_by(id= session['organisation_id']).first()
+        if form.validate_on_submit():
+            salt = bcrypt.gensalt()
+            
+            hashed_password = bcrypt.hashpw(form.password.data, salt)  
+            user.firstname= form.firstname.data
+            user.lastname= form.lastname.data
+            user.email= form.email.data
+            user.username= form.username.data
+            user.password= hashed_password
+            user.organisation= org
+            user.is_admin= form.is_admin.data
+            db.session.flush()
+            db.session.commit()
+            flash('User Registered Successfully ', 'alert-success')
+            return redirect(url_for('login_success'))
+        return render_template('users/register.html', form = form, user=user, action='edit')
+    else:
+        flash ("You don't have enough permissions to perform changes to user details", 'alert-danger')
+        return redirect(url_for('login_success'))
+
+
+@app.route('/viewusers', methods=('GET', 'POST'))
+@organisation_required
+@admin_required
+def view_users():
+    users = User.query.filter_by(organisation_id= session.get('organisation_id')).all()
+    return render_template('users/viewusers.html', users=users)
+    return 'users list'
 
 @app.route('/logout')
 def logout():
@@ -184,7 +222,7 @@ def newuserprojectassignment():
                 db.session.rollback()
                 return "User already assigned to this project"
         else:
-            flash ('User already assigned to activity')
+            flash ('User already assigned to activity', 'alert-danger')
             return redirect(url_for('newuserprojectassignment'))
     return render_template('/users/projectassignment.html', form=form, action='new')
     

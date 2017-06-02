@@ -1,5 +1,5 @@
 from functools import wraps
-from flask import session, request, redirect, url_for, abort
+from flask import session, request, redirect, url_for, abort, flash
 
 def login_required(f):
     @wraps(f)
@@ -18,6 +18,9 @@ def admin_required(f):
             return redirect(url_for('login', next=request.url))
         elif session.get('is_admin') is None:
             abort(403)
+        elif session.get('is_admin')==False:
+            flash('You do not have permission to perform this action, please contact your administrator for support', 'alert-danger')
+            return redirect(url_for('login_success'))
         return f(*args, **kwargs)
     return decorated_function
     

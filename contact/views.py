@@ -19,7 +19,7 @@ def contact():
  
     if request.method == 'POST':
         if form.validate() == False:
-          flash('All fields are required.')
+          flash('All fields are required.', 'alert-danger')
           return render_template('contact.html', form=form)
         else:
             msg = Message(form.subject.data, sender='contact@example.com', recipients=['eng.hassanemam@gmail.com'])
@@ -28,7 +28,7 @@ def contact():
             %s
             """ % (form.name.data, form.email.data, form.message.data)
             mail.send(msg)
-            flash('Message has been sent successfully ')
+            flash('Message has been sent successfully ', 'alert-success')
             return redirect(url_for('contact'))
  
     elif request.method == 'GET':

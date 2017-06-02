@@ -43,11 +43,11 @@ def new_wwp():
             db.session.add(wwp)
             db.session.flush()
             db.session.commit()
-            flash ("Added Sussefully! please create details of your weekly work plan")
+            flash ("Added Sussefully! please create details of your weekly work plan", 'alert-success')
             return redirect(url_for('new_wwp_details', id= wwp.id))
         except exc.IntegrityError as e:
             db.session.rollback()
-            flash('Error: Duplicate Entry. you can edit or delete existing.')
+            flash('Error: Duplicate Entry. you can edit or delete existing.', 'alert-danger')
     return render_template('wwp/wwpform.html', form=form, action='new')
     
 
@@ -61,7 +61,7 @@ def new_wwp_details(id):
     if lookahead:
         form.task.query = LookAheadDetail.query.filter_by(lookahead_id= lookahead.id)
     else:
-        flash('No lookahead tasks found. Please prepare the lookahead first!')
+        flash('No lookahead tasks found. Please prepare the lookahead first!', 'alert-danger')
         return redirect(url_for('view_wwps'))
     #= LookAheadDetail.query.join(ConstraintAnalysisDetail).join(LookAhead, aliased=True).filter_by(section_id==wwp.section_id, constraintanalysis_id==ca.id, ConstraintAnalysisDetail.can_do== True )
 
@@ -98,7 +98,7 @@ def new_wwp_details(id):
                                     )
             db.session.add(wwpdetail)
         db.session.commit()
-        flash("Weekly Work Plan saved successfully!")
+        flash("Weekly Work Plan saved successfully!",'alert-success')
         return redirect(url_for('view_wwp_detail', id=id))
 # except:
 #     flash('An error has occurred while creating the Weekly Work Plan')
@@ -167,7 +167,7 @@ def update_wwp_details(id):
         wwp.status = True
         db.session.add(wwp)
         db.session.commit()
-        flash("Weekly Work Plan saved successfully!")
+        flash("Weekly Work Plan saved successfully!", 'alert-success')
         return redirect(url_for('view_wwp_detail', id=id))
     # except:
     #     flash('An error has occurred while creating the Weekly Work Plan')

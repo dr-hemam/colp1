@@ -30,7 +30,7 @@ def new_lookahead():
             db.session.commit()
         except exc.IntegrityError as e:
             db.session.rollback()
-            flash("Error Duplicate Entry")
+            flash("Error Duplicate Entry", 'alert-danger')
             return redirect(url_for('new_lookahead'))
         return redirect(url_for('new_lookahead_details', id= lookahead.id))
     return render_template('lookaheads/lookaheadform.html', form=form, action='new')
@@ -85,7 +85,7 @@ def edit_lookahead_detail(tid):
         db.session.add(task)
         db.session.flush()
         db.session.commit()
-        flash('Task has been edited successfully')
+        flash('Task has been edited successfully', 'alert-success')
         return redirect(url_for('view_lookahead',id= task.lookahead_id))
     return render_template('lookaheads/lookaheaddetailsform.html', form = form, task=task, action='edit')
     
