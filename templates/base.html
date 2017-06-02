@@ -146,7 +146,7 @@
         {% if session['project_id'] %}
         <li><a href= {{ url_for('login_success') }} style="padding-right:20px;"><span>  {{ session['project'] }} </span></a></li>
         {% endif %}
-        <li><a href={{ url_for('edit_user', id=session['user_id']) }}><span class="glyphicon glyphicon-user"></span> {{ session['username'] }} </a></li>
+        <li><a href={{ url_for('view_user', id=session['user_id']) }}><span class="glyphicon glyphicon-user"></span> {{ session['username'] }} </a></li>
         <li><a href={{ url_for('logout') }}><span class="glyphicon glyphicon-log-out"></span> Logout </a></li>
         {% else %} 
         <li><a href={{ url_for('register') }}> Register </a></li>
@@ -163,10 +163,12 @@
       <ul class="nav">
 	      <li><a href="#" id="org_btn" data-toggle="collapse" data-target="#orgsubmeny" aria-expanded="false">Organisation</a>
           <ul class="nav collapse sub" id="orgsubmeny" role="menu" aria-labelledby="org_btn">
+            <li><a href={{ url_for('view_cycles') }}>Reporting Cycles</a></li>
+            <li><a href={{ url_for('view_roles') }}>Roles</a></li>
             <li><a href={{ url_for('view_projects') }}> Projects </a></li>
     				<li><a href= {{ url_for('view_users') }}  >Users</a></li>
-    				<li><a href={{ url_for('view_roles') }}>Roles</a></li>
-    				<li><a href={{ url_for('view_cycles') }}>Reporting Cycles</a></li>
+    				
+    				
     			</ul>	    
     		</li>
 		    <li><a href="#" id="prj_btn" data-toggle="collapse" data-target="#projmenu1" aria-expanded="false">Project</a>

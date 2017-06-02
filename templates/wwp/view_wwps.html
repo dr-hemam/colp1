@@ -32,9 +32,9 @@ ConOccult - Projects
             <td>{{ wp.section }}</td>
             <td><a href ={{ url_for('view_wwp_detail', id=wp.id ) }}>{{ wp.reportingdate }}</a></td>
             <td>
-            <a data-target="#confirm-delete" data-toggle="modal" data-href={{ url_for('view_wwp_detail', id=wp.id ) }} ><img src={{ url_for('static', filename='img/delete.png') }} style="width:20px;height:20px;" alt="Delete"/> </a>
-            <a href={{ url_for('view_wwp_detail', id= wp.id ) }}><img src= {{ url_for('static', filename='img/edit.png') }} style="width:20px;height:20px;" alt="Edit"/> </a>
-            <a href={{ url_for('update_wwp_details', id=wp.id ) }}><img src= {{ url_for('static', filename='img/update.png') }} style="width:20px;height:20px;" alt="Update"/> </a>
+            <a data-target="#confirm-delete" data-toggle="modal" data-href={{ url_for('view_wwp_detail', id=wp.id ) }} ><img title="Delete" src={{ url_for('static', filename='img/delete.png') }} style="width:20px;height:20px;" alt="Delete"/> </a>
+            <a href={{ url_for('view_wwp_detail', id= wp.id ) }}><img title="Edit" src= {{ url_for('static', filename='img/edit.png') }} style="width:20px;height:20px;" alt="Edit"/> </a>
+            <a href={{ url_for('update_wwp_details', id=wp.id ) }}><img title="Update" src= {{ url_for('static', filename='img/update.png') }} style="width:20px;height:20px;" alt="Update"/> </a>
             </td>
         </tr>
         

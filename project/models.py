@@ -13,13 +13,17 @@ class UserProject(db.Model):
 	role_id = db.Column(db.Integer)
 	user = db.relationship("User", backref="parent_assocs")
 	project = db.relationship("Project", backref="assoc")
+	is_active = db.Column(db.Boolean)
+	
 	__table_args__ = (
 		db.UniqueConstraint('project_id', 'user_id', name='uix_1'),
 	)
-	def __init__(self, project, user, role):
+	def __init__(self, project, user, role, is_active=True):
 		self.project_id = project.id
 		self.user_id = user.id
 		self.role_id = role.id
+		self.is_active= is_active
+
 
 
 class Project(db.Model):

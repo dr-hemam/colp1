@@ -58,10 +58,10 @@ def admin():
 @login_required
 def view_projects():
     if session.get('user_id'):
-        assprojects = UserProject.query.filter_by(user_id=session['user_id'])
-        projects=[]
-        for prj in assprojects:
-            projects.append(prj.project)
+        #assprojects = UserProject.query.filter_by(user_id=session['user_id'])
+        projects=Project.query.filter_by(org_id= session['organisation_id'], status=True).all()
+        # for prj in assprojects:
+        #     projects.append(prj.project)
     #projects = Project.query.filter_by(status=True, org_id=session['organisation_id']).all()
         return render_template('project/view.html', projects=projects, organisation = Organisation.query.filter_by(id=session['organisation_id']).first())
     
@@ -86,8 +86,18 @@ def project_detail():
         return redirect (next)
     return render_template('project/details.html', project=project)
 
+@app.route('/delete/<id>')
+@admin_required
+def delete_project(id):
+    project = Project.query.filter_by(id=id).first()
+    project.status=False
+    db.session.add(project)
+    db.session.commit()
+    return redirect(url_for('view_projects'))
+
 @app.route('/editproject/<project_id>', methods=['GET', 'POST'])
 @login_required
+@admin_required
 def edit_project(project_id):
     project = Project.query.filter_by(id= project_id).first()
     form = ProjectSetupForm(obj= project)

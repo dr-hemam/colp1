@@ -2,7 +2,7 @@ from colp import app, db
 from flask import render_template, redirect, session, request, url_for, flash
 from users.form import RegisterForm, LoginForm, RoleForm, UserProjectForm
 from users.models import User, Role
-from users.decorators import login_required, admin_required, organisation_required
+from users.decorators import login_required, admin_required, organisation_required, project_required
 from organisations.models import Organisation
 from project.models import Project, UserProject
 import bcrypt
@@ -77,7 +77,6 @@ def register():
 @organisation_required
 @login_required
 def edit_user(id):
-    print (type(id) ,type(session['user_id']))
     if session.get('is_admin') or id==str(session['user_id']):
         user = User.query.filter_by(id=id).first()
         form = RegisterForm(obj= user)
@@ -112,6 +111,24 @@ def view_users():
     return render_template('users/viewusers.html', users=users)
     return 'users list'
 
+@app.route('/viewuser/<id>', methods=('GET', 'POST'))
+@login_required
+def view_user(id):
+    if session.get('is_admin') or id==str(session['user_id']):
+        user = User.query.filter_by(organisation_id= session.get('organisation_id'), is_active=True).first()
+        assignments= UserProject.query.filter_by(user_id=user.id).all()
+        assigns=[]
+        for ass in assignments:
+            role= Role.query.filter_by(id= ass.role_id).first()
+            assigns.append([ass.project, role])
+            
+        return render_template('users/viewuser.html', user=user, assignments= assigns)
+    else:
+        flash('You are not authorised to access user details')
+        return redirect(url_for('login_success'))
+    
+
+
 @app.route('/deleteuser/<id>')
 def delete_user(id):
     user = User.query.filter_by(id= id).first()
@@ -145,8 +162,10 @@ def logout():
 @app.route('/login_success')
 @login_required
 def login_success():
-    
-    if session.get('user_id'):
+    if session.get('is_admin')==True:
+        projects= Project.query.filter_by(org_id= session['organisation_id']).all()
+        return render_template('/project/projectselection.html', projects= projects)
+    elif session.get('user_id'):
         assprojects = UserProject.query.filter_by(user_id=session['user_id'])
         projects=[]
         for prj in assprojects:
@@ -217,6 +236,7 @@ def delete_role(id):
     return redirect(url_for('view_roles'))
 
 @app.route('/assignusers', methods=['GET', 'POST'])
+@project_required
 def newuserprojectassignment():
     form = UserProjectForm()
     if request.method == "POST":
@@ -231,6 +251,7 @@ def newuserprojectassignment():
             try:
                 db.session.add(assignment)
                 db.session.commit()
+                flash('User has been assigned successfully to the Project','alert-success')
             except exc.IntegrityError as e:
                 db.session.rollback()
                 return "User already assigned to this project"

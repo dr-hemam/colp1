@@ -34,8 +34,8 @@ ConOccult - Projects
             <td><a href ={{ url_for('view_constraintanalysis_details', id=ca.id) }}>{{ ca.section }}</a></th>
             <td> {{ ca }}</td>
             <td>
-                <a data-target="#confirm-delete" data-toggle="modal" data-href={{ url_for('view_constraintanalysis_details', id = ca.id) }} ><img src="{{ url_for('static', filename='img/delete.png') }}" style="width:20px;height:20px;" alt="Delete"/> </a>
-                <a href={{ url_for('view_constraintanalysis_details', id = ca.id) }} "><img src="{{ url_for('static', filename='img/edit.png') }}" style="width:20px;height:20px;" alt="Edit"/> </a>
+                <a data-target="#confirm-delete" data-toggle="modal" data-href={{ url_for('view_constraintanalysis_details', id = ca.id) }} ><img title="Delete" src="{{ url_for('static', filename='img/delete.png') }}" style="width:20px;height:20px;" alt="Delete"/> </a>
+                <a href={{ url_for('view_constraintanalysis_details', id = ca.id) }}><img title="Edit" src="{{ url_for('static', filename='img/edit.png') }}" style="width:20px;height:20px;" alt="Edit"/> </a>
             </td>
         </tr>
         {% endfor %}
