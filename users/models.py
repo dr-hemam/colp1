@@ -12,10 +12,10 @@ class User(db.Model):
     password = db.Column(db.String(80))
     organisation_id = db.Column(db.Integer, db.ForeignKey('organisations.id'))
     organisation= db.relationship('Organisation', backref='users')
-	
     is_admin = db.Column(db.Boolean, default=False)
-
-    def __init__(self, firstname, lastname, email, username, password, organisation, is_admin=False):
+    is_active = db.Column(db.Boolean, default=True)
+    
+    def __init__(self, firstname, lastname, email, username, password, organisation, is_admin=False, is_active=True):
         self.firstname = firstname
         self.email = email
         self.lastname = lastname
@@ -23,6 +23,7 @@ class User(db.Model):
         self.is_admin = is_admin
         self.username = username
         self.organisation_id = organisation.id
+        self.is_active= is_active
         
 
     def __repr__(self):

@@ -64,7 +64,8 @@ def register():
                     username= form.username.data, 
                     password= hashed_password,
                     organisation= org,
-                    is_admin= form.is_admin.data)
+                    is_admin= form.is_admin.data,
+                    is_active= form.is_active.data)
         
         db.session.add(user)
         db.session.commit()
@@ -92,6 +93,7 @@ def edit_user(id):
             user.password= hashed_password
             user.organisation= org
             user.is_admin= form.is_admin.data
+            user.is_active = form.is_active.data
             db.session.flush()
             db.session.commit()
             flash('User Registered Successfully ', 'alert-success')
@@ -106,9 +108,20 @@ def edit_user(id):
 @organisation_required
 @admin_required
 def view_users():
-    users = User.query.filter_by(organisation_id= session.get('organisation_id')).all()
+    users = User.query.filter_by(organisation_id= session.get('organisation_id'), is_active=True).all()
     return render_template('users/viewusers.html', users=users)
     return 'users list'
+
+@app.route('/deleteuser/<id>')
+def delete_user(id):
+    user = User.query.filter_by(id= id).first()
+    user.is_active = False
+        
+    db.session.add(user)
+    db.session.commit()
+    return redirect(url_for('view_users'))
+
+
 
 @app.route('/logout')
 def logout():

@@ -20,6 +20,7 @@ class RegisterForm(Form):
     validators.Length(min=4, max=80)])
     confirm = PasswordField('Confirm Password')
     is_admin = BooleanField('Admin')
+    is_active = BooleanField('Active')
     #organisation = QuerySelectField('Organisation', query_factory= get_organisations, allow_blank=True)
     
 class LoginForm(Form):

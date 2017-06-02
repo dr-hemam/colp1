@@ -31,6 +31,7 @@
         {{ render_field(form.confirm, class='form-control') }}
         {% if session.get('is_admin')==True %}
           {{ render_field(form.is_admin, class='form-control') }}
+          {{ render_field(form.is_active, class='form-control') }}
         {% endif %}
         <button type="submit" class="btn btn-success">Submit</button>
         </form>
