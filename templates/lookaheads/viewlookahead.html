@@ -38,6 +38,8 @@ ConOccult - Reporting Cycles
             </tr>
             {% endfor %}
         </table>
+        
+        <a href= {{ url_for('edit_lookahead_details', id=lookahead.id) }} class="btn btn-success">Edit LookAhead</a>
     </div>
 </div>
 

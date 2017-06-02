@@ -30,7 +30,8 @@ def new_lookahead():
             db.session.commit()
         except exc.IntegrityError as e:
             db.session.rollback()
-            return "Error Duplicate Entry"
+            flash("Error Duplicate Entry")
+            return redirect(url_for('new_lookahead'))
         return redirect(url_for('new_lookahead_details', id= lookahead.id))
     return render_template('lookaheads/lookaheadform.html', form=form, action='new')
     
@@ -88,22 +89,57 @@ def edit_lookahead_detail(tid):
         return redirect(url_for('view_lookahead',id= task.lookahead_id))
     return render_template('lookaheads/lookaheaddetailsform.html', form = form, task=task, action='edit')
     
-    # lookaheaddetail= LookAheadDetail.query.filter_by(id= id).first()
-    # #lookahead = LookAhead.query.filter_by(id= lookaheaddetail.lookahead_id ).first()
-    # form = LookAheadDetailForm(obj= lookaheaddetail)
+@app.route('/editlookaheaddetails/<id>', methods=['GET','POST'])
+def edit_lookahead_details(id):
     
-    # if request.method == 'POST' and form.validate():
-    #     lookaheaddetail.task_code = form.task_code.data
-    #     lookaheaddetail.task_name = form.task_name.data
-    #     lookaheaddetail.start = form.start.data
-    #     lookaheaddetail.finish = form.finish.data
+    form = LookAheadDetailForm()
+    lookaheadmain = LookAhead.query.filter_by(id= id).all()
+    form.lookahead.query = lookaheadmain
+    tasks = LookAheadDetail.query.filter_by(lookahead_id= id).all()
+    forms=[]
+    for task in tasks:
+        form = LookAheadDetailForm(obj= task)
+        forms.append(form)
+    
+    if request.method == "POST":
+        codes = request.form.getlist('task_code')
+        names = request.form.getlist('task_name')
+        starts = request.form.getlist('start')
+        finishs = request.form.getlist('finish')
+        is_actives = request.form.getlist('is_active')
+        for i in range(len(codes)):
+            if i<len(tasks):
+                if tasks[i]:
+                    task = LookAheadDetail.query.filter_by(id=tasks[i].id).first()
+                    task.code = codes[i]
+                    task.name = names[i]
+                    db.session.commit()
+                    tasks[i].start= starts[i]
+                    tasks[i].finish= finishs[i]
+                    tasks[i].is_active= is_actives[i]
+            else:
+                task = LookAheadDetail(lookahead = lookaheadmain[0],
+                                    code= codes[i], 
+                                    name= names[i], 
+                                    start= starts[i], 
+                                    finish= finishs[i], 
+                                    is_active= is_actives[i])
+                db.session.add(task)
+                db.session.commit()
+                
+        # try:
+        #     db.session.commit()
+        # except exc.IntegrityError as e:
+        #     flash ('An Error has occured while trying to save changes')
+        #     print (e)
+        #     db.session.rollback()
         
-    #     db.session.add(lookaheaddetail)
-    #     db.session.flush()
-    #     db.session.commit()
-    #     return redirect(url_for('view_lookaheads'))
-    # return render_template('lookaheads/lookaheaddetailsform.html', form = form, lookahead_detail=lookaheaddetail, action='edit')
-
+        return redirect(url_for('view_lookahead', id=id))
+    
+    
+    
+    return render_template('lookaheads/editlhdetails.html', forms=forms, lookahead=lookaheadmain[0])
+    
 @app.route('/viewlookaheads')
 @login_required
 @project_required

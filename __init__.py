@@ -24,3 +24,4 @@ from lookaheads import views
 from constraintsanalysis import views
 from wwp import views
 from reporting import views
+from contact import views
