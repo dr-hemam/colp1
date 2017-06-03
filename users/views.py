@@ -144,6 +144,7 @@ def delete_user(id):
 def logout():
     if session.get('project_id'):
         session.pop('project_id')
+    if session.get('project'):
         session.pop('project')
     if session.get('username'):
         session.pop('username')
