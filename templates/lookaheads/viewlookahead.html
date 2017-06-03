@@ -9,18 +9,9 @@ ConOccult - Reporting Cycles
     <div class ="col-md-8">
         <h1>Look Ahead Activities </h1>
         <h3>Week Commencing {{lookahead}}</h3>
-        {% with messages = get_flashed_messages(with_categories=true) %}
-          {% if messages %}
-            
-            {% for category, message in messages %}
-            <ul class='flashes alert {{ category }} alert-dismissable'>
-              <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-              <li>{{ message }}</li>
-             </ul>
-            {% endfor %}
-            
-          {% endif %}
-        {% endwith %}
+        
+        {% include '_flashmessages.html' %}
+        
         <hr>
         <h4>Activities</h4>
         <table class='table table-hover table-responsive'>

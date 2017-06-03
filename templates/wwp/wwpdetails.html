@@ -10,18 +10,9 @@ ConOccult - Reporting Cycles
         <h1>Weekly Work Plan</h1>
         <h3>Section: {{wwp.section}}</h3>
         <h3>Week Commencing {{wwp.reportingdate}}</h3>
-        {% with messages = get_flashed_messages(with_categories=true) %}
-          {% if messages %}
-            
-            {% for category, message in messages %}
-            <ul class='flashes alert {{ category }} alert-dismissable'>
-              <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-              <li>{{ message }}</li>
-             </ul>
-            {% endfor %}
-            
-          {% endif %}
-        {% endwith %}
+        
+        {% include '_flashmessages.html' %}
+        
         {% from '_formhelpers.html' import render_field_nolabel %}
         {% if action=='new' %}<form method="POST" action ={{ url_for('new_wwp_details', id= wwp.id) }} role ="form">
         

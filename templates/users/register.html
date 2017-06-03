@@ -5,18 +5,9 @@
 
     <div class="col-md-4">
         <h3> User Details Form</h3>
-        {% with messages = get_flashed_messages(with_categories=true) %}
-          {% if messages %}
-            
-            {% for category, message in messages %}
-            <ul class='flashes alert {{ category }} alert-dismissable'>
-              <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-              <li>{{ message }}</li>
-             </ul>
-            {% endfor %}
-            
-          {% endif %}
-        {% endwith %}
+        
+        {% include '_flashmessages.html' %}
+        
         {% from "_formhelpers.html" import render_field %}
         {% if action=='new' %}<form method="POST" action ={{ url_for('register') }} role ="form">
         {% else %}<form method="POST" action="{{ url_for('edit_user', id= user.id) }}" role="form">
@@ -27,8 +18,10 @@
         {{ render_field(form.lastname, class='form-control') }}
         {{ render_field(form.username, class='form-control') }}
         {{ render_field(form.email, class='form-control') }}
-        {{ render_field(form.password, class='form-control') }}
-        {{ render_field(form.confirm, class='form-control') }}
+        {% if action=='new' %}
+          {{ render_field(form.password, class='form-control') }}
+          {{ render_field(form.confirm, class='form-control') }}
+        {% endif %}
         {% if session.get('is_admin')==True %}
           {{ render_field(form.is_admin, class='form-control') }}
           {{ render_field(form.is_active, class='form-control') }}

@@ -2,15 +2,38 @@ from colp import app, db
 from flask import render_template, redirect, session, request, url_for, flash
 from users.form import RegisterForm, LoginForm, RoleForm, UserProjectForm
 from users.models import User, Role
+from users.token import generate_confirmation_token, confirm_token
+from users.email import *
 from users.decorators import login_required, admin_required, organisation_required, project_required
 from organisations.models import Organisation
 from project.models import Project, UserProject
-import bcrypt
+import bcrypt, datetime
 from sqlalchemy import exc
 
 '''
 This section handles user registeration and login
 '''
+
+@app.route('/confirmemail/<token>')
+@login_required
+def confirm_account(token):
+    try:
+        email = confirm_token(token)
+    except:
+        flash('The confirmation link is invalid or has expired.', 'alert-danger')
+    user = User.query.filter_by(email=email).first_or_404()
+    if user.confirmed:
+        flash('Account already confirmed. Please login.', 'alert-success')
+    else:
+        user.confirmed = True
+        user.confirmed_on = datetime.datetime.now()
+        db.session.add(user)
+        db.session.commit()
+        flash('You have confirmed your account. Thanks!', 'alert-success')
+    return redirect(url_for('login_success'))
+
+
+
 @app.route('/login', methods=('GET', 'POST'))
 def login():
     form = LoginForm()
@@ -48,6 +71,8 @@ def login():
             return error
     return render_template('users/login.html', form=form, error=error)
 
+
+
 @app.route('/register', methods=('GET', 'POST'))
 @organisation_required
 def register():
@@ -67,11 +92,20 @@ def register():
                     is_admin= form.is_admin.data,
                     is_active= form.is_active.data)
         
+        token = generate_confirmation_token(user.email)
+        confirm_url = url_for('confirm_account', token=token, _external=True)
+        html = render_template('users/activate.html', confirm_url=confirm_url)
+        subject = "Please confirm your email"
+
         db.session.add(user)
         db.session.commit()
-        flash('User Registered Successfully ', 'alert-success')
+        send_email(user.email, subject, html)        
+        flash('A confirmation email has been sent via email.', 'alert-success')
+        # flash('User Registered Successfully ', 'alert-success')
         return redirect(url_for('newuserprojectassignment'))
     return render_template('users/register.html', form=form, action='new')
+
+
 
 @app.route('/edituser/<id>', methods=('GET', 'POST'))
 @organisation_required
@@ -81,21 +115,18 @@ def edit_user(id):
         user = User.query.filter_by(id=id).first()
         form = RegisterForm(obj= user)
         org = Organisation.query.filter_by(id= session['organisation_id']).first()
-        if form.validate_on_submit():
+        if request.method=='POST':
             salt = bcrypt.gensalt()
             
-            hashed_password = bcrypt.hashpw(form.password.data, salt)  
             user.firstname= form.firstname.data
             user.lastname= form.lastname.data
             user.email= form.email.data
-            user.username= form.username.data
-            user.password= hashed_password
             user.organisation= org
             user.is_admin= form.is_admin.data
             user.is_active = form.is_active.data
             db.session.flush()
             db.session.commit()
-            flash('User Registered Successfully ', 'alert-success')
+            flash('User Details Successfully Updated', 'alert-success')
             return redirect(url_for('login_success'))
         return render_template('users/register.html', form = form, user=user, action='edit')
     else:
@@ -190,6 +221,7 @@ it has functions to create, edit, delete and view Roles
 
 
 @app.route('/addrole', methods=('GET', 'POST'))
+@login_required
 def add_role():
     form = RoleForm()
     if form.validate_on_submit():
@@ -205,6 +237,7 @@ def add_role():
     return render_template('users/roleform.html', form=form, action='new')
     
 @app.route('/viewroles')
+@login_required
 def view_roles():
     roles = Role.query.filter_by(is_active =True, organisation_id= session.get('organisation_id')).all()
     return render_template('users/view_roles.html', roles=roles, organisation_name= Organisation.query.filter_by(id=session.get('organisation_id')).first())
@@ -287,7 +320,10 @@ def roles_ordered():
     ul +="]"
     return ul
     
-    
+
+
+
+  
 # def sub(roles, id):
 #     ul ="<ul>"
 #     for role in roles:

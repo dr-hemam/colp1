@@ -12,19 +12,24 @@ class User(db.Model):
     password = db.Column(db.String(80))
     organisation_id = db.Column(db.Integer, db.ForeignKey('organisations.id'))
     organisation= db.relationship('Organisation', backref='users')
+    confirmed = db.Column(db.Boolean, nullable=False, default=False)
+    confirmed_on = db.Column(db.DateTime, nullable=True)
     is_admin = db.Column(db.Boolean, default=False)
     is_active = db.Column(db.Boolean, default=True)
     
-    def __init__(self, firstname, lastname, email, username, password, organisation, is_admin=False, is_active=True):
+    
+    def __init__(self, firstname, lastname, email, username, password, organisation, is_admin=False, is_active=True, confirmed=False, confirmed_on= None):
         self.firstname = firstname
         self.email = email
         self.lastname = lastname
         self.password = password
         self.is_admin = is_admin
         self.username = username
-        self.organisation_id = organisation.id
+        if organisation:
+            self.organisation_id = organisation.id
         self.is_active= is_active
-        
+        self.confirmed = confirmed
+        self.confirmed_on = confirmed_on
 
     def __repr__(self):
         return self.username

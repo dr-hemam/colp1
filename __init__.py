@@ -2,11 +2,13 @@ from flask import Flask
 from flask.ext.sqlalchemy import SQLAlchemy
 from flask.ext.migrate import Migrate
 from sqlalchemy import exc
+from flask_mail import Mail
 
 
 app = Flask(__name__)
 app.config.from_object('settings')
 db = SQLAlchemy(app)
+mail = Mail(app)
 
 #Migration
 migrate= Migrate(app, db)

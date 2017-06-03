@@ -8,18 +8,9 @@
   <div class="col-md-4">
 
     <h3>User Login</h3>
-      {% with messages = get_flashed_messages(with_categories=true) %}
-          {% if messages %}
-            
-            {% for category, message in messages %}
-            <ul class='flashes alert {{ category }} alert-dismissable'>
-              <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-              <li>{{ message }}</li>
-             </ul>
-            {% endfor %}
-            
-          {% endif %}
-        {% endwith %}
+      
+      {% include '_flashmessages.html' %}
+      
     {% if error %}
     <div class="error text-danger">{{ error }}</div>
     {% endif %}

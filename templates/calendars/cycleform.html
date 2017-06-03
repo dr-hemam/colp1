@@ -8,18 +8,9 @@ ConOccult - Reporting Cycles
 <div class="row">
     <div class ="col-md-8">
         <h1>Reporting Cycle Form</h1>
-          {% with messages = get_flashed_messages(with_categories=true) %}
-          {% if messages %}
-            
-            {% for category, message in messages %}
-            <ul class='flashes alert {{ category }} alert-dismissable'>
-              <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-              <li>{{ message }}</li>
-             </ul>
-            {% endfor %}
-            
-          {% endif %}
-        {% endwith %}
+          
+        {% include '_flashmessages.html' %}  
+          
         {% from '_formhelpers.html' import render_field %}
         {% if action=='new' %}<form method="POST" action ={{ url_for('add_cycle') }} role ="form">
         {% else %}<form method="POST" action="{{ url_for('edit_cycle', id= cycle.id)  }}" enctype="multipart/form-data" role="form">

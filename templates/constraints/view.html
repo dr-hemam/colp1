@@ -8,18 +8,9 @@ ConOccult - Projects
 
     <div class ="col-md-8">
         <h1>Reasons for Delay List</h1>
-        {% with messages = get_flashed_messages(with_categories=true) %}
-          {% if messages %}
-            
-            {% for category, message in messages %}
-            <ul class='flashes alert {{ category }} alert-dismissable'>
-              <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-              <li>{{ message }}</li>
-             </ul>
-            {% endfor %}
-            
-          {% endif %}
-        {% endwith %}
+        
+        {% include '_flashmessages.html' %}
+        
         <div style="padding:20px;">
             <table class="table table-hover table-responsive">
                 <tr>

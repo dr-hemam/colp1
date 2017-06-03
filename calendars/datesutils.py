@@ -1,3 +1,8 @@
+'''
+This are group of functions and utilities used to hlp with dates calculations
+
+'''
+
 import datetime
 from datetime import timedelta, date
 import calendar

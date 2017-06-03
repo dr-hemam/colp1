@@ -8,6 +8,7 @@ from organisations.models import Organisation
 
 
 @app.route('/newconstraint', methods=['GET', 'POST'])
+@login_required
 def new_constraint():
     form = ConstraintForm()
     if request.method == "POST" and form.validate() and session.get('organisation_id'):
@@ -38,6 +39,7 @@ def edit_constraint(id):
     return render_template('constraints/setup.html', form = form, constraint=constraint, action='edit')
 
 @app.route('/viewconstraints')
+@login_required
 def view_constraints():
     constraints = Constraint.query.filter_by(is_active=True, org_id=session['organisation_id']).all()
     return render_template('constraints/view.html', constraints=constraints)

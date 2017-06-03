@@ -2,7 +2,8 @@ from colp import app, db
 from calendars.form import CycleForm
 from calendars.models import ReportingCycle
 from flask import render_template, redirect, url_for, request, session
-
+from users.decorators import login_required
+from organisations.models import Organisation
 
 
 '''
@@ -20,6 +21,7 @@ def add_cycle():
                             cycle_type= form.cycle_type.data,
                             cycle_value = form.cycle_value.data,
                             week_start = form.week_start.data,
+                            organisation = Organisation.query.filter_by(id=session['organisation_id']),
                             is_active= form.is_active.data)
         db.session.add(cycle)
         db.session.commit()
@@ -29,8 +31,9 @@ def add_cycle():
 
 
 @app.route('/viewcycles')
+@login_required
 def view_cycles():
-    cycles = ReportingCycle.query.filter_by().all()
+    cycles = ReportingCycle.query.filter_by(organisation_id = session['organisation_id'], is_active=True).all()
     return render_template('calendars/view.html', cycles=cycles)
 
 @app.route('/editcycle/<id>', methods=['GET', 'POST'])
