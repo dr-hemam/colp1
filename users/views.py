@@ -115,7 +115,7 @@ def view_users():
 @login_required
 def view_user(id):
     if session.get('is_admin') or id==str(session['user_id']):
-        user = User.query.filter_by(organisation_id= session.get('organisation_id'), is_active=True).first()
+        user = User.query.filter_by(id= id, organisation_id= session.get('organisation_id'), is_active=True).first()
         assignments= UserProject.query.filter_by(user_id=user.id).all()
         assigns=[]
         for ass in assignments:
