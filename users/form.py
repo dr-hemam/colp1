@@ -46,7 +46,7 @@ class UserProjectForm(Form):
         return User.query.filter_by(organisation_id=session.get('organisation_id'))
     
     def get_roles():
-        return Role.query.filter_by(id=session.get('organisation_id'))
+        return Role.query.filter_by(organisation_id=session.get('organisation_id'))
         
     user = QuerySelectField('User', query_factory= get_users)
     role = QuerySelectField('Role', query_factory= get_roles)

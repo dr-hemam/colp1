@@ -286,6 +286,7 @@ def newuserprojectassignment():
                 db.session.add(assignment)
                 db.session.commit()
                 flash('User has been assigned successfully to the Project','alert-success')
+                return redirect(url_for('view_user'), id=user.id)
             except exc.IntegrityError as e:
                 db.session.rollback()
                 return "User already assigned to this project"
