@@ -21,7 +21,7 @@ def add_cycle():
                             cycle_type= form.cycle_type.data,
                             cycle_value = form.cycle_value.data,
                             week_start = form.week_start.data,
-                            organisation = Organisation.query.filter_by(id=session['organisation_id']),
+                            organisation = Organisation.query.filter_by(id=session['organisation_id']).first(),
                             is_active= form.is_active.data)
         db.session.add(cycle)
         db.session.commit()
