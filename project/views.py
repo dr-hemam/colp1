@@ -11,7 +11,6 @@ from wtforms import validators
 
 
 @app.route('/newproject', methods=['POST', 'GET'])
-@login_required
 @admin_required
 def newproject():
     form = ProjectSetupForm()
@@ -44,10 +43,6 @@ def newproject():
         flash(e, 'alert-danger')
     return render_template('project/setup.html', form=form, action='new')
     
-
-@app.route('/projectsuccess')
-def proj_added():
-    return "project added successfully"
     
 @app.route('/admin', methods =['GET', 'POST'])
 @admin_required

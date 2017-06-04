@@ -5,9 +5,9 @@ from users.decorators import *
 from wwp.models import WWP, WWPDetail
 import json
 
-@app.route('/report', methods=['POST', 'GET'])
+@app.route('/report3', methods=['POST', 'GET'])
 
-def report():
+def report3():
     
     return render_template('reports/dashboard.html')
     
@@ -18,10 +18,10 @@ def report2():
     
     return render_template('reports/dashboard2.html')
 
-@app.route('/report3', methods=['POST', 'GET'])
+@app.route('/report', methods=['POST', 'GET'])
 @login_required
 @project_required
-def report3():
+def report():
     if session.get('project_id'):
         wwps = WWP.query.filter_by(project_id= session['project_id']).all()
         data=[]
@@ -31,7 +31,6 @@ def report3():
             jsonTasks =[]
             for task in WWPtasks:
                 jsonTasks.append(task.to_json())
-                print(jsonTasks, jsonWWP)
             jsonWWP["tasks"] = []
             jsonWWP["tasks"] = jsonTasks
             

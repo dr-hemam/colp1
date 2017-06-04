@@ -2,7 +2,7 @@ from colp import app, db
 from calendars.form import CycleForm
 from calendars.models import ReportingCycle
 from flask import render_template, redirect, url_for, request, session
-from users.decorators import login_required
+from users.decorators import login_required, admin_required
 from organisations.models import Organisation
 
 
