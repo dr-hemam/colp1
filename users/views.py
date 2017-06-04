@@ -75,6 +75,7 @@ def login():
 
 @app.route('/register', methods=('GET', 'POST'))
 @organisation_required
+@admin_required
 def register():
     form = RegisterForm()
     org = Organisation.query.filter_by(id= session['organisation_id']).first()
@@ -161,6 +162,7 @@ def view_user(id):
 
 
 @app.route('/deleteuser/<id>')
+@admin_required
 def delete_user(id):
     user = User.query.filter_by(id= id).first()
     user.is_active = False
@@ -206,7 +208,7 @@ def login_success():
     return render_template('/project/view.html')
 
 @app.route('/allprojects')
-@login_required
+@admin_required
 def all_projects():
     
     if session.get('organisation_id'):
@@ -221,7 +223,7 @@ it has functions to create, edit, delete and view Roles
 
 
 @app.route('/addrole', methods=('GET', 'POST'))
-@login_required
+@admin_required
 def add_role():
     form = RoleForm()
     if form.validate_on_submit():
@@ -261,6 +263,7 @@ def edit_role(id):
     return render_template('users/roleform.html', form = form, role=role, action='edit')
     
 @app.route('/deleterole/<id>')
+@admin_required
 def delete_role(id):
     role = Role.query.filter_by(id= id).first()
     role.is_active = False
@@ -271,6 +274,7 @@ def delete_role(id):
 
 @app.route('/assignusers', methods=['GET', 'POST'])
 @project_required
+@admin_required
 def newuserprojectassignment():
     form = UserProjectForm()
     if request.method == "POST":

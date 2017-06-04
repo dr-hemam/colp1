@@ -12,6 +12,7 @@ This code controls the creation, editing, viewing and deleting of organisations
 
 
 @app.route('/newcycle', methods=['POST', 'GET'])
+@admin_required
 def add_cycle():
     form = CycleForm()
     
@@ -37,6 +38,7 @@ def view_cycles():
     return render_template('calendars/view.html', cycles=cycles)
 
 @app.route('/editcycle/<id>', methods=['GET', 'POST'])
+@admin_required
 def edit_cycle(id):
     cycle = ReportingCycle.query.filter_by(id= id).first()
     form = CycleForm(obj= cycle)

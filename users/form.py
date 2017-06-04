@@ -28,7 +28,7 @@ class LoginForm(Form):
             validators.Required(),
             validators.Length(min=4, max=25)
         ])
-    password = PasswordField('New Password', [
+    password = PasswordField('Password', [
             validators.Required(),
             validators.Length(min=4, max=80)
         ])
