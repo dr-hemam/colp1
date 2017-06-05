@@ -93,14 +93,14 @@ def register():
                     is_admin= form.is_admin.data,
                     is_active= form.is_active.data)
         
-        # token = generate_confirmation_token(user.email)
-        # confirm_url = url_for('confirm_account', token=token, _external=True)
-        # html = render_template('users/activate.html', confirm_url=confirm_url)
-        # subject = "Please confirm your email"
+        token = generate_confirmation_token(user.email)
+        confirm_url = url_for('confirm_account', token=token, _external=True)
+        html = render_template('users/activate.html', confirm_url=confirm_url)
+        subject = "Please confirm your email"
 
         db.session.add(user)
         db.session.commit()
-        # send_email(user.email, subject, html)        
+        send_email(user.email, subject, html)        
         flash('A confirmation email has been sent via email.', 'alert-success')
         # flash('User Registered Successfully ', 'alert-success')
         return redirect(url_for('newuserprojectassignment'))
