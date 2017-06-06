@@ -1,1 +1,1 @@
-mysql -u root -phassan colp < colp.sql
+mysql -u root -p colp < colp.sql
