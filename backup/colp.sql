@@ -247,7 +247,7 @@ CREATE TABLE `organisations` (
   `is_active` tinyint(1) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `code` (`code`)
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -256,7 +256,7 @@ CREATE TABLE `organisations` (
 
 LOCK TABLES `organisations` WRITE;
 /*!40000 ALTER TABLE `organisations` DISABLE KEYS */;
-INSERT INTO `organisations` VALUES (1,'FUS','Fusion','Fusion is a joint venture between Morgan Sindal, BAM Nutall and Ferrovial',1),(2,'Egis','Egis Rail','Egis Rail Account for Sherif Mahmoud',1),(3,'hochtief','HOCHTIEF','HOCHTIEF - construction, civil engineering and building. HOCHTIEF is one of the World\'s leading construction groups.',1),(4,'PES','PES.','PES Company',1),(5,'CONO','ConOccult Management','ConOccult Sample Organisation for Training',1),(6,'BSUni','Ball State University','Ball State University',1),(7,'AAL','Abdelaal Est','Abdelaal Est',1),(8,'C1-1','C1 project','hhh',1),(9,'1XFEm','1XFEm','1XFEm',1);
+INSERT INTO `organisations` VALUES (1,'FUS','Fusion','Fusion is a joint venture between Morgan Sindal, BAM Nutall and Ferrovial',1),(3,'hochtief','HOCHTIEF','HOCHTIEF - construction, civil engineering and building. HOCHTIEF is one of the World\'s leading construction groups.',1),(4,'PES','PES.','PES Company',1),(5,'CONO','ConOccult Management','ConOccult Sample Organisation for Training',1),(6,'BSUni','Ball State University','Ball State University',1),(7,'AAL','Abdelaal Est','Abdelaal Est',1),(10,'Egis','Egis Rail','Egis Rail Test Account',1),(11,'iSim','iSimar','isimsar',1),(12,'SALEH','Saleh Mubarak Consulting','Saleh Mubarak Consulting',1);
 /*!40000 ALTER TABLE `organisations` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -503,7 +503,7 @@ CREATE TABLE `users` (
   UNIQUE KEY `username` (`username`),
   KEY `organisation_id` (`organisation_id`),
   CONSTRAINT `users_ibfk_1` FOREIGN KEY (`organisation_id`) REFERENCES `organisations` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -512,7 +512,7 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES (1,'Hassan','Emam','hassan.emam@hotmail.com','hassan','$2a$12$UfqXLs0gHouGmyq/rMDAPOGfJQN5QECR.QmbhHi1FIFpcTkV5CgrK',1,1,1,0,NULL),(2,'Emam','Emam','emam@hotmail.com','Emam','$2a$12$ja2Upqbyioxp/Vx/GI6jK.datHdrmXdEDAYnN9T5kXjiiRV00ngRa',1,0,1,0,NULL),(3,'Mohsen','Ammar','dr.hemam@hotmail.com','mammar','$2a$12$wxlRaIZZcuaxWi4JKQiT/eereBKW6G6lPUYTBNWDyyHe29c8d.GGa',1,0,0,0,NULL),(4,'Sherif','Mahmoud','smahmoud@live.com','smahmoud','$2a$12$L83OltI8a8/plhf8GQqSFOl/2OtOpLPVeyVbIUQBNhLrbTfWz7UMG',2,1,1,0,NULL),(5,'David','Nash','davidnash.email@gmail.com','dnash','$2a$12$MEGCpHeu46Uacfy8LN2A7e3z51UpJZLuiLf/bomiNIs187GwtrQT.',3,1,1,0,NULL),(6,'Ahmed','Al Senousy','Alsenosy15@gmail.com','ahmedalsenosy','$2a$12$OOrtR196AyUpFmpqs6/IoeIFCNWZTXQKi14hKuDo9UDw99m1lOIfa',4,1,1,0,NULL),(7,'Hassan','Emam','hassan@emam.me','h.emam','$2a$12$yv2K1EwHUiGssUnotS4iQO6g3qIJE6fvctkEwU0VGcuvzIx3o7gMq',5,1,1,0,NULL),(8,'Sherif','Attallah','sherif111@hotmail.com','sherifattallah','$2a$12$qKi0TCMCKzwdR305lQDPMOegs5eb5h.xf4QqGNBU8CSJDKoWM6akO',6,1,1,0,NULL),(9,'Mohamed','Abdelaal','md_mike@hotmail.com','mido','$2a$12$HCLQ1Iijx8TiYjjuHPO9KuUiN5zsHBkN/6lIDwTZkcR5nR.qvuEBq',7,1,1,0,NULL),(10,'hhhh','hhhhhh','hemam@logikalprojects.com','khabini81','$2a$12$6RnvjPnNbuXL4RCn/I5PGuNz6ibZiQz4YtrHfNrGY7PyRX6uQ0spy',8,1,1,0,NULL),(11,'Allien','Mars','alien@emam.me','alien@emam.me','$2a$12$yimK1ELpUbiReHTuAXkokOePeZ6ogNGJwmDokLd1VRTsVdplR8gKm',9,1,1,0,NULL);
+INSERT INTO `users` VALUES (1,'Hassan','Emam','hassan.emam@hotmail.com','hassan','$2a$12$UfqXLs0gHouGmyq/rMDAPOGfJQN5QECR.QmbhHi1FIFpcTkV5CgrK',1,1,1,0,NULL),(2,'Emam','Emam','emam@hotmail.com','Emam','$2a$12$ja2Upqbyioxp/Vx/GI6jK.datHdrmXdEDAYnN9T5kXjiiRV00ngRa',1,0,1,0,NULL),(5,'David','Nash','davidnash.email@gmail.com','dnash','$2a$12$MEGCpHeu46Uacfy8LN2A7e3z51UpJZLuiLf/bomiNIs187GwtrQT.',3,1,1,0,NULL),(6,'Ahmed','Al Senousy','Alsenosy15@gmail.com','ahmedalsenosy','$2a$12$OOrtR196AyUpFmpqs6/IoeIFCNWZTXQKi14hKuDo9UDw99m1lOIfa',4,1,1,0,NULL),(7,'Hassan','Emam','hassan@emam.me','h.emam','$2a$12$yv2K1EwHUiGssUnotS4iQO6g3qIJE6fvctkEwU0VGcuvzIx3o7gMq',5,1,1,0,NULL),(8,'Sherif','Attallah','sherif111@hotmail.com','sherifattallah','$2a$12$qKi0TCMCKzwdR305lQDPMOegs5eb5h.xf4QqGNBU8CSJDKoWM6akO',6,1,1,0,NULL),(9,'Mohamed','Abdelaal','md_mike@hotmail.com','mido','$2a$12$HCLQ1Iijx8TiYjjuHPO9KuUiN5zsHBkN/6lIDwTZkcR5nR.qvuEBq',7,1,1,0,NULL),(14,'Sherif','Mahmoud','smahmoud@live.com','smahmoud','$2a$12$lpMMx1VzPIFraRxLC/8fYeUs5gM1Bid.umX/UWLEvnkihgYO2F1oK',10,1,1,0,NULL),(15,'Hassan','Emam','dr.hemam@yahoo.co.uk','khabini','$2a$12$ucZYvdWCLEv5YEoa/2EaiOG/nHgD7dDASnU0pZVzqXZ9XhwoLnEcO',11,1,1,0,NULL),(16,'Saleh','Mubarak','cpmxpert@gmail.com','smubarak','$2a$12$a0Ia.K64SKZfueiQ9.w.GuwePl1OzNYQvjwJRi8kA3etX6Cpg.fpy',12,1,1,0,NULL);
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -603,4 +603,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2017-06-05 15:56:36
+-- Dump completed on 2017-06-06  8:11:17
