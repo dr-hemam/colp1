@@ -14,8 +14,8 @@ Occult - Projects
         <table align='center'>
             <tr><th>Projects</th></tr>
         {% for project in projects %}
-        <tr><td>
-        <button type ="submit" name='submit' class="btn btn-default" value="{{ project.id }}">{{ project.name }}</button>
+        <tr><td style="padding-top: 1em;">
+        <button type ="submit" name='submit' class="btn btn-primary" style="min-width:30em;" value="{{ project.id }}">{{ project.name }}</button><br>
         </td></tr>
         {% endfor %}
         

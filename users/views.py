@@ -64,11 +64,13 @@ def login():
                 else:
                     return redirect(url_for('login_success'))
             else:
-                error = "Incorrect password"
-                return error
+                flash("Invalid login credentials",'alert-danger')
+            
+                return redirect(url_for('login'))
         else:
-            error = "User not found"
-            return error
+            flash("Invalid login credentials",'alert-danger')
+            
+            return redirect(url_for('login'))
     return render_template('users/login.html', form=form, error=error)
 
 
@@ -148,7 +150,7 @@ def view_users():
 def view_user(id):
     if session.get('is_admin') or id==str(session['user_id']):
         user = User.query.filter_by(id= id, organisation_id= session.get('organisation_id'), is_active=True).first()
-        assignments= UserProject.query.filter_by(user_id=user.id).all()
+        assignments= UserProject.query.filter_by(user_id=user.id, is_active=True).all()
         assigns=[]
         for ass in assignments:
             role= Role.query.filter_by(id= ass.role_id).first()
@@ -299,7 +301,41 @@ def newuserprojectassignment():
             return redirect(url_for('newuserprojectassignment'))
     return render_template('/users/projectassignment.html', form=form, action='new')
     
+@app.route('/deleteusrprojassignment', methods=['GET'])
+def delusrprjassignment():
+    project_id = request.args.get('prj_id')
+    user_id = request.args.get('user_id')
     
+    userassig = UserProject.query.filter_by(project_id=project_id, user_id=user_id).first()
+    userassig.is_active = False
+    
+    db.session.add(userassig)
+    db.session.commit()
+    flash('Assignment has been deleted successully')
+    return redirect(url_for('view_user', id=user_id))
+    
+@app.route('/editusrprojassignment', methods=['GET', 'POST'])
+def editusrprjassignment():
+    project_id = request.args.get('prj_id')
+    user_id = request.args.get('user_id')
+    
+    userassig = UserProject.query.filter_by(project_id=project_id, user_id=user_id).first()
+    form = UserProjectForm(obj=userassig)
+    
+    if userassig:
+        if request.method == "POST":
+            role= Role.query.filter_by(id = userassig.role_id)
+            role = form.role.data
+            print (role)
+            userassig.role_id = role.id
+            db.session.add(userassig)
+            db.session.commit()
+            flash('Assignment has been amended successully','alert-success')
+            return redirect(url_for('view_user', id=user_id))
+    else:
+        flash('Unexpected error has occured', 'alert-danger')
+    return render_template('/users/projectassignment.html', form=form, action='edit', prj_id=project_id, user_id = user_id)
+  
 def sub(roles, id):
     ul =',"childs":['
     for role in roles:
@@ -312,6 +348,7 @@ def sub(roles, id):
     return ul
             
 @app.route('/rolesorder')
+@admin_required
 def roles_ordered():
     roles = Role.query.filter_by(organisation_id= session.get('organisation_id')).all()
     ul="["

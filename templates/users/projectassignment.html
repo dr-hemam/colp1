@@ -13,14 +13,12 @@ ConOccult - Assign User to Project
         
         {% from '_formhelpers.html' import render_field %}
         {% if action=='new' %}<form method="POST" action ={{ url_for('newuserprojectassignment') }} role ="form">
-        
+        {% else %} <form method="POST" action ={{ url_for('editusrprjassignment', prj_id= prj_id, user_id = user_id) }} role ="form">
         {% endif %}
         {{ form.hidden_tag() }}
         {{ render_field(form.user, class="form-control") }}
         {{ render_field(form.role, class="form-control") }}
-
-
-        <button type ="submit" class="btn btn-default">Save</button>
+        <button type ="submit" class="btn btn-success">Save</button>
         </form>
 
     </div>

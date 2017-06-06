@@ -6,7 +6,7 @@ ConOccult - New Project
 
 {% block content %}
 <div class="row">
-    <div class ="col-md-4">
+    <div class ="col-md-6">
         <h1>Create New Project</h1>
         
         {% include '_flashmessages.html' %}
@@ -26,7 +26,7 @@ ConOccult - New Project
         {{ render_field(form.cycle, class="form-control") }}
         {{ render_field(form.status, class="form-control") }}
 
-        <button type ="submit" class="btn btn-default">Save</button>
+        <button type ="submit" class="btn btn-success">Save</button>
         </form>
 
     </div>

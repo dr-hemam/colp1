@@ -7,7 +7,7 @@ ConOccult - User Details
 {% block content %}
 
     <div class ="col-md-8">
-        <h2> {{ organisation_name }} Users List</h2>
+        <h2> {{ organisation_name }} User Details</h2>
         
         {% include '_flashmessages.html' %}
         
@@ -40,6 +40,10 @@ ConOccult - User Details
             <tr>
                 <td>{{assignment[0]}}</td>
                 <td>{{assignment[1]}}</td>
+                <td>
+                    <a data-target="#confirm-delete" data-toggle="modal" data-href="{{ url_for('delusrprjassignment', prj_id= assignment[0].id, user_id = user.id) }} "><img title="Delete" src="{{ url_for('static', filename='img/delete.png') }}" style="width:20px;height:20px;" alt="Delete"/> </a>
+                    <a href="{{ url_for('editusrprjassignment',prj_id= assignment[0].id, user_id = user.id) }} "><img title="Edit" src="{{ url_for('static', filename='img/edit.png') }}" style="width:20px;height:20px;" alt="Edit"/> </a>
+                </td>
             </tr>
             {% endfor %}
         </table>
