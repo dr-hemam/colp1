@@ -20,7 +20,11 @@ def new_lookahead():
     form.section.query = Section.query.filter_by(project_id= session.get('project_id'))
     if request.method == "POST" and form.validate() and session.get('project_id'):
         project = Project.query.filter_by(id=session.get('project_id')).first()
-        lookahead = LookAhead (project= project, 
+        lookahead = LookAhead.query.filter_by(project_id= project.id, reportingdate_id= form.reportingdate.data.id, section_id= form.section.data.id).first()
+        if lookahead and lookahead.is_active==False:
+                lookahead.is_active=True
+        else:
+            lookahead = LookAhead (project= project, 
                                 reportingdate= form.reportingdate.data,
                                 section = form.section.data,
                                 is_active = form.section.data)
@@ -30,6 +34,7 @@ def new_lookahead():
             db.session.commit()
         except exc.IntegrityError as e:
             db.session.rollback()
+            
             flash("Error Duplicate Entry", 'alert-danger')
             return redirect(url_for('new_lookahead'))
         return redirect(url_for('new_lookahead_details', id= lookahead.id))
@@ -144,7 +149,7 @@ def edit_lookahead_details(id):
 @login_required
 @project_required
 def view_lookaheads():
-    lookaheads = LookAhead.query.join(ReportingDate).filter_by(project_id=session['project_id'])
+    lookaheads = LookAhead.query.join(ReportingDate).filter(LookAhead.project_id==session['project_id'], LookAhead.is_active==True)
     lookaheads = lookaheads.order_by(desc('rdate')).all()
     print('lookaheads', lookaheads)
     return render_template('lookaheads/view.html', lookaheads=lookaheads)
@@ -154,5 +159,20 @@ def view_lookaheads():
 @project_required
 def view_lookahead(id):
     lookahead = LookAhead.query.filter_by(id=id).first()
-    details = LookAheadDetail.query.filter_by(lookahead_id=id).all()
+    details = LookAheadDetail.query.filter_by(lookahead_id=id, is_active=True).all()
     return render_template('lookaheads/viewlookahead.html', lookahead = lookahead, tasks = details)
+    
+@app.route('/deletelookahead/<id>')
+@login_required
+@project_required
+def delete_lookahead(id):
+    lookahead = LookAhead.query.filter_by(id=id).first()
+    lookahead.is_active = False
+    tasks = LookAheadDetail.query.filter_by(lookahead_id= lookahead.id).all()
+    db.session.add(lookahead)
+    for t in tasks:
+        t.is_active=False
+        db.session.add(t)
+    
+    db.session.commit()
+    return redirect(url_for('view_lookaheads'))
