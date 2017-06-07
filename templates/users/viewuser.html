@@ -10,7 +10,7 @@ ConOccult - User Details
         <h2> {{ organisation_name }} User Details</h2>
         
         {% include '_flashmessages.html' %}
-        
+        <div style="overflow-x:auto;">
         <table class='table table-hover table-responsive'>
         <tr>
             <th>User Name</th>
@@ -30,6 +30,8 @@ ConOccult - User Details
         </td>
         
         </table>
+        </div>
+        <div style="overflow-x:auto;">
         <h3>Project Assignments</h3>
         <table class='table table-hover table-responsive'>
             <tr>
@@ -47,7 +49,7 @@ ConOccult - User Details
             </tr>
             {% endfor %}
         </table>
-
+        </div>
     </div>
 
 <div class="modal fade" id="confirm-delete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">

@@ -9,7 +9,7 @@ ConOccult - Organisations
     <div class ="col-md-5">
         <h1>Organisations List</h1>
         {% include '_flashmessages.html' %}
-        
+        <div style="overflow-x:auto;">
         <table>
         
         {% for organisation in organisations %}
@@ -19,7 +19,7 @@ ConOccult - Organisations
         <tr><td>{{ organisation.description }}</td></tr>
         {% endfor %}
         </table>
-           
+        </div>
     </div>
 
 {% endblock %}

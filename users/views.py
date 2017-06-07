@@ -1,7 +1,7 @@
 from colp import app, db
 from flask import render_template, redirect, session, request, url_for, flash
 from users.form import RegisterForm, LoginForm, RoleForm, UserProjectForm
-from users.models import User, Role
+from users.models import User, Role, UserLog
 # from users.token import generate_confirmation_token, confirm_token
 # from users.email import *
 from users.decorators import login_required, admin_required, organisation_required, project_required
@@ -48,7 +48,11 @@ def login():
         if author:
             if bcrypt.hashpw(form.password.data, author.password) == author.password:
                 session['username'] = form.username.data
-                #
+                log = UserLog(user_id= str(author.id), success=True)
+                print(log, author.id)
+                db.session.add(log)
+                
+                db.session.commit()
                 session['user_id'] = author.id
                 org = Organisation.query.filter_by(id=author.organisation_id).first()
                 if org:
@@ -68,8 +72,10 @@ def login():
             
                 return redirect(url_for('login'))
         else:
+            log = UserLog(user_id= author.id, success=True)
+            db.session.add(log)
             flash("Invalid login credentials",'alert-danger')
-            
+            db.session.commit()
             return redirect(url_for('login'))
     return render_template('users/login.html', form=form, error=error)
 

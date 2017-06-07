@@ -12,7 +12,7 @@ ConOccult - Projects
         </div>
         
         {% include '_flashmessages.html' %}
-        
+        <div style="overflow-x:auto;">
         <table class='table table-hover table-responsive'>
         <tr>
             <th>Section</th>
@@ -30,7 +30,7 @@ ConOccult - Projects
         </tr>
         {% endfor %}
         </table>
-        
+        </div>
         <a href= {{ url_for('new_constraintanalysis') }} class='btn btn-success'> Add Constraint Analysis </a>
            
     </div>

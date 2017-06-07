@@ -1,5 +1,5 @@
 from colp import db
-
+from datetime import datetime
 
 
 class User(db.Model):
@@ -34,6 +34,21 @@ class User(db.Model):
     def __repr__(self):
         return self.username
 
+class UserLog(db.Model):
+    __tablename__='users_log'
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer)
+    date = db.Column(db.DateTime)
+    success = db.Column(db.Boolean)
+    
+    def __init__(self, user_id, success, date=None):
+        self.user_id = user_id
+        self.date = datetime.now()
+        self.success = success
+        
+    def __repr__(self):
+        return 'user:' + str(self.user_id) + ' logged on: ' + str(self.date)
+    
        
 class Role(db.Model):
     __tablename__='roles'

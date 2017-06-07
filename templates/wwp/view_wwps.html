@@ -10,7 +10,7 @@ ConOccult - Projects
         <h1>Weekly Work Plans</h1>
         
         {% include '_flashmessages.html' %}
-        
+        <div style="overflow-x:auto;">
         <table class="table table-hover table-responsive">
         <tr>
             <th>Code</th>
@@ -31,6 +31,7 @@ ConOccult - Projects
         
         {% endfor %}
         </table>
+        </div>
         <a href= {{ url_for('new_wwp') }} class='btn btn-success'> Add Weekly Plan </a>
     </div>
 

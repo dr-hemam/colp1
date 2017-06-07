@@ -16,6 +16,7 @@ ConOccult - Reporting Cycles
         <form method="POST" action= {{ url_for('edit_lookahead_details', id = lookahead.id )  }} role="form">
         
         {{ forms[0].hidden_tag() }}
+        <div style="overflow-x:auto;">
         <table>
         <tr><th>ID</th><th>Name</th><th>Start</th><th>Finish</th><th>Active</th></tr>
         {% for form in forms %}
@@ -30,6 +31,7 @@ ConOccult - Reporting Cycles
         {% endfor %}
         
         </table>
+        </div>
         <button type ="submit" class="btn btn-success">Save</button>
         </form>
 
