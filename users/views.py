@@ -68,14 +68,18 @@ def login():
                 else:
                     return redirect(url_for('login_success'))
             else:
+                log = UserLog(user_id= str(author.id), success=False)
+                db.session.add(log)
+                db.session.commit()
                 flash("Invalid login credentials",'alert-danger')
             
                 return redirect(url_for('login'))
         else:
-            log = UserLog(user_id= author.id, success=True)
+            log = UserLog(user_id= str(author.id), success=False)
             db.session.add(log)
-            flash("Invalid login credentials",'alert-danger')
             db.session.commit()
+            
+            flash("Invalid login credentials",'alert-danger')
             return redirect(url_for('login'))
     return render_template('users/login.html', form=form, error=error)
 
