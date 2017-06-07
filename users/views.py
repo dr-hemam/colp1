@@ -45,11 +45,12 @@ def login():
         author = User.query.filter_by(
             username=form.username.data,
             ).first()
+        ip = request.remote_addr
+        print('ip', ip)
         if author:
             if bcrypt.hashpw(form.password.data, author.password) == author.password:
                 session['username'] = form.username.data
-                log = UserLog(user_id= str(author.id), success=True)
-                print(log, author.id)
+                log = UserLog(user_id= str(author.id), ipaddr= str(ip), success=True)
                 db.session.add(log)
                 
                 db.session.commit()
@@ -60,7 +61,6 @@ def login():
                     
                     session['organisation_id'] = org.id
                     session['organisation'] =org.name
-                    print('Session org id is set to ' + str(session['organisation_id']))
                 if 'next' in session:
                     next = session.get('next')
                     session.pop('next')
@@ -68,14 +68,14 @@ def login():
                 else:
                     return redirect(url_for('login_success'))
             else:
-                log = UserLog(user_id= str(author.id), success=False)
+                log = UserLog(user_id= str(author.id), ipaddr= ip, success=False)
                 db.session.add(log)
                 db.session.commit()
                 flash("Invalid login credentials",'alert-danger')
             
                 return redirect(url_for('login'))
         else:
-            log = UserLog(user_id= str(author.id), success=False)
+            log = UserLog(user_id= str(author.id), ipaddr= ip, success=False)
             db.session.add(log)
             db.session.commit()
             

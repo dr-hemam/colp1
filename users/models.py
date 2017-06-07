@@ -40,11 +40,13 @@ class UserLog(db.Model):
     user_id = db.Column(db.Integer)
     date = db.Column(db.DateTime)
     success = db.Column(db.Boolean)
+    ipaddr = db.Column(db.String(40))
     
-    def __init__(self, user_id, success, date=None):
+    def __init__(self, user_id, success, ipaddr, date=None):
         self.user_id = user_id
         self.date = datetime.now()
         self.success = success
+        self.ipaddr = ipaddr
         
     def __repr__(self):
         return 'user:' + str(self.user_id) + ' logged on: ' + str(self.date)
