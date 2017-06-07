@@ -1,8 +1,8 @@
--- MySQL dump 10.13  Distrib 5.5.50, for debian-linux-gnu (x86_64)
+-- MySQL dump 10.13  Distrib 5.5.54, for debian-linux-gnu (armv7l)
 --
 -- Host: localhost    Database: colp
 -- ------------------------------------------------------
--- Server version	5.5.50-0ubuntu0.14.04.1
+-- Server version	5.5.54-0+deb8u1
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -42,7 +42,6 @@ CREATE TABLE `alembic_version` (
 
 LOCK TABLES `alembic_version` WRITE;
 /*!40000 ALTER TABLE `alembic_version` DISABLE KEYS */;
-INSERT INTO `alembic_version` VALUES ('731fc396b52a');
 /*!40000 ALTER TABLE `alembic_version` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -67,7 +66,7 @@ CREATE TABLE `constraintanalysis` (
   CONSTRAINT `constraintanalysis_ibfk_1` FOREIGN KEY (`project_id`) REFERENCES `projects` (`id`),
   CONSTRAINT `constraintanalysis_ibfk_2` FOREIGN KEY (`reportingdate_id`) REFERENCES `reportingdates` (`id`),
   CONSTRAINT `constraintanalysis_ibfk_3` FOREIGN KEY (`section_id`) REFERENCES `sections` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -76,7 +75,7 @@ CREATE TABLE `constraintanalysis` (
 
 LOCK TABLES `constraintanalysis` WRITE;
 /*!40000 ALTER TABLE `constraintanalysis` DISABLE KEYS */;
-INSERT INTO `constraintanalysis` VALUES (1,1,1,1,1,NULL),(2,1,1,2,1,NULL),(3,1,2,1,1,NULL),(4,1,3,1,1,NULL);
+INSERT INTO `constraintanalysis` VALUES (1,1,1,1,1,NULL),(2,1,1,2,1,NULL),(3,1,2,1,1,NULL),(4,1,3,1,1,NULL),(5,3,212,4,1,NULL);
 /*!40000 ALTER TABLE `constraintanalysis` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -94,9 +93,7 @@ CREATE TABLE `constraintanalysis_details` (
   `status` tinyint(1) DEFAULT NULL,
   `is_active` tinyint(1) DEFAULT NULL,
   `can_do` tinyint(1) DEFAULT NULL,
-  `id` int(11) NOT NULL,
   PRIMARY KEY (`constraintanalysis_id`,`task_id`,`constraint_id`),
-  UNIQUE KEY `uix_cad` (`constraintanalysis_id`,`task_id`,`constraint_id`),
   KEY `task_id` (`task_id`),
   KEY `constraint_id` (`constraint_id`),
   CONSTRAINT `constraintanalysis_details_ibfk_1` FOREIGN KEY (`constraintanalysis_id`) REFERENCES `constraintanalysis` (`id`),
@@ -111,6 +108,7 @@ CREATE TABLE `constraintanalysis_details` (
 
 LOCK TABLES `constraintanalysis_details` WRITE;
 /*!40000 ALTER TABLE `constraintanalysis_details` DISABLE KEYS */;
+INSERT INTO `constraintanalysis_details` VALUES (1,1,1,1,1,1),(1,1,2,1,1,1),(1,1,3,1,1,1),(1,1,4,1,1,1),(1,1,5,1,1,1),(1,1,6,1,1,1),(1,1,7,1,1,1),(1,1,8,1,1,1),(1,1,9,1,1,1),(1,1,10,1,1,1),(1,1,11,1,1,1),(1,2,1,1,1,1),(1,2,2,1,1,1),(1,2,3,1,1,1),(1,2,4,1,1,1),(1,2,5,1,1,1),(1,2,6,1,1,1),(1,2,7,1,1,1),(1,2,8,1,1,1),(1,2,9,1,1,1),(1,2,10,1,1,1),(1,2,11,1,1,1),(2,3,1,1,1,1),(2,3,2,1,1,1),(2,3,3,1,1,1),(2,3,4,1,1,1),(2,3,5,0,1,1),(2,3,6,0,1,1),(2,3,7,0,1,1),(2,3,8,0,1,1),(2,3,9,0,1,1),(2,3,10,0,1,1),(2,3,11,0,1,1),(2,4,1,1,1,1),(2,4,2,1,1,1),(2,4,3,1,1,1),(2,4,4,1,1,1),(2,4,5,0,1,1),(2,4,6,0,1,1),(2,4,7,1,1,1),(2,4,8,0,1,1),(2,4,9,1,1,1),(2,4,10,0,1,1),(2,4,11,0,1,1),(3,5,1,1,1,1),(3,5,2,1,1,1),(3,5,3,1,1,1),(3,5,4,1,1,1),(3,5,5,1,1,1),(3,5,6,1,1,1),(3,5,7,1,1,1),(3,5,8,1,1,1),(3,5,9,1,1,1),(3,5,10,1,1,1),(3,5,11,1,1,1),(3,6,1,1,1,1),(3,6,2,1,1,1),(3,6,3,1,1,1),(3,6,4,1,1,1),(3,6,5,1,1,1),(3,6,6,1,1,1),(3,6,7,1,1,1),(3,6,8,1,1,1),(3,6,9,1,1,1),(3,6,10,1,1,1),(3,6,11,1,1,1),(4,7,1,1,1,1),(4,7,2,0,1,1),(4,7,3,1,1,1),(4,7,4,0,1,1),(4,7,5,1,1,1),(4,7,6,0,1,1),(4,7,7,0,1,1),(4,7,8,0,1,1),(4,7,9,0,1,1),(4,7,10,0,1,1),(4,7,11,0,1,1),(4,8,1,1,1,1),(4,8,2,0,1,1),(4,8,3,1,1,1),(4,8,4,0,1,1),(4,8,5,1,1,1),(4,8,6,0,1,1),(4,8,7,0,1,1),(4,8,8,0,1,1),(4,8,9,0,1,1),(4,8,10,0,1,1),(4,8,11,0,1,1),(4,9,1,1,1,1),(4,9,2,0,1,1),(4,9,3,1,1,1),(4,9,4,0,1,1),(4,9,5,1,1,1),(4,9,6,0,1,1),(4,9,7,0,1,1),(4,9,8,0,1,1),(4,9,9,0,1,1),(4,9,10,0,1,1),(4,9,11,0,1,1),(5,10,13,1,1,1),(5,11,13,1,1,1);
 /*!40000 ALTER TABLE `constraintanalysis_details` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -129,7 +127,7 @@ CREATE TABLE `constraints` (
   PRIMARY KEY (`id`),
   KEY `org_id` (`org_id`),
   CONSTRAINT `constraints_ibfk_1` FOREIGN KEY (`org_id`) REFERENCES `organisations` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -138,7 +136,7 @@ CREATE TABLE `constraints` (
 
 LOCK TABLES `constraints` WRITE;
 /*!40000 ALTER TABLE `constraints` DISABLE KEYS */;
-INSERT INTO `constraints` VALUES (1,'Consents',1,1),(2,'Community Engagement',1,1),(3,'Contract',1,1),(4,'Compensation Event',1,1),(5,'Design',1,1),(6,'Land Access',1,1),(7,'Method Statement',1,1),(8,'Resource',1,1),(9,'Equipment',1,1),(10,'Space',1,1),(11,'Prerequisite work',1,1),(12,'Other',1,1);
+INSERT INTO `constraints` VALUES (1,'Consents',1,1),(2,'Community Engagement',1,1),(3,'Contract',1,1),(4,'Compensation Event',1,1),(5,'Design',1,1),(6,'Land Access',1,1),(7,'Method Statement',1,1),(8,'Resource',1,1),(9,'Equipment',1,1),(10,'Space',1,1),(11,'Prerequisite work',1,1),(12,'Other',1,1),(13,'Method Statement',5,1);
 /*!40000 ALTER TABLE `constraints` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -157,7 +155,7 @@ CREATE TABLE `delay_reasons` (
   PRIMARY KEY (`id`),
   KEY `org_id` (`org_id`),
   CONSTRAINT `delay_reasons_ibfk_1` FOREIGN KEY (`org_id`) REFERENCES `organisations` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -166,7 +164,7 @@ CREATE TABLE `delay_reasons` (
 
 LOCK TABLES `delay_reasons` WRITE;
 /*!40000 ALTER TABLE `delay_reasons` DISABLE KEYS */;
-INSERT INTO `delay_reasons` VALUES (1,'Change in priority instructed by Client or PM',1,1),(2,'Defects requiring rework',1,1),(3,'Interface with other packages',1,1),(4,'Lack of human resource',1,1),(5,'Late materials',1,1),(6,'Defective materials',1,1),(7,'Late information',1,1),(8,'Incomplete information',1,1),(9,'Make ready items not in place',1,1),(10,'Outside influence',1,1),(11,'Over/under estimation of what could be achieved',1,1),(12,'Prerequisite activity not recognised be responsible party',1,1),(13,'Weather',1,1),(14,'Other',1,1);
+INSERT INTO `delay_reasons` VALUES (1,'Change in priority instructed by Client or PM',1,1),(2,'Defects requiring rework',1,1),(3,'Interface with other packages',1,1),(4,'Lack of human resource',1,1),(5,'Late materials',1,1),(6,'Defective materials',1,1),(7,'Late information',1,1),(8,'Incomplete information',1,1),(9,'Make ready items not in place',1,1),(10,'Outside influence',1,1),(11,'Over/under estimation of what could be achieved',1,1),(12,'Prerequisite activity not recognised be responsible party',1,1),(13,'Weather',1,1),(14,'Other',1,1),(15,'Design Change',5,1);
 /*!40000 ALTER TABLE `delay_reasons` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -199,7 +197,7 @@ CREATE TABLE `lookaheads` (
 
 LOCK TABLES `lookaheads` WRITE;
 /*!40000 ALTER TABLE `lookaheads` DISABLE KEYS */;
-INSERT INTO `lookaheads` VALUES (1,1,1,1,1),(2,1,1,2,1),(3,1,2,1,1),(4,1,3,1,1);
+INSERT INTO `lookaheads` VALUES (1,1,1,1,1),(2,1,1,2,1),(3,1,2,1,1),(4,1,3,1,1),(5,3,212,4,1);
 /*!40000 ALTER TABLE `lookaheads` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -221,7 +219,7 @@ CREATE TABLE `lookaheads_details` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `uix_1_lookahead_details_lookahead_id_task_code` (`lookahead_id`,`task_code`),
   CONSTRAINT `lookaheads_details_ibfk_1` FOREIGN KEY (`lookahead_id`) REFERENCES `lookaheads` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -230,7 +228,7 @@ CREATE TABLE `lookaheads_details` (
 
 LOCK TABLES `lookaheads_details` WRITE;
 /*!40000 ALTER TABLE `lookaheads_details` DISABLE KEYS */;
-INSERT INTO `lookaheads_details` VALUES (1,1,'Task C1-10','Task C1-10','2016-11-17 00:00:00','2016-11-20 00:00:00',1),(2,1,'Task C1-20','Task C1-20','2016-11-18 00:00:00','2016-11-21 00:00:00',1),(3,2,'Task C2-10','Task C2-10','2016-11-17 00:00:00','2016-11-18 00:00:00',1),(4,2,'Task C2-20','Task C2-20','2016-11-18 00:00:00','2016-11-20 00:00:00',1),(5,3,'Task 24-1','Task 24-1','2016-11-25 00:00:00','2016-11-26 00:00:00',1),(6,3,'Task 24-2','Task 24-2','2016-11-26 00:00:00','2016-11-28 00:00:00',1),(7,4,'Task 1-12-1','Task 1-12-1','2017-12-01 00:00:00','2017-12-03 00:00:00',1),(8,4,'Task 1-12-2','Task 1-12-2','2017-12-01 00:00:00','2017-12-03 00:00:00',1),(9,4,'Task 1-12-3','Task 1-12-3','2017-12-02 00:00:00','2017-12-03 00:00:00',1),(10,2,'Task C2-22','Task C2-22','2016-11-18 00:00:00','2016-11-21 00:00:00',1);
+INSERT INTO `lookaheads_details` VALUES (1,1,'Task C1-10','Task C1-10','2016-11-17 00:00:00','2016-11-20 00:00:00',1),(2,1,'Task C1-20','Task C1-20','2016-11-18 00:00:00','2016-11-21 00:00:00',1),(3,2,'Task C2-10','Task C2-10','2016-11-17 00:00:00','2016-11-18 00:00:00',1),(4,2,'Task C2-20','Task C2-20','2016-11-18 00:00:00','2016-11-20 00:00:00',1),(5,3,'Task 24-1','Task 24-1','2016-11-25 00:00:00','2016-11-26 00:00:00',1),(6,3,'Task 24-2','Task 24-2','2016-11-26 00:00:00','2016-11-28 00:00:00',1),(7,4,'Task 1-12-1','Task 1-12-1','2017-12-01 00:00:00','2017-12-03 00:00:00',1),(8,4,'Task 1-12-2','Task 1-12-2','2017-12-01 00:00:00','2017-12-03 00:00:00',1),(9,4,'Task 1-12-3','Task 1-12-3','2017-12-02 00:00:00','2017-12-03 00:00:00',1),(10,5,'10','Task 10','2017-06-01 00:00:00','2017-06-10 00:00:00',1),(11,5,'20','Task 20','2017-06-04 00:00:00','2017-06-08 00:00:00',1);
 /*!40000 ALTER TABLE `lookaheads_details` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -249,7 +247,7 @@ CREATE TABLE `organisations` (
   `is_active` tinyint(1) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `code` (`code`)
-) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -258,7 +256,7 @@ CREATE TABLE `organisations` (
 
 LOCK TABLES `organisations` WRITE;
 /*!40000 ALTER TABLE `organisations` DISABLE KEYS */;
-INSERT INTO `organisations` VALUES (1,'FUS','Fusion','Fusion is a joint venture between Morgan Sindal, BAM Nutall and Ferrovial',1),(3,'hochtief','HOCHTIEF','HOCHTIEF - construction, civil engineering and building. HOCHTIEF is one of the World\'s leading construction groups.',1),(4,'PES','PES.','PES Company',1),(5,'CONO','ConOccult Management','ConOccult Sample Organisation for Training',1),(6,'BSUni','Ball State University','Ball State University',1),(7,'AAL','Abdelaal Est','Abdelaal Est',1),(10,'Egis','Egis Rail','Egis Rail Test Account',1),(11,'iSim','iSimar','isimsar',1),(12,'SALEH','Saleh Mubarak Consulting','Saleh Mubarak Consulting',1);
+INSERT INTO `organisations` VALUES (1,'FUS','Fusion','Fusion is a joint venture between Morgan Sindal, BAM Nutall and Ferrovial',1),(3,'hochtief','HOCHTIEF','HOCHTIEF - construction, civil engineering and building. HOCHTIEF is one of the World\'s leading construction groups.',1),(4,'PES','PES.','PES Company',1),(5,'CONO','ConOccult Management','ConOccult Sample Organisation for Training',1),(6,'BSUni','Ball State University','Ball State University',1),(7,'AAL','Abdelaal Est','Abdelaal Est',1),(10,'Egis','Egis Rail','Egis Rail Test Account',1),(11,'iSim','iSimar','isimsar',1),(12,'SALEH','Saleh Mubarak Consulting','Saleh Mubarak Consulting',1),(13,'SIXCO','SixConstruct','SixConstruct is a subsidiary of BESIX',1),(14,'vial ','vial y vives - dsd','vial y vives - dsd',1),(15,'Gnus','Gnus Consultants','Gnus Consultants',1);
 /*!40000 ALTER TABLE `organisations` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -321,7 +319,7 @@ CREATE TABLE `projects` (
 
 LOCK TABLES `projects` WRITE;
 /*!40000 ALTER TABLE `projects` DISABLE KEYS */;
-INSERT INTO `projects` VALUES (1,'1EW03','Central Enabling Works Contract',1,'Enabling works for HS2\'s central section','2016-11-17 00:00:00','2017-11-16 00:00:00',1,1,1),(2,'MWCC','Main Works Contract N2',1,'Main civil works contract for HS2 northern section 2','2017-07-17 00:00:00','2020-07-17 00:00:00',1,1,1),(3,'SMP-1','Sample Project 1',7,'Sample project for demonstration only','2017-06-01 00:00:00','2018-05-30 00:00:00',1,5,1),(4,'AAL','Project 2',7,'Project 2','2017-06-15 00:00:00','2019-12-15 00:00:00',1,5,1);
+INSERT INTO `projects` VALUES (1,'1EW03','Central Enabling Works Contract',1,'Enabling works for HS2\'s central section','2016-11-17 00:00:00','2017-11-16 00:00:00',1,1,1),(2,'MWCC','Main Works Contract N1',1,'Main civil works contract for HS2 northern section 2','2017-07-17 00:00:00','2020-07-17 00:00:00',1,1,1),(3,'SMP-1','Sample Project 1',7,'Sample project for demonstration only','2017-06-01 00:00:00','2018-05-30 00:00:00',1,5,1),(4,'AAL','Project 2',7,'Project 2','2017-06-15 00:00:00','2019-12-15 00:00:00',1,5,1);
 /*!40000 ALTER TABLE `projects` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -438,7 +436,7 @@ CREATE TABLE `sections` (
   KEY `parent_id` (`parent_id`),
   CONSTRAINT `sections_ibfk_1` FOREIGN KEY (`project_id`) REFERENCES `projects` (`id`),
   CONSTRAINT `sections_ibfk_2` FOREIGN KEY (`parent_id`) REFERENCES `sections` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -447,7 +445,7 @@ CREATE TABLE `sections` (
 
 LOCK TABLES `sections` WRITE;
 /*!40000 ALTER TABLE `sections` DISABLE KEYS */;
-INSERT INTO `sections` VALUES (1,'C01','Section C1',1,NULL,1),(2,'C02','Section C2',1,NULL,1),(3,'C03','Section C3',1,NULL,1);
+INSERT INTO `sections` VALUES (1,'C01','Section C1',1,NULL,1),(2,'C02','Section C2',1,NULL,1),(3,'C03','Section C3',1,NULL,1),(4,'A1','Area 1',3,NULL,1);
 /*!40000 ALTER TABLE `sections` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -477,7 +475,7 @@ CREATE TABLE `user_project` (
 
 LOCK TABLES `user_project` WRITE;
 /*!40000 ALTER TABLE `user_project` DISABLE KEYS */;
-INSERT INTO `user_project` VALUES (1,1,1,1),(1,2,2,1),(2,3,1,1),(3,7,3,1),(4,7,3,1);
+INSERT INTO `user_project` VALUES (1,1,1,1),(1,2,1,1),(2,3,1,1),(3,7,3,1),(4,7,3,1);
 /*!40000 ALTER TABLE `user_project` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -505,7 +503,7 @@ CREATE TABLE `users` (
   UNIQUE KEY `username` (`username`),
   KEY `organisation_id` (`organisation_id`),
   CONSTRAINT `users_ibfk_1` FOREIGN KEY (`organisation_id`) REFERENCES `organisations` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -514,7 +512,7 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES (1,'Hassan','Emam','hassan.emam@hotmail.com','hassan','$2a$12$UfqXLs0gHouGmyq/rMDAPOGfJQN5QECR.QmbhHi1FIFpcTkV5CgrK',1,1,1,0,NULL),(2,'Emam','Emam','emam@hotmail.com','Emam','$2a$12$ja2Upqbyioxp/Vx/GI6jK.datHdrmXdEDAYnN9T5kXjiiRV00ngRa',1,0,1,0,NULL),(5,'David','Nash','davidnash.email@gmail.com','dnash','$2a$12$MEGCpHeu46Uacfy8LN2A7e3z51UpJZLuiLf/bomiNIs187GwtrQT.',3,1,1,0,NULL),(6,'Ahmed','Al Senousy','Alsenosy15@gmail.com','ahmedalsenosy','$2a$12$OOrtR196AyUpFmpqs6/IoeIFCNWZTXQKi14hKuDo9UDw99m1lOIfa',4,1,1,0,NULL),(7,'Hassan','Emam','hassan@emam.me','h.emam','$2a$12$yv2K1EwHUiGssUnotS4iQO6g3qIJE6fvctkEwU0VGcuvzIx3o7gMq',5,1,1,0,NULL),(8,'Sherif','Attallah','sherif111@hotmail.com','sherifattallah','$2a$12$qKi0TCMCKzwdR305lQDPMOegs5eb5h.xf4QqGNBU8CSJDKoWM6akO',6,1,1,0,NULL),(9,'Mohamed','Abdelaal','md_mike@hotmail.com','mido','$2a$12$HCLQ1Iijx8TiYjjuHPO9KuUiN5zsHBkN/6lIDwTZkcR5nR.qvuEBq',7,1,1,0,NULL),(14,'Sherif','Mahmoud','smahmoud@live.com','smahmoud','$2a$12$lpMMx1VzPIFraRxLC/8fYeUs5gM1Bid.umX/UWLEvnkihgYO2F1oK',10,1,1,0,NULL),(15,'Hassan','Emam','dr.hemam@yahoo.co.uk','khabini','$2a$12$ucZYvdWCLEv5YEoa/2EaiOG/nHgD7dDASnU0pZVzqXZ9XhwoLnEcO',11,1,1,0,NULL),(16,'Saleh','Mubarak','cpmxpert@gmail.com','smubarak','$2a$12$a0Ia.K64SKZfueiQ9.w.GuwePl1OzNYQvjwJRi8kA3etX6Cpg.fpy',12,1,1,0,NULL);
+INSERT INTO `users` VALUES (1,'Hassan','Emam','hassan.emam@hotmail.com','hassan','$2a$12$UfqXLs0gHouGmyq/rMDAPOGfJQN5QECR.QmbhHi1FIFpcTkV5CgrK',1,1,1,0,NULL),(2,'Emam','Emam','emam@hotmail.com','Emam','$2a$12$ja2Upqbyioxp/Vx/GI6jK.datHdrmXdEDAYnN9T5kXjiiRV00ngRa',1,0,1,0,NULL),(5,'David','Nash','davidnash.email@gmail.com','dnash','$2a$12$MEGCpHeu46Uacfy8LN2A7e3z51UpJZLuiLf/bomiNIs187GwtrQT.',3,1,1,0,NULL),(6,'Ahmed','Al Senousy','Alsenosy15@gmail.com','ahmedalsenosy','$2a$12$OOrtR196AyUpFmpqs6/IoeIFCNWZTXQKi14hKuDo9UDw99m1lOIfa',4,1,1,0,NULL),(7,'Hassan','Emam','hassan@emam.me','h.emam','$2a$12$yv2K1EwHUiGssUnotS4iQO6g3qIJE6fvctkEwU0VGcuvzIx3o7gMq',5,1,1,0,NULL),(8,'Sherif','Attallah','sherif111@hotmail.com','sherifattallah','$2a$12$qKi0TCMCKzwdR305lQDPMOegs5eb5h.xf4QqGNBU8CSJDKoWM6akO',6,1,1,0,NULL),(9,'Mohamed','Abdelaal','md_mike@hotmail.com','mido','$2a$12$HCLQ1Iijx8TiYjjuHPO9KuUiN5zsHBkN/6lIDwTZkcR5nR.qvuEBq',7,1,1,0,NULL),(14,'Sherif','Mahmoud','smahmoud@live.com','smahmoud','$2a$12$lpMMx1VzPIFraRxLC/8fYeUs5gM1Bid.umX/UWLEvnkihgYO2F1oK',10,1,1,0,NULL),(15,'Hassan','Emam','dr.hemam@yahoo.co.uk','khabini','$2a$12$ucZYvdWCLEv5YEoa/2EaiOG/nHgD7dDASnU0pZVzqXZ9XhwoLnEcO',11,1,1,0,NULL),(16,'Saleh','Mubarak','cpmxpert@gmail.com','smubarak','$2a$12$a0Ia.K64SKZfueiQ9.w.GuwePl1OzNYQvjwJRi8kA3etX6Cpg.fpy',12,1,1,0,NULL),(17,'Amr','Megahed','amrsmegahed@gmail.com','asmegahed','$2a$12$828ulGHY.wzi2jbhdlzdBeZeeiUBgi2qto9B.HT9.UplfvTl2KLeO',13,1,1,0,NULL),(18,'Jorge','Cuevas','jcuevas@vyv-dsd.cl','jorgecuevas','$2a$12$/BuZtRirrwezTff.jrB1KO3UOwJRCQJr37eroU6sXFKdg5VSMGiom',14,1,1,0,NULL),(19,'Mohamed','Elkaddah','elkaddah@gmail.com','Elkaddah','$2a$12$JyCtPvsZxdIKBikEJOWI7..GmWgcTig8Y/IzW72pmTYLjOjKmQzra',15,1,1,0,NULL);
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -540,9 +538,7 @@ CREATE TABLE `wwp_details` (
   `updated` tinyint(1) DEFAULT NULL,
   `is_active` tinyint(1) DEFAULT NULL,
   `delayreason_id` int(11) DEFAULT NULL,
-  `id` int(11) NOT NULL,
   PRIMARY KEY (`wwp_id`,`task_id`),
-  UNIQUE KEY `uix_wwpd` (`wwp_id`,`task_id`),
   KEY `task_id` (`task_id`),
   KEY `user_id` (`user_id`),
   KEY `delayreason_id` (`delayreason_id`),
@@ -559,7 +555,7 @@ CREATE TABLE `wwp_details` (
 
 LOCK TABLES `wwp_details` WRITE;
 /*!40000 ALTER TABLE `wwp_details` DISABLE KEYS */;
-INSERT INTO `wwp_details` VALUES (1,1,1,1,1,1,0,0,0,0,1,1,1,NULL,0),(1,2,1,0,0,1,1,1,0,0,1,1,1,NULL,0),(2,3,1,1,1,1,0,0,0,0,1,1,1,NULL,0),(2,4,1,0,1,1,1,0,0,0,0,1,1,2,0),(3,5,1,1,1,1,0,0,0,0,1,1,1,NULL,0),(3,6,1,0,1,1,1,0,0,0,0,1,1,8,0),(4,7,1,0,0,0,0,0,0,0,1,1,1,NULL,0),(4,8,2,0,0,0,0,0,0,0,0,1,1,13,0),(4,9,2,0,0,0,0,0,0,0,1,1,1,NULL,0);
+INSERT INTO `wwp_details` VALUES (1,1,1,1,1,1,0,0,0,0,1,1,1,NULL),(1,2,1,0,0,1,1,1,0,0,1,1,1,NULL),(2,3,1,1,1,1,0,0,0,0,1,1,1,NULL),(2,4,1,0,1,1,1,0,0,0,0,1,1,2),(3,5,1,1,1,1,0,0,0,0,1,1,1,NULL),(3,6,1,0,1,1,1,0,0,0,0,1,1,8),(4,7,1,0,0,0,0,0,0,0,1,1,1,NULL),(4,8,2,0,0,0,0,0,0,0,0,1,1,13),(4,9,2,0,0,0,0,0,0,0,1,1,1,NULL),(5,10,7,1,1,1,0,0,0,0,0,0,1,NULL),(5,11,7,0,1,1,1,1,0,0,0,0,1,NULL);
 /*!40000 ALTER TABLE `wwp_details` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -585,7 +581,7 @@ CREATE TABLE `wwps` (
   CONSTRAINT `wwps_ibfk_1` FOREIGN KEY (`project_id`) REFERENCES `projects` (`id`),
   CONSTRAINT `wwps_ibfk_2` FOREIGN KEY (`reportingdate_id`) REFERENCES `reportingdates` (`id`),
   CONSTRAINT `wwps_ibfk_3` FOREIGN KEY (`section_id`) REFERENCES `sections` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -594,7 +590,7 @@ CREATE TABLE `wwps` (
 
 LOCK TABLES `wwps` WRITE;
 /*!40000 ALTER TABLE `wwps` DISABLE KEYS */;
-INSERT INTO `wwps` VALUES (1,1,1,1,1,1,1),(2,1,1,2,0.5,1,1),(3,1,2,1,0.5,1,1),(4,1,3,1,0.666667,1,1);
+INSERT INTO `wwps` VALUES (1,1,1,1,1,1,1),(2,1,1,2,0.5,1,1),(3,1,2,1,0.5,1,1),(4,1,3,1,0.666667,1,1),(5,3,212,4,NULL,1,0);
 /*!40000 ALTER TABLE `wwps` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -607,4 +603,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2017-06-07 13:48:26
+-- Dump completed on 2017-06-07 19:48:24
