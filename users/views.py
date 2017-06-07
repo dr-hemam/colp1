@@ -45,7 +45,10 @@ def login():
         author = User.query.filter_by(
             username=form.username.data,
             ).first()
-        ip = request.remote_addr
+        if request.headers.getlist("X-Forwarded-For"):
+           ip = request.headers.getlist("X-Forwarded-For")[0]
+        else:
+           ip = request.remote_addr
         print('ip', ip)
         if author:
             if bcrypt.hashpw(form.password.data, author.password) == author.password:
