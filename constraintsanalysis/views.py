@@ -12,6 +12,19 @@ from sections.models import Section
 from sqlalchemy import exc, desc
 
 
+def getCheckbox(cn):
+    ccd=[]
+    x=0
+    while(x <len(cn)):
+        if cn[x]=='No':
+            ccd.append(False)
+            x= x+1
+        else:
+            ccd.append(True)
+            x=x+2
+    return ccd
+
+
 @app.route('/newconstraintanalysis', methods=['POST', 'GET'])
 @login_required
 @project_required
@@ -40,19 +53,130 @@ def new_constraintanalysis():
 
 @app.route('/newconstraintanalysisdetails/<id>', methods=['POST', 'GET'])
 def new_constraintanalysis_details(id):
-    form = ConstraintAnalysisDetailForm()
-    constraintanalysis = ConstraintAnalysis.query.filter_by(id= id).first()
-    # get lookahead_id through reporting date id
-    lookahead = LookAhead.query.filter_by(reportingdate_id = constraintanalysis.reportingdate_id, section_id= constraintanalysis.section_id).first()
-    tasks = LookAheadDetail.query.filter_by(lookahead_id= lookahead.id).all()
-    constraints = Constraint.query.filter_by(org_id = session.get('organisation_id'), is_active=True).all()
-    form.task.query = tasks
-    form.constraint.query = constraints
-    print(form, form.validate(), form.errors.items())
-    if form.validate_on_submit():
-        print('validated')
-        constraints = Constraint.query.filter_by(org_id = session.get('organisation_id'), is_active=True).all()
+    try:
+        form = ConstraintAnalysisDetailForm()
         constraintanalysis = ConstraintAnalysis.query.filter_by(id= id).first()
+        # get lookahead_id through reporting date id
+        lookahead = LookAhead.query.filter_by(reportingdate_id = constraintanalysis.reportingdate_id, section_id= constraintanalysis.section_id).first()
+        if not lookahead:
+            flash('Lookahead has for the same section and reporting date has to be defined first', 'alert-danger')
+            return redirect(url_for('view_constraintsalysis'))
+        tasks = LookAheadDetail.query.filter_by(lookahead_id= lookahead.id).all()
+        constraints = Constraint.query.filter_by(org_id = session.get('organisation_id'), is_active=True).all()
+        form.task.query = tasks
+        form.constraint.query = constraints
+        if form.validate_on_submit():
+            constraints = Constraint.query.filter_by(org_id = session.get('organisation_id'), is_active=True).all()
+            constraintanalysis = ConstraintAnalysis.query.filter_by(id= id).first()
+            checkboxes=[]
+            for c in constraints:
+                cn = request.form.getlist(str(c.id))
+                ccd=[]
+                x=0
+                while(x <len(cn)):
+                    if cn[x]=='No':
+                        ccd.append(False)
+                        x= x+1
+                    else:
+                        ccd.append(True)
+                        x=x+2
+                checkboxes.append(ccd)
+            activities = request.form.getlist('task')
+            is_actives = request.form.getlist('is_active')
+            #statuses = request.form.getlist('status')
+            can_dos = getCheckbox(request.form.getlist('can_do'))
+            
+            for i in range(len(activities)):
+                for cnst in range(len(checkboxes)):
+                    task = LookAheadDetail.query.filter_by(id=activities[i]).first()
+                    cnstanalysis= ConstraintAnalysisDetail (constraintanalysis= constraintanalysis,
+                                            task= task, 
+                                            constraint= constraints[cnst],
+                                            can_do = can_dos[i],
+                                            status= checkboxes[cnst][i])
+                    db.session.add(cnstanalysis)
+            db.session.commit()
+            flash('Constraint analysis details added successfully!', 'alert-success')
+            return redirect(url_for('view_constraintanalysis_details', id=id))
+        return render_template('constraintsanalysis/constraintanalysisdetailsform.html', form=form, action='new', constraintanalysis = constraintanalysis, constraints = constraints, lookahead=lookahead)
+    except :
+        flash('An error has occured while processing data', 'alert-danger')
+        db.session.rollback()
+        return redirect(url_for('view_constraintsalysis'))
+
+    
+        
+@app.route('/viewconstraintanalysis')
+@login_required
+@project_required
+def view_constraintsalysis():
+    constraintanalysis = ConstraintAnalysis.query.join(ReportingDate).filter(ConstraintAnalysis.project_id==session['project_id'], ConstraintAnalysis.is_active==True)
+    constraintanalysis = constraintanalysis.order_by(desc('rdate')).all()
+    return render_template('constraintsanalysis/view.html', constraintanalysis=constraintanalysis)
+    
+@app.route('/viewconstraintanalysisdetails/<id>')
+@login_required
+@project_required
+def view_constraintanalysis_details(id):
+    constraintanalysis = ConstraintAnalysis.query.filter_by(id=id).first()
+    tasks = ConstraintAnalysisDetail.query.filter_by(constraintanalysis_id=id, is_active=True).group_by(ConstraintAnalysisDetail.task_id)
+    constraints = Constraint.query.filter_by(org_id = session.get('organisation_id'), is_active=True).all()
+    cons=[]
+    details = ConstraintAnalysisDetail.query.filter_by(constraintanalysis_id=id)
+    constraints = Constraint.query.filter_by(org_id = session.get('organisation_id'), is_active=True).all()
+    for d in details.all():
+        cn = Constraint.query.filter_by(id=d.constraint_id).first()
+        if cn not in cons:
+            cons.append(cn)
+    
+    return render_template('constraintsanalysis/viewconstraintanalysis.html', constraintanalysis = constraintanalysis, tasks = tasks, constraints= cons, details = details)
+    
+@app.route('/deleteconstraintanalysis/<id>')
+@login_required
+@project_required
+def delete_constraintanalysis(id):
+    constraintanalysis = ConstraintAnalysis.query.filter_by(id=id).first()
+    constraintanalysis.is_active = False
+    db.session.add(constraintanalysis)
+    tasks=ConstraintAnalysisDetail.query.filter_by(constraintanalysis_id=constraintanalysis.id, is_active=True).all()
+    for t in tasks:
+        t.is_active=False
+        db.session.add(t)
+    
+    db.session.commit()
+    flash('The selected constraint analysis has been delete successully', 'alert-success')
+    return redirect(url_for('view_constraintsalysis'))
+    
+@app.route('/deletecadetail', methods=['GET'])
+def delete_constraintanalysis_detail():
+    try:
+        t_id= request.args.get('task_id')
+        ca_id= request.args.get('ca_id')
+        catask = ConstraintAnalysisDetail.query.filter_by(task_id= t_id, constraintanalysis_id = ca_id).all()
+        
+        for c in catask:
+            c.is_active= False
+            db.session.add(c)
+            
+        db.session.commit()
+        flash('Activity has been deleted successfull from constraint analysis','alert-success')
+    except:
+        db.session.rollbak()
+        flash('An error has occurred in the deletion process.', 'alert-danger')
+    return redirect(url_for('view_constraintanalysis_details', id= ca_id))
+    
+@app.route('/editcadetail', methods=['GET', 'POST'])
+def edit_constraintanalysis_detail():
+    t_id= request.args.get('task_id')
+    ca_id= request.args.get('ca_id')
+    catask = ConstraintAnalysisDetail.query.filter_by(task_id= t_id, constraintanalysis_id = ca_id, is_active=True).all()
+    task = LookAheadDetail.query.filter_by(id=t_id).first()
+    constraints = Constraint.query.filter_by(org_id=session.get('organisation_id'), is_active=True).all()
+    # get lookahead_id through reporting date id
+    constraintanalysis = ConstraintAnalysis.query.filter_by(id= ca_id).first()
+    form = ConstraintAnalysisDetailForm()
+    if request.method=='POST':
+        
         checkboxes=[]
         for c in constraints:
             cn = request.form.getlist(str(c.id))
@@ -66,39 +190,25 @@ def new_constraintanalysis_details(id):
                     ccd.append(True)
                     x=x+2
             checkboxes.append(ccd)
-        activities = request.form.getlist('task')
-        is_actives = request.form.getlist('is_active')
-        #statuses = request.form.getlist('status')
-        can_dos = request.form.getlist('can_do')
-        print(str(can_dos), str(len(activities)))
-        for i in range(len(activities)):
-            for cnst in range(len(checkboxes)):
-                task = LookAheadDetail.query.filter_by(id=activities[i]).first()
-                cnstanalysis= ConstraintAnalysisDetail (constraintanalysis= constraintanalysis,
-                                        task= task, 
-                                        constraint= constraints[cnst],
-                                        can_do = can_dos[i],
-                                        status= checkboxes[cnst][i])
-                db.session.add(cnstanalysis)
+        is_actives = getCheckbox(request.form.getlist('is_active'))
+        can_dos = (len(request.form.getlist('can_do')) >1)
+        i=0
+        for c in catask:
+            if i < len(checkboxes):
+                c.status = checkboxes[i][0]
+                c.can_do = can_dos
+                c.is_active = is_actives[0]
+                db.session.add(c)
+                print(checkboxes, c.status, c.can_do)
+                i+=1 
+            else:
+                pass
+            
+            
         db.session.commit()
-        return redirect(url_for('view_constraintanalysis_details', id=id))
-
-    return render_template('constraintsanalysis/constraintanalysisdetailsform.html', form=form, action='new', constraintanalysis = constraintanalysis, constraints = constraints, lookahead=lookahead)
-        
-@app.route('/viewconstraintanalysis')
-@login_required
-@project_required
-def view_constraintsalysis():
-    constraintanalysis = ConstraintAnalysis.query.join(ReportingDate).filter_by(project_id=session['project_id'], is_active=True)
-    constraintanalysis = constraintanalysis.order_by(desc('rdate')).all()
-    return render_template('constraintsanalysis/view.html', constraintanalysis=constraintanalysis)
+        flash('Constraint analysis details added successfully!', 'alert-success')
+        return redirect(url_for('view_constraintanalysis_details', id=constraintanalysis.id))
+    return render_template('constraintsanalysis/editcadetail.html', form=form, action='edit', task=task, constraintanalysis = constraintanalysis, constraints = constraints)
     
-@app.route('/viewconstraintanalysisdetails/<id>')
-@login_required
-@project_required
-def view_constraintanalysis_details(id):
-    constraintanalysis = ConstraintAnalysis.query.filter_by(id=id).first()
-    tasks = ConstraintAnalysisDetail.query.filter_by(constraintanalysis_id=id).group_by(ConstraintAnalysisDetail.task_id)
-    constraints = Constraint.query.filter_by(org_id = session.get('organisation_id'), is_active=True).all()
-    details =ConstraintAnalysisDetail.query.filter_by(constraintanalysis_id=id)
-    return render_template('constraintsanalysis/viewconstraintanalysis.html', constraintanalysis = constraintanalysis, tasks = tasks, constraints= constraints, details = details)
+        
+    

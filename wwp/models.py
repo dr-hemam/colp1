@@ -48,6 +48,7 @@ class WWP(db.Model):
 		
 class WWPDetail(db.Model):
 	__tablename__ ="wwp_details"
+	id= db.Column(db.Integer, primary_key=True)
 	wwp_id = db.Column(db.Integer, db.ForeignKey('wwps.id'), primary_key=True)
 	wwp = db.relationship('WWP', backref='detail')
 	task_id = db.Column(db.Integer, db.ForeignKey('lookaheads_details.id'), primary_key=True)
@@ -66,6 +67,10 @@ class WWPDetail(db.Model):
 	is_active = db.Column(db.Boolean)
 	delayreason = db.relationship('DelayReason', backref='wwptask')
 	delayreason_id = db.Column(db.Integer, db.ForeignKey('delay_reasons.id'))
+	__table_args__ = (
+		db.UniqueConstraint('wwp_id', 'task_id', name='uix_wwpd'),
+	)
+	
 	
 	def __init__(self, wwp, task, user, mon, tue, wed, thu, fri, sat, sun, updated= False, status= False, is_active=True):
 		self.wwp_id = wwp.id

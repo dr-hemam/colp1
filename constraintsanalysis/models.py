@@ -37,6 +37,7 @@ class ConstraintAnalysis(db.Model):
 	
 class ConstraintAnalysisDetail(db.Model):
 	__tablename__ ="constraintanalysis_details"
+	id= db.Column(db.Integer, primary_key=True)
 	constraintanalysis_id = db.Column(db.Integer, db.ForeignKey('constraintanalysis.id'), primary_key=True)
 	constraintanalysis = db.relationship('ConstraintAnalysis', backref='detail')
 	task_id = db.Column(db.Integer, db.ForeignKey('lookaheads_details.id'), primary_key=True)
@@ -46,6 +47,9 @@ class ConstraintAnalysisDetail(db.Model):
 	status = db.Column(db.Boolean)
 	is_active = db.Column(db.Boolean)
 	can_do = db.Column(db.Boolean)
+	__table_args__ = (
+		db.UniqueConstraint('constraintanalysis_id', 'task_id', 'constraint_id', name='uix_cad'),
+	)
 	
 	def __init__(self, constraintanalysis, task, constraint, status, can_do, is_active=True):
 		self.constraintanalysis_id = constraintanalysis.id

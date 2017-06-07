@@ -176,3 +176,16 @@ def delete_lookahead(id):
     
     db.session.commit()
     return redirect(url_for('view_lookaheads'))
+    
+@app.route('/deletelhdetail/<id>')
+@login_required
+@project_required
+def delete_lookahead_activity(id):
+    
+    task = LookAheadDetail.query.filter_by(id=id).first()
+    lookahead_id = task.lookahead_id
+    task.is_active = False
+    
+    db.session.add(task)
+    db.session.commit()
+    return redirect(url_for('view_lookahead', id = lookahead_id))

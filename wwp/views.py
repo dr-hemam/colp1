@@ -59,7 +59,7 @@ def new_wwp_details(id):
     ca = ConstraintAnalysis.query.filter_by(project_id=wwp.project_id, section_id=wwp.section_id, reportingdate_id=wwp.reportingdate_id).first()
     lookahead = LookAhead.query.filter_by(reportingdate_id = wwp.reportingdate_id, section_id= wwp.section_id).first()
     if lookahead:
-        form.task.query = LookAheadDetail.query.filter_by(lookahead_id= lookahead.id)
+        form.task.query = LookAheadDetail.query.join(ConstraintAnalysisDetail).join(LookAhead, aliased=True).filter(LookAheadDetail.lookahead_id==lookahead.id, ConstraintAnalysisDetail.constraintanalysis_id==ca.id, ConstraintAnalysisDetail.can_do== True )
     else:
         flash('No lookahead tasks found. Please prepare the lookahead first!', 'alert-danger')
         return redirect(url_for('view_wwps'))
