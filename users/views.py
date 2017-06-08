@@ -78,9 +78,7 @@ def login():
             
                 return redirect(url_for('login'))
         else:
-            log = UserLog(user_id= str(author.id), ipaddr= ip, success=False)
-            db.session.add(log)
-            db.session.commit()
+            
             
             flash("Invalid login credentials",'alert-danger')
             return redirect(url_for('login'))
