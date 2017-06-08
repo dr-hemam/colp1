@@ -11,11 +11,11 @@ from organisations.models import Organisation
 def new_reason():
     form = DelayReasonForm()
     
-    if request.method == "POST" and form.validate() and session.get('organisation_id'):
+    if request.method == "POST" and form.validate() and session.get('project_id'):
         user= User.query.filter_by(id= session['user_id']).first()
-        org = Organisation.query.filter_by(id= session['organisation_id']).first()
+        project = Project.query.filter_by(id= session['project_id']).first()
         reason = DelayReason (name= form.name.data, 
-                            organisation = org,
+                            project = project,
                             is_active= True)
         db.session.add(reason)
         db.session.flush()
@@ -41,9 +41,9 @@ def edit_reason(id):
 
 @app.route('/viewreasons')
 @login_required
-@organisation_required
+@project_required
 def view_reasons():
-    reasons = DelayReason.query.filter_by(is_active=True, org_id=session['organisation_id']).all()
+    reasons = DelayReason.query.filter_by(is_active=True, project_id=session['project_id']).all()
     return render_template('delayreasons/view.html', reasons=reasons)
     
 @app.route('/deletereason/<id>')
