@@ -62,6 +62,9 @@ class Role(db.Model):
     manager_id = db.Column(db.Integer, db.ForeignKey('roles.id'))
     manager = db.relationship(lambda: Role, remote_side=id,backref='subs')
     is_active = db.Column(db.Boolean, default=True)
+    __table_args__ = (
+		db.UniqueConstraint('name', 'organisation_id', name='uix_rol1'),
+	)
     def __init__(self, name, organisation, manager, is_active=True):
         self.name = name
         if organisation is not None:

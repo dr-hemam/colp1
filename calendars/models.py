@@ -13,7 +13,7 @@ from datetime import datetime
 class ReportingCycle(db.Model):
 	__tablename__ = 'reportingcycles'
 	id = db.Column(db.Integer, primary_key=True)
-	code = db.Column(db.String(80), unique=True)
+	code = db.Column(db.String(80))
 	name = db.Column(db.String(80))
 	cycle_type = db.Column(db.Text)
 	cycle_value = db.Column(db.Integer)
@@ -23,6 +23,10 @@ class ReportingCycle(db.Model):
 	organisation_id = db.Column(db.Integer, db.ForeignKey('organisations.id'))
 	organisation= db.relationship('Organisation', backref='cycles')
 	is_active = db.Column(db.Boolean)
+	
+	__table_args__ = (
+		db.UniqueConstraint('code', 'organisation_id', name='uix_rc1'),
+	)
 	
 	def __init__(self, code, name, cycle_type, cycle_value, week_start, organisation, is_active = True):
 		self.code = code

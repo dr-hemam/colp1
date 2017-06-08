@@ -42,6 +42,9 @@ class Project(db.Model):
 	status = db.Column(db.Boolean, default=True)
 	users = db.relationship("UserProject")
 
+	__table_args__ = (
+		db.UniqueConstraint('code', 'org_id', name='uix_prj1'),
+	)
 
 	def __init__(self, code, name, description, owner, start, finish, cycle, organisation, status):
 		self.code = code

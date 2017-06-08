@@ -11,7 +11,9 @@ class DelayReason(db.Model):
 	project_id = db.Column(db.Integer, db.ForeignKey('projects.id'))
 	project= db.relationship('Project', backref='delayreasons')
 	is_active = db.Column(db.Boolean)
-
+	__table_args__ = (
+		db.UniqueConstraint('name', 'project_id', name='uix_dr1'),
+	)
 	def __init__(self, name, project, is_active=True):
 		self.name = name
 		self.project_id= project.id

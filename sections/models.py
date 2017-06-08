@@ -15,7 +15,9 @@ class Section(db.Model):
 	parent = db.relationship(lambda: Section, remote_side=id, backref='subs')
 	
 	active = db.Column(db.Boolean)
-
+	__table_args__ = (
+		db.UniqueConstraint('code', 'project_id', name='uix_sec1'),
+	)
 	def __init__(self, code, name, project, parent, active=True):
 		self.code = code
 		self.name = name

@@ -48,6 +48,7 @@ def new_wwp():
         except exc.IntegrityError as e:
             db.session.rollback()
             flash('Error: Duplicate Entry. you can edit or delete existing.', 'alert-danger')
+            return redirect(url_for('new_wwp_details', id= wwp.id))
     return render_template('wwp/wwpform.html', form=form, action='new')
     
 

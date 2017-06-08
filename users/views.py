@@ -96,29 +96,34 @@ def register():
     org = Organisation.query.filter_by(id= session['organisation_id']).first()
     
     if form.validate_on_submit():
-        salt = bcrypt.gensalt()
-        
-        hashed_password = bcrypt.hashpw(form.password.data, salt)  
-        user= User(firstname= form.firstname.data,
-                    lastname= form.lastname.data, 
-                    email= form.email.data, 
-                    username= form.username.data, 
-                    password= hashed_password,
-                    organisation= org,
-                    is_admin= form.is_admin.data,
-                    is_active= form.is_active.data)
-        
-        # token = generate_confirmation_token(user.email)
-        # confirm_url = url_for('confirm_account', token=token, _external=True)
-        # html = render_template('users/activate.html', confirm_url=confirm_url)
-        # subject = "Please confirm your email"
-
-        db.session.add(user)
-        db.session.commit()
-        # send_email(user.email, subject, html)        
-        flash('A confirmation email has been sent via email.', 'alert-success')
-        # flash('User Registered Successfully ', 'alert-success')
-        return redirect(url_for('newuserprojectassignment'))
+        try:
+            salt = bcrypt.gensalt()
+            
+            hashed_password = bcrypt.hashpw(form.password.data, salt)  
+            user= User(firstname= form.firstname.data,
+                        lastname= form.lastname.data, 
+                        email= form.email.data, 
+                        username= form.username.data, 
+                        password= hashed_password,
+                        organisation= org,
+                        is_admin= form.is_admin.data,
+                        is_active= form.is_active.data)
+            
+            # token = generate_confirmation_token(user.email)
+            # confirm_url = url_for('confirm_account', token=token, _external=True)
+            # html = render_template('users/activate.html', confirm_url=confirm_url)
+            # subject = "Please confirm your email"
+    
+            db.session.add(user)
+            db.session.commit()
+            # send_email(user.email, subject, html)        
+            #flash('A confirmation email has been sent via email.', 'alert-success')
+            flash('User Registered Successfully ', 'alert-success')
+            return redirect(url_for('newuserprojectassignment'))
+        except exc.IntegrityError:
+            flash('The user details conflict with existing user', 'alert-danger')
+            db.session.rollback()
+            return redirect(url_for('view_users'))
     return render_template('users/register.html', form=form, action='new')
 
 
@@ -132,18 +137,25 @@ def edit_user(id):
         form = RegisterForm(obj= user)
         org = Organisation.query.filter_by(id= session['organisation_id']).first()
         if request.method=='POST':
-            salt = bcrypt.gensalt()
+            try:
+                    
+                salt = bcrypt.gensalt()
+                
+                user.firstname= form.firstname.data
+                user.lastname= form.lastname.data
+                user.email= form.email.data
+                user.organisation= org
+                user.is_admin= form.is_admin.data
+                user.is_active = form.is_active.data
+                db.session.flush()
+                db.session.commit()
+                flash('User Details Successfully Updated', 'alert-success')
+                return redirect(url_for('login_success'))
             
-            user.firstname= form.firstname.data
-            user.lastname= form.lastname.data
-            user.email= form.email.data
-            user.organisation= org
-            user.is_admin= form.is_admin.data
-            user.is_active = form.is_active.data
-            db.session.flush()
-            db.session.commit()
-            flash('User Details Successfully Updated', 'alert-success')
-            return redirect(url_for('login_success'))
+            except :
+                flash('Unexpected error have occurred while saving your data. Contact system admin', 'alert-danger')
+                db.session.rollback()
+                return redirect(url_for('view_users'))
         return render_template('users/register.html', form = form, user=user, action='edit')
     else:
         flash ("You don't have enough permissions to perform changes to user details", 'alert-danger')
@@ -179,11 +191,16 @@ def view_user(id):
 @app.route('/deleteuser/<id>')
 @admin_required
 def delete_user(id):
-    user = User.query.filter_by(id= id).first()
-    user.is_active = False
-        
-    db.session.add(user)
-    db.session.commit()
+    try:
+        user = User.query.filter_by(id= id).first()
+        user.is_active = False
+            
+        db.session.add(user)
+        db.session.commit()
+    except:
+        flash('Unexpected error have occurred while saving your data. Contact system admin', 'alert-danger')
+        db.session.rollback()
+        return redirect(url_for('view_users'))
     return redirect(url_for('view_users'))
 
 
@@ -240,16 +257,22 @@ it has functions to create, edit, delete and view Roles
 @app.route('/addrole', methods=('GET', 'POST'))
 @admin_required
 def add_role():
-    form = RoleForm()
-    if form.validate_on_submit():
-        organisation = Organisation.query.filter_by(id= session['organisation_id']).first()
-        role= Role(form.name.data,
-                    organisation, 
-                    form.manager.data, 
-                    form.is_active.data)
-        
-        db.session.add(role)
-        db.session.commit()
+    try:
+        form = RoleForm()
+        if form.validate_on_submit():
+            organisation = Organisation.query.filter_by(id= session['organisation_id']).first()
+            role= Role(form.name.data,
+                        organisation, 
+                        form.manager.data, 
+                        form.is_active.data)
+            
+            db.session.add(role)
+            db.session.commit()
+            flash('Role created successfully','alert-success')
+            return redirect(url_for('view_roles'))
+    except exc.IntegrityError:
+        flash('The role name ' + form.name.data + ' already exists','alert-danger')
+        db.session.rollback()
         return redirect(url_for('view_roles'))
     return render_template('users/roleform.html', form=form, action='new')
     
@@ -267,25 +290,36 @@ def edit_role(id):
     form = RoleForm(obj= role)
     
     if request.method == "POST" and form.validate():
-        role.name = form.name.data
-        role.manager = form.manager.data
-        role.is_active = form.is_active.data
-        
-        db.session.add(role)
-        db.session.flush()
-        db.session.commit()
-        return redirect(url_for('view_roles'))
+        try:
+                
+            role.name = form.name.data
+            role.manager = form.manager.data
+            role.is_active = form.is_active.data
+            
+            db.session.add(role)
+            db.session.flush()
+            db.session.commit()
+            return redirect(url_for('view_roles'))
+        except:
+            flash('Unexpected error have occurred while saving your data. Contact system admin', 'alert-danger')
+            db.session.rollback()
+            return redirect(url_for('view_roles'))
     return render_template('users/roleform.html', form = form, role=role, action='edit')
     
 @app.route('/deleterole/<id>')
 @admin_required
 def delete_role(id):
-    role = Role.query.filter_by(id= id).first()
-    role.is_active = False
-        
-    db.session.add(role)
-    db.session.commit()
-    return redirect(url_for('view_roles'))
+    try:
+        role = Role.query.filter_by(id= id).first()
+        role.is_active = False
+            
+        db.session.add(role)
+        db.session.commit()
+        return redirect(url_for('view_roles'))
+    except:
+        flash('Unexpected error have occurred while saving your data. Contact system admin', 'alert-danger')
+        db.session.rollback()
+        return redirect(url_for('view_roles'))
 
 @app.route('/assignusers', methods=['GET', 'POST'])
 @project_required
@@ -316,16 +350,21 @@ def newuserprojectassignment():
     
 @app.route('/deleteusrprojassignment', methods=['GET'])
 def delusrprjassignment():
-    project_id = request.args.get('prj_id')
-    user_id = request.args.get('user_id')
-    
-    userassig = UserProject.query.filter_by(project_id=project_id, user_id=user_id).first()
-    userassig.is_active = False
-    
-    db.session.add(userassig)
-    db.session.commit()
-    flash('Assignment has been deleted successully')
-    return redirect(url_for('view_user', id=user_id))
+    try:
+        project_id = request.args.get('prj_id')
+        user_id = request.args.get('user_id')
+        
+        userassig = UserProject.query.filter_by(project_id=project_id, user_id=user_id).first()
+        userassig.is_active = False
+        
+        db.session.add(userassig)
+        db.session.commit()
+        flash('Assignment has been deleted successully')
+        return redirect(url_for('view_user', id=user_id))
+    except:
+        flash('Unexpected error have occurred while saving your data. Contact system admin', 'alert-danger')
+        db.session.rollback()
+        return redirect(url_for('view_user', id=user_id))
     
 @app.route('/editusrprojassignment', methods=['GET', 'POST'])
 def editusrprjassignment():
@@ -337,13 +376,19 @@ def editusrprjassignment():
     
     if userassig:
         if request.method == "POST":
-            role= Role.query.filter_by(id = userassig.role_id)
-            role = form.role.data
-            print (role)
-            userassig.role_id = role.id
-            db.session.add(userassig)
-            db.session.commit()
-            flash('Assignment has been amended successully','alert-success')
+            try:
+                
+                role= Role.query.filter_by(id = userassig.role_id)
+                role = form.role.data
+                print (role)
+                userassig.role_id = role.id
+                db.session.add(userassig)
+                db.session.commit()
+                flash('Assignment has been amended successully','alert-success')
+            except:
+                flash('Unexpected error have occurred while saving your data. Contact system admin', 'alert-danger')
+                db.session.rollback()
+                return redirect(url_for('view_user', id=user_id))
             return redirect(url_for('view_user', id=user_id))
     else:
         flash('Unexpected error has occured', 'alert-danger')
