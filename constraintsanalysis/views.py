@@ -9,7 +9,7 @@ from calendars.models import ReportingDate
 from lookaheads.models import LookAhead, LookAheadDetail
 from constraints.models import Constraint
 from sections.models import Section
-from sqlalchemy import exc, desc
+from sqlalchemy import exc,desc
 
 
 def getCheckbox(cn):
@@ -110,7 +110,7 @@ def new_constraintanalysis_details(id):
             flash('Constraint analysis details added successfully!', 'alert-success')
             return redirect(url_for('view_constraintanalysis_details', id=id))
         return render_template('constraintsanalysis/constraintanalysisdetailsform.html', form=form, action='new', constraintanalysis = constraintanalysis, constraints = constraints, lookahead=lookahead)
-    except :
+    except exc.IntegrityError:
         flash('An error has occured while processing data', 'alert-danger')
         db.session.rollback()
         return redirect(url_for('new_constraintanalysis_details',id=id))
