@@ -5,6 +5,7 @@ from flask import render_template, redirect, url_for, request, session
 from users.models import User
 from users.decorators import *
 from organisations.models import Organisation
+from project.models import Project
 
 
 @app.route('/newconstraint', methods=['GET', 'POST'])
@@ -17,14 +18,14 @@ def new_constraint():
         if not constraint:
             project = Project.query.filter_by(id= session['project_id']).first()
             constraint = Constraint (name= form.name.data, 
-                                organisation = org,
+                                project = project,
                                 is_active= True)
         else:
             
             if constraint.is_active==False:
                 constraint.is_active=True
             else:
-                flash('The constraint ' + form.name.data + ' already defined for the active project')
+                flash('The constraint ' + form.name.data + ' already defined for the active project','alert-danger')
                 return redirect(url_for('view_constraints'))
         try:
             db.session.add(constraint)
