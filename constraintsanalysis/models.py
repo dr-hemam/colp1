@@ -37,7 +37,7 @@ class ConstraintAnalysis(db.Model):
 	
 class ConstraintAnalysisDetail(db.Model):
 	__tablename__ ="constraintanalysis_details"
-	id = db.Column(db.Integer, unique=True, autoincrement=True)
+	id = db.Column(db.Integer, primary_key=True, unique=True, autoincrement=True)
 	constraintanalysis_id = db.Column(db.Integer, db.ForeignKey('constraintanalysis.id'), primary_key=True)
 	constraintanalysis = db.relationship('ConstraintAnalysis', backref='detail')
 	task_id = db.Column(db.Integer, db.ForeignKey('lookaheads_details.id'), primary_key=True)
