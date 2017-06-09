@@ -46,10 +46,13 @@ def edit_reason(id):
     if request.method == "POST" and form.validate():
         reason.name = form.name.data
         reason.is_active = form.is_active.data
-        
-        db.session.add(reason)
-        db.session.flush()
-        db.session.commit()
+        try:
+            db.session.add(reason)
+            db.session.flush()
+            db.session.commit()
+        except exc.IntegrityError:
+            flash('The delay reason ' + form.name.data + ' already exist for the current project')
+            db.session.rollback()
         return redirect(url_for('view_reasons'))
     return render_template('delayreasons/setup.html', form = form, reason=reason, action='edit')
 

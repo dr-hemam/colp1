@@ -1,10 +1,10 @@
 from colp import app, db
 from calendars.form import CycleForm
 from calendars.models import ReportingCycle
-from flask import render_template, redirect, url_for, request, session
+from flask import render_template, redirect, url_for, request, session, flash
 from users.decorators import login_required, admin_required
 from organisations.models import Organisation
-
+from sqlalchemy import exc
 
 '''
 This code controls the creation, editing, viewing and deleting of organisations
@@ -24,8 +24,12 @@ def add_cycle():
                             week_start = form.week_start.data,
                             organisation = Organisation.query.filter_by(id=session['organisation_id']).first(),
                             is_active= form.is_active.data)
-        db.session.add(cycle)
-        db.session.commit()
+        try:
+            db.session.add(cycle)
+            db.session.commit()
+        except exc.IntegrityError:
+            flash('The cycle ' + form.code.data + ' already defined for the organisation')
+            db.session.rollback()
         return redirect(url_for('view_cycles'))
         
     return render_template('calendars/cycleform.html', form=form, action='new')
@@ -50,20 +54,27 @@ def edit_cycle(id):
         cycle.cycle_type = form.cycle_type.data
         cycle.cycle_value = form.cycle_value.data
         cycle.week_start= form.week_start.data
-
-        db.session.add(cycle)
-        db.session.flush()
-        db.session.commit()
+        try:
+            db.session.add(cycle)
+            db.session.flush()
+            db.session.commit()
+            flash('Reporting cycle has been saved successfully','alert-success')
+        except exc.IntegrityError:
+            flash('The cycle ' + form.code.data + ' already defined for the organisation')
+            db.session.rollback()
         return redirect(url_for('view_cycles'))
     return render_template('calendars/cycleform.html', form = form, cycle=cycle, action='edit')
-'''
-@app.route('/deleteorganisation/<id>')
-def delete_organisations(id):
-    organisation = Organisation.query.filter_by(id= id).first()
-    organisation.is_active = False
-        
-    db.session.add(organisation)
-    db.session.commit()
+
+@app.route('/deletecycle/<id>')
+def delete_cycle(id):
+    cycle = ReportingCycle.query.filter_by(id= id).first()
+    if cycle:
+        cycle.is_active = False
+        try:
+            db.session.add(cycle)
+            db.session.commit()
+            flash('Reporting cycle has been deleted successfully','alert-success')
+        except:
+            flash('An unexpected error occurred', 'alert-danger')
     return redirect(url_for('view_organisations'))
     
-'''
