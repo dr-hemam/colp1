@@ -34,14 +34,24 @@ def new_constraintanalysis():
     form.section.query = Section.query.filter_by(project_id= session.get('project_id'))
     if request.method == "POST" and form.validate() and session.get('project_id'):
         project = Project.query.filter_by(id=session.get('project_id')).first()
-        constraintanalysis = ConstraintAnalysis (project= project, 
-                                                reportingdate= form.reportingdate.data,
-                                                section= form.section.data,
-                                                is_active = form.is_active.data)
+        constraintanalysis = ConstraintAnalysis.query.filter_by(reportingdate_id = form.reportingdate.data.id, 
+                                                                project_id= project.id,
+                                                                section_id = form.section.data.id).first()
+        if not constraintanalysis:
+            constraintanalysis = ConstraintAnalysis (project= project, 
+                                                    reportingdate= form.reportingdate.data,
+                                                    section= form.section.data,
+                                                    is_active = form.is_active.data)
+        elif constraintanalysis.is_active == False:
+            constraintanalysis.is_active = True
+        else:
+            flash("Error: Duplicate Entry. you can edit or delete existing.", 'alert-danger')
+            return redirect(url_for('view_constraintsalysis'))
         try:
             db.session.add(constraintanalysis)
             db.session.flush()
             db.session.commit()
+            flash('Constraint analysis has been created successfully', 'alert-success')
             return redirect(url_for('new_constraintanalysis_details', id= constraintanalysis.id))
         except exc.IntegrityError as e:
             db.session.rollback()
@@ -59,14 +69,14 @@ def new_constraintanalysis_details(id):
         # get lookahead_id through reporting date id
         lookahead = LookAhead.query.filter_by(reportingdate_id = constraintanalysis.reportingdate_id, section_id= constraintanalysis.section_id).first()
         if not lookahead:
-            flash('Lookahead has for the same section and reporting date has to be defined first', 'alert-danger')
+            flash('Lookahead for the same section and reporting date has to be defined before proceeding', 'alert-danger')
             return redirect(url_for('view_constraintsalysis'))
         tasks = LookAheadDetail.query.filter_by(lookahead_id= lookahead.id).all()
-        constraints = Constraint.query.filter_by(org_id = session.get('organisation_id'), is_active=True).all()
+        constraints = Constraint.query.filter_by(project_id = session.get('project_id'), is_active=True).all()
         form.task.query = tasks
         form.constraint.query = constraints
         if form.validate_on_submit():
-            constraints = Constraint.query.filter_by(org_id = session.get('organisation_id'), is_active=True).all()
+            constraints = Constraint.query.filter_by(project_id = session.get('project_id'), is_active=True).all()
             constraintanalysis = ConstraintAnalysis.query.filter_by(id= id).first()
             checkboxes=[]
             for c in constraints:
@@ -95,6 +105,7 @@ def new_constraintanalysis_details(id):
                                             can_do = can_dos[i],
                                             status= checkboxes[cnst][i])
                     db.session.add(cnstanalysis)
+            db.session.flush()
             db.session.commit()
             flash('Constraint analysis details added successfully!', 'alert-success')
             return redirect(url_for('view_constraintanalysis_details', id=id))
@@ -102,7 +113,7 @@ def new_constraintanalysis_details(id):
     except :
         flash('An error has occured while processing data', 'alert-danger')
         db.session.rollback()
-        return redirect(url_for('view_constraintsalysis'))
+        return redirect(url_for('new_constraintanalysis_details',id=id))
 
     
         
@@ -120,10 +131,9 @@ def view_constraintsalysis():
 def view_constraintanalysis_details(id):
     constraintanalysis = ConstraintAnalysis.query.filter_by(id=id).first()
     tasks = ConstraintAnalysisDetail.query.filter_by(constraintanalysis_id=id, is_active=True).group_by(ConstraintAnalysisDetail.task_id)
-    constraints = Constraint.query.filter_by(org_id = session.get('organisation_id'), is_active=True).all()
     cons=[]
     details = ConstraintAnalysisDetail.query.filter_by(constraintanalysis_id=id)
-    constraints = Constraint.query.filter_by(org_id = session.get('organisation_id'), is_active=True).all()
+    constraints = Constraint.query.filter_by(project_id = session.get('projectn_id'), is_active=True).all()
     for d in details.all():
         cn = Constraint.query.filter_by(id=d.constraint_id).first()
         if cn not in cons:
@@ -171,7 +181,7 @@ def edit_constraintanalysis_detail():
     ca_id= request.args.get('ca_id')
     catask = ConstraintAnalysisDetail.query.filter_by(task_id= t_id, constraintanalysis_id = ca_id, is_active=True).all()
     task = LookAheadDetail.query.filter_by(id=t_id).first()
-    constraints = Constraint.query.filter_by(org_id=session.get('organisation_id'), is_active=True).all()
+    constraints = Constraint.query.filter_by(project_id=session.get('project_id'), is_active=True).all()
     # get lookahead_id through reporting date id
     constraintanalysis = ConstraintAnalysis.query.filter_by(id= ca_id).first()
     form = ConstraintAnalysisDetailForm()
