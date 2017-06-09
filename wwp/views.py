@@ -67,7 +67,7 @@ def new_wwp_details(id):
     #= LookAheadDetail.query.join(ConstraintAnalysisDetail).join(LookAhead, aliased=True).filter_by(section_id==wwp.section_id, constraintanalysis_id==ca.id, ConstraintAnalysisDetail.can_do== True )
 
     if request.method == "POST" and form.validate():
-        constraints = Constraint.query.filter_by(org_id = session.get('organisation_id'), is_active=True).all()
+        constraints = Constraint.query.filter_by(project_id = session.get('project_id'), is_active=True).all()
         constraintanalysis = ConstraintAnalysis.query.filter_by(id= id).first()
         
         activities = request.form.getlist('task')
