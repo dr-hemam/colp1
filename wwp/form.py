@@ -21,7 +21,7 @@ class WWPDetailForm(Form):
         return User.query.filter_by(organisation_id=session.get('organisation_id'))
         
     def delay_reasons():
-        return DelayReason.query.filter_by(org_id= session.get('project_id'))
+        return DelayReason.query.filter_by(project_id= session.get('project_id'))
     
     task = QuerySelectField('Task', [validators.Required()])
     user = QuerySelectField('User', query_factory= get_users, allow_blank=True)
