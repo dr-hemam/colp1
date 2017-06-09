@@ -63,57 +63,57 @@ def new_constraintanalysis():
 
 @app.route('/newconstraintanalysisdetails/<id>', methods=['POST', 'GET'])
 def new_constraintanalysis_details(id):
-
-    form = ConstraintAnalysisDetailForm()
-    constraintanalysis = ConstraintAnalysis.query.filter_by(id= id).first()
-    # get lookahead_id through reporting date id
-    lookahead = LookAhead.query.filter_by(reportingdate_id = constraintanalysis.reportingdate_id, section_id= constraintanalysis.section_id).first()
-    if not lookahead:
-        flash('Lookahead for the same section and reporting date has to be defined before proceeding', 'alert-danger')
-        return redirect(url_for('view_constraintsalysis'))
-    tasks = LookAheadDetail.query.filter_by(lookahead_id= lookahead.id).all()
-    constraints = Constraint.query.filter_by(project_id = session.get('project_id'), is_active=True).all()
-    form.task.query = tasks
-    form.constraint.query = constraints
-    if form.validate_on_submit():
-        constraints = Constraint.query.filter_by(project_id = session.get('project_id'), is_active=True).all()
+    try:
+        form = ConstraintAnalysisDetailForm()
         constraintanalysis = ConstraintAnalysis.query.filter_by(id= id).first()
-        checkboxes=[]
-        for c in constraints:
-            cn = request.form.getlist(str(c.id))
-            ccd=[]
-            x=0
-            while(x <len(cn)):
-                if cn[x]=='No':
-                    ccd.append(False)
-                    x= x+1
-                else:
-                    ccd.append(True)
-                    x=x+2
-            checkboxes.append(ccd)
-        activities = request.form.getlist('task')
-        is_actives = request.form.getlist('is_active')
-        #statuses = request.form.getlist('status')
-        can_dos = getCheckbox(request.form.getlist('can_do'))
-        
-        for i in range(len(activities)):
-            for cnst in range(len(checkboxes)):
-                task = LookAheadDetail.query.filter_by(id=activities[i]).first()
-                cnstanalysis= ConstraintAnalysisDetail (constraintanalysis= constraintanalysis,
-                                        task= task, 
-                                        constraint= constraints[cnst],
-                                        can_do = can_dos[i],
-                                        status= checkboxes[cnst][i])
-                db.session.add(cnstanalysis)
-        db.session.flush()
-        db.session.commit()
-        flash('Constraint analysis details added successfully!', 'alert-success')
-        return redirect(url_for('view_constraintanalysis_details', id=id))
-    return render_template('constraintsanalysis/constraintanalysisdetailsform.html', form=form, action='new', constraintanalysis = constraintanalysis, constraints = constraints, lookahead=lookahead)
-    # except exc.IntegrityError:
-    #     flash('An error has occured while processing data', 'alert-danger')
-    #     db.session.rollback()
-    #     return redirect(url_for('new_constraintanalysis_details',id=id))
+        # get lookahead_id through reporting date id
+        lookahead = LookAhead.query.filter_by(reportingdate_id = constraintanalysis.reportingdate_id, section_id= constraintanalysis.section_id).first()
+        if not lookahead:
+            flash('Lookahead for the same section and reporting date has to be defined before proceeding', 'alert-danger')
+            return redirect(url_for('view_constraintsalysis'))
+        tasks = LookAheadDetail.query.filter_by(lookahead_id= lookahead.id).all()
+        constraints = Constraint.query.filter_by(project_id = session.get('project_id'), is_active=True).all()
+        form.task.query = tasks
+        form.constraint.query = constraints
+        if form.validate_on_submit():
+            constraints = Constraint.query.filter_by(project_id = session.get('project_id'), is_active=True).all()
+            constraintanalysis = ConstraintAnalysis.query.filter_by(id= id).first()
+            checkboxes=[]
+            for c in constraints:
+                cn = request.form.getlist(str(c.id))
+                ccd=[]
+                x=0
+                while(x <len(cn)):
+                    if cn[x]=='No':
+                        ccd.append(False)
+                        x= x+1
+                    else:
+                        ccd.append(True)
+                        x=x+2
+                checkboxes.append(ccd)
+            activities = request.form.getlist('task')
+            is_actives = request.form.getlist('is_active')
+            #statuses = request.form.getlist('status')
+            can_dos = getCheckbox(request.form.getlist('can_do'))
+            
+            for i in range(len(activities)):
+                for cnst in range(len(checkboxes)):
+                    task = LookAheadDetail.query.filter_by(id=activities[i]).first()
+                    cnstanalysis= ConstraintAnalysisDetail (constraintanalysis= constraintanalysis,
+                                            task= task, 
+                                            constraint= constraints[cnst],
+                                            can_do = can_dos[i],
+                                            status= checkboxes[cnst][i])
+                    db.session.add(cnstanalysis)
+            db.session.flush()
+            db.session.commit()
+            flash('Constraint analysis details added successfully!', 'alert-success')
+            return redirect(url_for('view_constraintanalysis_details', id=id))
+        return render_template('constraintsanalysis/constraintanalysisdetailsform.html', form=form, action='new', constraintanalysis = constraintanalysis, constraints = constraints, lookahead=lookahead)
+    except exc.IntegrityError:
+        flash('An error has occured while processing data', 'alert-danger')
+        db.session.rollback()
+        return redirect(url_for('new_constraintanalysis_details',id=id))
 
     
         
