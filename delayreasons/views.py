@@ -5,6 +5,8 @@ from flask import render_template, redirect, url_for, request, session, flash
 from users.models import User
 from users.decorators import *
 from organisations.models import Organisation
+from project.models import Project
+from sqlalchemy import exc
 
 
 @app.route('/newreason', methods=['GET', 'POST'])
@@ -12,15 +14,27 @@ def new_reason():
     form = DelayReasonForm()
     
     if request.method == "POST" and form.validate() and session.get('project_id'):
-        user= User.query.filter_by(id= session['user_id']).first()
-        project = Project.query.filter_by(id= session['project_id']).first()
-        reason = DelayReason (name= form.name.data, 
-                            project = project,
-                            is_active= True)
-        db.session.add(reason)
-        db.session.flush()
-        db.session.commit()
-        return redirect(url_for('view_reasons'))
+        reason = DelayReason.query.filter_by(name= form.name.data, project_id=session.get('project_id')).first()
+        if not reason:
+            user= User.query.filter_by(id= session['user_id']).first()
+            project = Project.query.filter_by(id= session['project_id']).first()
+            reason = DelayReason (name= form.name.data, 
+                                project = project,
+                                is_active= True)
+        else:
+            reason.is_active=True
+        try:
+            db.session.add(reason)
+            db.session.flush()
+            db.session.commit()
+            flash('Delay reason has been added successfully', 'alert-success')
+            return redirect(url_for('view_reasons'))
+        except exc.IntegrityError:
+            
+            flash('The delay reason ' + form.name.data + ' already exist for the current project')
+            db.session.rollback()
+                
+            return redirect(url_for('view_reasons'))
     return render_template('delayreasons/setup.html', form=form, action='new')
     
 @app.route('/editreason/<id>', methods=['GET', 'POST'])
