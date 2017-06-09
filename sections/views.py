@@ -22,9 +22,13 @@ def new_section():
                             project= Project.query.filter_by(id=session['project_id']).first(),
                             parent= form.parent.data,
                             active= form.active.data)
-        db.session.add(section)
-        db.session.flush()
-        db.session.commit()
+        try:
+            db.session.add(section)
+            db.session.flush()
+            db.session.commit()
+        except:
+            flash('Duplicate entries not allowed', 'alert-danger')
+            return redirect(url_for('new_section'))
         return redirect(url_for('view_sections'))
     return render_template('sections/sectionform.html', form=form, action='new')
     
