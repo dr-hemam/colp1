@@ -33,7 +33,7 @@ ConOccult - Reporting Cycles
         <tr class="tr_clone">
             <td style="min-width:15em">{{ render_field_nolabel(form.task, class="form-control") }}</td>
             {% for constraint in constraints %}
-            <td><div class="form-group">
+            <td class="col-md-1"><div class="form-group">
             <input class="form-control" id="{{constraint.id}}" name="{{constraint.id}}" type="checkbox" value='1'>
             <input type="hidden" name="{{constraint.id}}" value="No"></div>
             </td>
