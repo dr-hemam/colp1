@@ -3,6 +3,7 @@ from wtforms import validators, StringField, PasswordField, TextAreaField, Boole
 from wtforms.fields.html5 import DateField
 from wtforms.fields.html5 import EmailField
 from calendars.models import ReportingCycle
+from flask import session
 from wtforms.ext.sqlalchemy.fields import QuerySelectField
 
 
@@ -20,7 +21,7 @@ from wtforms.ext.sqlalchemy.fields import QuerySelectField
 class ProjectSetupForm(Form):
     
     def get_cycles():
-        return ReportingCycle.query
+        return ReportingCycle.query.filter_by(organisation_id = session.get('organisation_id'))
     
     
     
