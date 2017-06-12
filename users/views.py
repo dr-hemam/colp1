@@ -402,7 +402,8 @@ def sub(roles, id):
             ul += "}"
     ul += "]"
     return ul
-            
+
+
 @app.route('/rolesorder')
 @admin_required
 def roles_ordered():
