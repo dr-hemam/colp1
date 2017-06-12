@@ -122,11 +122,40 @@ def view_wwps():
 def view_wwp_detail(id):
     wwp= WWP.query.filter_by(id=id).first()
     wwpdetails = WWPDetail.query.filter_by(wwp_id=wwp.id,is_active=True).all()
+    
     return render_template('wwp/viewwwpdetails.html', wwp=wwp, wwpdetails= wwpdetails)
 
     
     #return render_template('wwp/view_wwps.html', wwp=wwp)
+
+
+@app.route('/editwwpdetail', methods=['GET', 'POST'])
+def edit_wwp_detail():
+    task_id= request.args.get('t_id')
+    wwp_id= request.args.get('w_id')
+    wwpdetail = WWPDetail.query.filter_by(wwp_id=wwp_id, task_id=task_id).first()
+    task = LookAheadDetail.query.filter_by(id=task_id).first()
     
+    wwp = WWP.query.filter_by(id=wwp_id).first()
+    form = WWPDetailForm(obj= wwpdetail)
+    if request.method=='POST':
+        print(getCheckbox(request.form.getlist('mon')))
+        wwpdetail.mon = getCheckbox(request.form.getlist('mon'))[0]
+        wwpdetail.tue = getCheckbox(request.form.getlist('tue'))[0]
+        wwpdetail.wed = getCheckbox(request.form.getlist('wed'))[0]
+        wwpdetail.thu = getCheckbox(request.form.getlist('thu'))[0]
+        wwpdetail.fri = getCheckbox(request.form.getlist('fri'))[0]
+        wwpdetail.sat = getCheckbox(request.form.getlist('sat'))[0]
+        wwpdetail.sun = getCheckbox(request.form.getlist('sun'))[0]
+        
+        db.session.add(wwpdetail)
+        db.session.flush()
+        db.session.commit()
+        flash('Weekly Work Plan has been updated successfully', 'alert-success')
+        return redirect(url_for('view_wwp_detail', id=wwp_id))
+    return render_template('wwp/wwpdetails.html', form=form, action='edit',  wwp = wwp, detail = wwpdetail)
+  
+  
 @app.route('/deletewwpdetail', methods=['GET'])
 @login_required
 @project_required
@@ -154,6 +183,10 @@ def delete_wwp(id):
         wwp = WWP.query.filter_by(id=id).first()
         wwp.is_active= False
         db.session.add(wwp)
+        wwpdetails = WWPDetail.query.filter_by(wwp_id =wwp.id).all()
+        for detail in wwpdetails:
+            detail.is_active=False
+            db.session.add(detail)
         db.session.commit()
         flash('The selected WWP has been deleted successfully','alert-success')
         return redirect(url_for('view_wwps'))
@@ -172,7 +205,7 @@ def update_wwp_details(id):
     lookahead = LookAhead.query.filter_by(reportingdate_id = wwp.reportingdate_id, section_id= wwp.section_id).first()
     
     #= LookAheadDetail.query.join(ConstraintAnalysisDetail).join(LookAhead, aliased=True).filter_by(section_id==wwp.section_id, constraintanalysis_id==ca.id, ConstraintAnalysisDetail.can_do== True )
-    wwp_details = WWPDetail.query.filter_by(wwp_id = wwp.id).all()
+    wwp_details = WWPDetail.query.filter_by(wwp_id = wwp.id, is_active=True).all()
     
     
     #print (task_forms)

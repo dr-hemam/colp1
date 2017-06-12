@@ -15,7 +15,7 @@ ConOccult - Reporting Cycles
         
         {% from '_formhelpers.html' import render_field_nolabel %}
         {% if action=='new' %}<form method="POST" action ={{ url_for('new_wwp_details', id= wwp.id) }} role ="form">
-        
+        {% else %}<form method="POST" action ={{ url_for('edit_wwp_detail', w_id= detail.wwp_id, t_id = detail.task_id) }} role ="form">
         {% endif %}
         {{ form.hidden_tag() }}
         <div style="overflow-x:auto;">
@@ -27,18 +27,21 @@ ConOccult - Reporting Cycles
             <td class="col-md-1">Tue</td>
             <td class="col-md-1">Wed</td>
             <td class="col-md-1">Thu</td>
-            <td class="col-md-1">Frid</td>
+            <td class="col-md-1">Fri</td>
             <td class="col-md-1">Sat</td>
             <td class="col-md-1">Sun</td>
             {% if action=='update' %}
             <td>Reason</td>
             {% endif %}
             <td>Active</td>
-            
-            <td>Actions</td>
+            {%if action=='new' %}
+            <td>Actions</td>{% endif %}
         </tr>
         <tr class="tr_clone">
-            <td>{{ render_field_nolabel(form.task, class="form-control") }}</td>
+            <td>{%if action=='new' %} {{ render_field_nolabel(form.task, class="form-control") }}
+            {% else %} {{ detail.task }}
+            {% endif %}
+            </td>
             <td>{{ render_field_nolabel(form.user, class="form-control") }}</td>
             <td>
                 <input class="form-control" id="mon" name="mon" type="checkbox" value='1'>
@@ -74,9 +77,10 @@ ConOccult - Reporting Cycles
             </td>
             {% endif %}
             <td>{{ render_field_nolabel(form.is_active, class="form-control") }}</td>
+            {% if action=='new' %}
             <td><a href="#" name="add" value="Add" class="tr_clone_add"><img height=20px src="{{url_for('static', filename='img/add.png')}}"></a>
             <a href='#' name="remove"  class="tr_clone_remove"><img height=20px src="{{url_for('static', filename='img/delete.png')}}"></a></td>
-            
+            {% endif %}            
         </tr>
         </table>
         </div>
