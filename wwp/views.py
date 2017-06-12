@@ -111,7 +111,7 @@ def new_wwp_details(id):
 @project_required
 def view_wwps():
     #wwp= WWP.query.filter_by(project_id=session.get('project_id'), is_active=True)
-    wwp= WWP.query.join(ReportingDate).filter_by(project_id=session['project_id'], is_active=True)
+    wwp= WWP.query.join(ReportingDate).filter(WWP.project_id==session['project_id'], WWP.is_active==True)
     wwp = wwp.order_by(desc('rdate')).all()
     
     return render_template('wwp/view_wwps.html', wwp=wwp)
@@ -121,13 +121,48 @@ def view_wwps():
 @project_required
 def view_wwp_detail(id):
     wwp= WWP.query.filter_by(id=id).first()
-    wwpdetails = WWPDetail.query.filter_by(wwp_id=wwp.id).all()
+    wwpdetails = WWPDetail.query.filter_by(wwp_id=wwp.id,is_active=True).all()
     return render_template('wwp/viewwwpdetails.html', wwp=wwp, wwpdetails= wwpdetails)
 
     
     #return render_template('wwp/view_wwps.html', wwp=wwp)
     
-    
+@app.route('/deletewwpdetail', methods=['GET'])
+@login_required
+@project_required
+def delete_wwp_detail():
+    try:
+        wwp_id = request.args.get('w_id')
+        task_id = request.args.get('t_id')
+        wwpdetail = WWPDetail.query.filter_by(wwp_id=wwp_id, task_id=task_id).first()
+        wwpdetail.is_active= False
+        db.session.add(wwpdetail)
+        db.session.commit()
+        flash('The selected activities has been deleted successfully','alert-success')
+        return redirect(url_for('view_wwp_detail', id=wwp_id))
+        
+    except:
+        flash ('Unexpected error has occurred while processing your request','alert-danger')
+        db.session.rollback()
+        return redirect(url_for('view_wwp'))
+
+@app.route('/deletewwp/<id>', methods=['GET'])
+@login_required
+@project_required
+def delete_wwp(id):
+    try:
+        wwp = WWP.query.filter_by(id=id).first()
+        wwp.is_active= False
+        db.session.add(wwp)
+        db.session.commit()
+        flash('The selected WWP has been deleted successfully','alert-success')
+        return redirect(url_for('view_wwps'))
+        
+    except:
+        flash ('Unexpected error has occurred while processing your request','alert-danger')
+        db.session.rollback()
+        return redirect(url_for('view_wwps'))
+
 @app.route('/updatewwpdetails/<id>', methods=['POST', 'GET'])
 def update_wwp_details(id):
 

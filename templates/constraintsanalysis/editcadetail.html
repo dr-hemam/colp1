@@ -16,10 +16,10 @@ ConOccult - Constraint Analysi
         <br>
         {{ form.hidden_tag() }}
         <div style="overflow-x:auto;">
-        <table class='table table-hover table-responsive'>
+        <table class='dataTable display' id='constraints'>
         <tr><th>Name</th>
         {% for constraint in constraints %}
-            <th class="rotate"><div>{{constraint}}</div></th>
+            <th class="rotate" style="vertical-align: middle;text-align: left"><div>{{constraint}}</div></th>
             {% endfor %}
             <th>Can do</th>
             <th>active</th>
