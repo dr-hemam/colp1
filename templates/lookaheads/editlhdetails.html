@@ -53,7 +53,9 @@ ConOccult - Reporting Cycles
              </div>
             </td>
             <td>{{ render_field_nolabel(form.is_active, class="form-control") }}</td>
-            <td><input type="button" name="add" value="Add" class="tr_clone_add"></td>
+            <!-- <td><input type="button" name="add" value="Add" class="tr_clone_add"></td> -->
+            <td><a href="#" name="add" value="Add" class="tr_clone_add"><img height=20px src="{{url_for('static', filename='img/add.png')}}"></a>
+            <a href='#' name="remove"  class="tr_clone_remove"><img height=20px src="{{url_for('static', filename='img/delete.png')}}"></a></td>
         </tr>
         {% endfor %}
         
