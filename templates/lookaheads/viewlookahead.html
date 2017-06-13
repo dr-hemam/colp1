@@ -20,16 +20,18 @@ ConOccult - Reporting Cycles
                 <th>ID</th><th>Name</th><th>Start</th><th>Finish</th><th>Actions</th>
             </tr>
             {% for task in tasks %}
+            {% if task %}
             <tr>
             <td>{{ task.task_code }}</td>
             <td>{{ task.task_name }}</td>
-            <td>{{ task.start.strftime('%d-%b-%Y')}}</td>
-            <td>{{ task.finish.strftime('%d-%b-%Y') }}</td>
+            <td>{{ task.start.strftime('%d-%m-%Y')}}</td>
+            <td>{{ task.finish.strftime('%d-%m-%Y') }}</td>
             <td>
                 <a data-target="#confirm-delete" data-toggle="modal" data-href="{{ url_for('delete_lookahead_activity', id = task.id) }} "><img title="Delete" src="{{ url_for('static', filename='img/delete.png') }}" style="width:20px;height:20px;" alt="Delete"/> </a>
                 <a href="{{ url_for('edit_lookahead_detail', tid = task.id) }} "><img title="Edit" src="{{ url_for('static', filename='img/edit.png') }}" style="width:20px;height:20px;" alt="Edit"/> </a>
             </td>
             </tr>
+            {% endif %}
             {% endfor %}
         </table>
         </div>

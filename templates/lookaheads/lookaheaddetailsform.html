@@ -9,10 +9,18 @@ ConOccult - Reporting Cycles
     <div class ="col-md-8">
         <h1>Look Ahead Activities Form</h1>
         <h3>Week Commencing {{lookahead}}</h3>
-        
+        <link rel="stylesheet" href="https://formden.com/static/cdn/bootstrap-iso.css" /> 
+
+<!--Font Awesome (added because you use icons in your prepend/append)-->
+<link rel="stylesheet" href="https://formden.com/static/cdn/font-awesome/4.4.0/css/font-awesome.min.css" />
+
+        <style>.bootstrap-iso .formden_header h2, .bootstrap-iso .formden_header p, .bootstrap-iso form{font-family: Arial, Helvetica, sans-serif; color: black}.bootstrap-iso form button, .bootstrap-iso form button:hover{color: white !important;} .asteriskField{color: red;}</style>
+
         {% include '_flashmessages.html' %}
         
         {% from '_formhelpers.html' import render_field_nolabel %}
+        <div class="bootstrap-iso">
+
         {% if action=='new' %}<form method="POST" action ={{ url_for('new_lookahead_details', id= lookahead.id) }} role ="form">
         {% else %}<form method="POST" action= {{ url_for('edit_lookahead_detail', tid = task.id )  }} role="form">
         {% endif %}
@@ -23,8 +31,30 @@ ConOccult - Reporting Cycles
         <tr class="tr_clone">
             <td>{{ render_field_nolabel(form.task_code, class="form-control") }}</td>
             <td>{{ render_field_nolabel(form.task_name, class="form-control") }}</td>
-            <td>{{ render_field_nolabel(form.start, class="form-control") }}</td>
-            <td>{{ render_field_nolabel(form.finish, class="form-control") }}</td>
+            <td><!-- {{ render_field_nolabel(form.start, class="form-control") }} -->
+           <div class="form-group ">
+      
+      <div class="input-group">
+       <div class="input-group-addon">
+        <i class="fa fa-calendar">
+        </i>
+       </div>
+       <input class="form-control" id="start" name="start" placeholder="DD/MM/YYYY" type="text"/>
+      </div>
+     </div>
+            </td>
+            <td><!-- {{ render_field_nolabel(form.finish, class="form-control") }}-->
+            <div class="form-group ">
+      
+              <div class="input-group">
+               <div class="input-group-addon">
+                <i class="fa fa-calendar">
+                </i>
+               </div>
+               <input class="form-control" id="finish" name="finish" placeholder="DD/MM/YYYY" type="text"/>
+              </div>
+             </div>
+            </td>
             <td>{{ render_field_nolabel(form.is_active, class="form-control") }}</td>
             {% if action=='new' %}<td><input type="button" name="add" value="Add" class="tr_clone_add"></td>
             {% endif %}
@@ -33,7 +63,7 @@ ConOccult - Reporting Cycles
         </div>
         <button type ="submit" class="btn btn-success">Save</button>
         </form>
-
+    </div>
     </div>
 </div>
 <script>
@@ -46,4 +76,38 @@ $(document).ready(function(){
 });
 });
 </script>
+
+<!-- Include jQuery -->
+<script type="text/javascript" src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
+
+<!-- Include Date Range Picker -->
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/js/bootstrap-datepicker.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/css/bootstrap-datepicker3.css"/>
+
+<script>
+    $(document).ready(function(){
+        var date_input=$('input[name="start"]'); //our date input has the name "date"
+        var container=$('.bootstrap-iso form').length>0 ? $('.bootstrap-iso form').parent() : "body";
+        date_input.datepicker({
+            format: 'dd/mm/yyyy',
+            container: container,
+            todayHighlight: true,
+            autoclose: true,
+        })
+    })
+</script>
+
+<script>
+    $(document).ready(function(){
+        var date_input=$('input[name="finish"]'); //our date input has the name "date"
+        var container=$('.bootstrap-iso form').length>0 ? $('.bootstrap-iso form').parent() : "body";
+        date_input.datepicker({
+            format: 'dd/mm/yyyy',
+            container: container,
+            todayHighlight: true,
+            autoclose: true,
+        })
+    })
+</script>
+
 {% endblock %}

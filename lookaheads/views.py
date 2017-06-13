@@ -9,6 +9,8 @@ from calendars.models import ReportingDate
 from sections.models import Section
 from sqlalchemy import exc, desc
 from wtforms import validators
+from datetime import datetime
+
 
 
 @app.route('/newlookahead', methods=['POST', 'GET'])
@@ -42,7 +44,7 @@ def new_lookahead():
     return render_template('lookaheads/lookaheadform.html', form=form, action='new')
     
 
-@app.route('/newlooaheaddetails/<id>', methods=['POST', 'GET'])
+@app.route('/newlookaheaddetails/<id>', methods=['POST', 'GET'])
 def new_lookahead_details(id):
     form = LookAheadDetailForm()
     lookaheadmain = LookAhead.query.filter_by(id= id).all()
@@ -53,21 +55,30 @@ def new_lookahead_details(id):
         names = request.form.getlist('task_name')
         starts = request.form.getlist('start')
         finishs = request.form.getlist('finish')
+        print(starts, finishs)
         is_actives = request.form.getlist('is_active')
-        for i in range(len(codes)):
-            task = LookAheadDetail(lookahead = lookaheadmain[0],
-                                    code= codes[i], 
-                                    name= names[i], 
-                                    start= starts[i], 
-                                    finish= finishs[i], 
-                                    is_active= is_actives[i])
-            try:
-                db.session.add(task)
-                db.session.commit()
-                flash('Lookahead tasks has been added successfully', 'alert-success')
-            except exc.IntegrityError as e:
-                db.session.rollback()
-                flash("Error Duplicate Entry", 'alert-danger')
+        if codes and names and starts and finishs:
+            for i in range(len(codes)):
+                start = datetime.strptime(starts[i], '%d/%m/%Y')
+                finish = datetime.strptime(finishs[i], '%d/%m/%Y')
+                task = LookAheadDetail(lookahead = lookaheadmain[0],
+                                        code= codes[i], 
+                                        name= names[i], 
+                                        start= start, 
+                                        finish= finish, 
+                                        is_active= is_actives[i])
+                try:
+                    db.session.add(task)
+                    db.session.commit()
+                    flash('Lookahead tasks has been added successfully', 'alert-success')
+                except exc.IntegrityError as e:
+                    db.session.rollback()
+                    flash("Error Duplicate Entry", 'alert-danger')
+                    return redirect(url_for('view_lookaheads'))
+                except:
+                    db.session.rollback()
+                    flash('Unexpected error has occurred','alert-danger')
+                    return redirect(url_for('view_lookaheads'))
         return redirect(url_for('view_lookahead', id=id))
     return render_template('lookaheads/lookaheaddetailsform.html', form=form, action='new', lookahead = lookaheadmain[0])
         
@@ -117,12 +128,14 @@ def edit_lookahead_details(id):
         for i in range(len(codes)):
             if i<len(tasks):
                 if tasks[i]:
+                    start = datetime.strptime(starts[i], '%d/%m/%Y')
+                    finish = datetime.strptime(finishs[i], '%d/%m/%Y')
                     task = LookAheadDetail.query.filter_by(id=tasks[i].id).first()
                     task.code = codes[i]
                     task.name = names[i]
                     db.session.commit()
-                    tasks[i].start= starts[i]
-                    tasks[i].finish= finishs[i]
+                    tasks[i].start= start
+                    tasks[i].finish= finish
                     tasks[i].is_active= is_actives[i]
             else:
                 task = LookAheadDetail(lookahead = lookaheadmain[0],
@@ -153,7 +166,7 @@ def edit_lookahead_details(id):
 def view_lookaheads():
     lookaheads = LookAhead.query.join(ReportingDate).filter(LookAhead.project_id==session['project_id'], LookAhead.is_active==True)
     lookaheads = lookaheads.order_by(desc('rdate')).all()
-    print('lookaheads', lookaheads)
+    
     return render_template('lookaheads/view.html', lookaheads=lookaheads)
     
 @app.route('/viewlookahead/<id>')
@@ -162,6 +175,10 @@ def view_lookaheads():
 def view_lookahead(id):
     lookahead = LookAhead.query.filter_by(id=id).first()
     details = LookAheadDetail.query.filter_by(lookahead_id=id, is_active=True).all()
+    print('lookaheads', details)
+    if not details or len(details)<1:
+        flash('No activities found within the lookahead')
+        return redircet(url_for('new_lookahead_details', id= id))
     return render_template('lookaheads/viewlookahead.html', lookahead = lookahead, tasks = details)
     
 @app.route('/deletelookahead/<id>')

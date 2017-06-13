@@ -8,7 +8,7 @@ from organisations.models import Organisation
 from calendars.datesutils import *
 from calendars.models import ReportingDate
 from wtforms import validators
-
+from datetime import datetime
 
 @app.route('/newproject', methods=['POST', 'GET'])
 @admin_required
@@ -17,15 +17,19 @@ def newproject():
     try:
             
         if request.method == "POST":
-            if form.validate() and session.get('organisation_id'):
+            print(form.validate(), request.form.get('start'))
+            if session.get('organisation_id'):
                 user= User.query.filter_by(id= session['user_id']).first()
                 org = Organisation.query.filter_by(id= session['organisation_id']).first()
+                start = datetime.strptime(request.form.get('start'), '%d/%m/%Y')
+                finish = datetime.strptime(request.form.get('finish'), '%d/%m/%Y')
+                print(start,finish)
                 project = Project (code= form.code.data, 
                                     name= form.name.data, 
                                     owner= user.id,
                                     description= form.description.data, 
-                                    start= form.start.data, 
-                                    finish= form.finish.data,
+                                    start= start, 
+                                    finish= finish,
                                     cycle= form.cycle.data,
                                     organisation = org,
                                     status= form.status.data)
@@ -97,10 +101,12 @@ def edit_project(project_id):
     project = Project.query.filter_by(id= project_id).first()
     form = ProjectSetupForm(obj= project)
     
-    if request.method == "POST" and form.validate():
+    if request.method == "POST":
+        start = datetime.strptime(request.form.get('start'), '%d/%m/%Y')
+        finish = datetime.strptime(request.form.get('finish'), '%d/%m/%Y')
         project.code = form.code.data
-        project.start = form.start.data
-        project.finish = form.finish.data
+        project.start = start
+        project.finish = finish
         project.status = form.status.data
         project.name = form.name.data
         project.description = form.description.data
