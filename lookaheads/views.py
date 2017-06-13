@@ -178,7 +178,7 @@ def view_lookahead(id):
     print('lookaheads', details)
     if not details or len(details)<1:
         flash('No activities found within the lookahead')
-        return redircet(url_for('new_lookahead_details', id= id))
+        return redirect(url_for('new_lookahead_details', id= id))
     return render_template('lookaheads/viewlookahead.html', lookahead = lookahead, tasks = details)
     
 @app.route('/deletelookahead/<id>')
