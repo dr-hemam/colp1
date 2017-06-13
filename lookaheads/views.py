@@ -177,7 +177,7 @@ def view_lookahead(id):
     details = LookAheadDetail.query.filter_by(lookahead_id=id, is_active=True).all()
     print('lookaheads', details)
     if not details or len(details)<1:
-        flash('No activities found within the lookahead')
+        flash('No activities found within the lookahead','alert-danger')
         return redirect(url_for('new_lookahead_details', id= id))
     return render_template('lookaheads/viewlookahead.html', lookahead = lookahead, tasks = details)
     
