@@ -23,7 +23,7 @@ ConOccult - Reporting Cycles
         
         {{ forms[0].hidden_tag() }}
         <div style="overflow-x:auto;">
-        <table>
+        <table id='constraints' class='dataTable display' cellspacing="0" width="100%">
         <tr><th>ID</th><th>Name</th><th>Start</th><th>Finish</th><th>Active</th></tr>
         {% for form in forms %}
         <tr class="tr_clone">
@@ -66,12 +66,27 @@ ConOccult - Reporting Cycles
 </div>
 <script>
 $(document).ready(function(){
-    $(document).on('click',"input.tr_clone_add", function() {
+    $(document).on('click',"a.tr_clone_add", function() {
     var $tr    = $(this).closest('.tr_clone');
     var $clone = $tr.clone();
     $clone.find(':text').val('');
     $tr.after($clone);
+    $clone.get(0).scrollIntoView();
 });
+
+$(document).on('click',"a.tr_clone_remove", function(){
+    var $tr = $(this).closest('.tr_clone');
+    var $remove = $tr.remove();
+    
+})
+$('#constraints').dataTable( {
+	"paging":   false,
+	"info":     false,
+	"filter":     false,
+	"scrollX": true,
+	
+	"order": [[ 1, "desc" ]]
+} );
 });
 </script>
 

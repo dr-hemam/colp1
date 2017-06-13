@@ -67,18 +67,19 @@ def new_lookahead_details(id):
                                         start= start, 
                                         finish= finish, 
                                         is_active= is_actives[i])
-                try:
-                    db.session.add(task)
-                    db.session.commit()
-                    flash('Lookahead tasks has been added successfully', 'alert-success')
-                except exc.IntegrityError as e:
-                    db.session.rollback()
-                    flash("Error Duplicate Entry", 'alert-danger')
-                    return redirect(url_for('view_lookaheads'))
-                except:
-                    db.session.rollback()
-                    flash('Unexpected error has occurred','alert-danger')
-                    return redirect(url_for('view_lookaheads'))
+                db.session.add(task)
+            try:
+                
+                db.session.commit()
+                flash('Lookahead tasks has been added successfully', 'alert-success')
+            except exc.IntegrityError as e:
+                db.session.rollback()
+                flash("Error Duplicate Entry", 'alert-danger')
+                return redirect(url_for('view_lookaheads'))
+            except:
+                db.session.rollback()
+                flash('Unexpected error has occurred','alert-danger')
+                return redirect(url_for('view_lookaheads'))
         return redirect(url_for('view_lookahead', id=id))
     return render_template('lookaheads/lookaheaddetailsform.html', form=form, action='new', lookahead = lookaheadmain[0])
         
