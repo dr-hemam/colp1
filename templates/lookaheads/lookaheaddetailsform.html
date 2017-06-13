@@ -94,7 +94,13 @@ $(document).ready(function(){
             todayHighlight: true,
             autoclose: true,
         })
-    })
+    });
+    
+    $('body').on('focus',"#start", function(){
+    $(this).datepicker({
+            format: 'dd/mm/yyyy'
+        })
+    });
 </script>
 
 <script>
@@ -107,7 +113,13 @@ $(document).ready(function(){
             todayHighlight: true,
             autoclose: true,
         })
-    })
+    });
+    
+    $('body').on('focus',"#finish", function(){
+    $(this).datepicker({
+            format: 'dd/mm/yyyy'
+        })
+    });
 </script>
 
 {% endblock %}
